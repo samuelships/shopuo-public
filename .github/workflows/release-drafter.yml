@@ -1,0 +1,50 @@
+name: Flutter Continuouse Integration
+
+on:
+  push:
+    # branches to consider in the event; optional, defaults to all
+    branches:
+      - master
+
+jobs:
+  update_release_draft:
+    runs-on: ubuntu-latest
+    steps:
+      # Drafts your next Release notes as Pull Requests are merged into "master"
+      - uses: release-drafter/release-drafter@v5
+        id: release_drafter
+      - name: Create File Conataining Url
+        run: echo ${{ steps.release_drafter.outputs.upload_url  }} > upload_url.txt
+      # - name: Upload upload_url.txt
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: upload_url
+      #     path: upload_url.txt
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  build_apk:
+    name: Build Apk and update draft artifact
+    needs: update_release_draft
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-java@v1
+        with:
+          java-version: "12.x"
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: "1.20.1"
+      - run: flutter pub get
+      - run: flutter test
+      - run: flutter build apk --debug --split-per-abi
+      - run: flutter build appbundle --debug
+      - name: Build project # This would actually build your project, using zip for an example artifact
+        run: |
+          ls
+          dir
+          zip --junk-paths apk_files.zip build/app/outputs/apk/debug/*.apk build/app/outputs/bundle/debug/app-release.aab
+      - name: Upload Apk Files
+        uses: actions/upload-artifact@v2
+        with:
+          name: apk_files
+          path: apk_files.zip
