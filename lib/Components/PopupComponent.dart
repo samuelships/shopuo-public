@@ -134,25 +134,21 @@ class _PopupComponentState extends State<PopupComponent>
             width: constraints.maxWidth,
             alignment: _alignment,
             color: Colors.black.withOpacity(_colorOpacity),
-            child: Stack(
-              children: [
-                AnimatedBuilder(
-                  animation: _controller,
-                  child: Container(
-                    constraints: BoxConstraints(maxWidth: 326),
-                    key: widgetKey,
-                    child: GestureDetector(
-                      child: widget.child,
-                      onVerticalDragStart: _onDragStart,
-                      onVerticalDragUpdate: (DragUpdateDetails update) {
-                        _onDragUpdate(update, constraints.maxHeight);
-                      },
-                      onVerticalDragEnd: _onDragEnd,
-                    ),
-                  ),
-                  builder: (context, child) => child,
-                )
-              ],
+            child: AnimatedBuilder(
+              animation: _controller,
+              child: Container(
+                constraints: BoxConstraints(maxWidth: 326),
+                key: widgetKey,
+                child: GestureDetector(
+                  child: widget.child,
+                  onVerticalDragStart: _onDragStart,
+                  onVerticalDragUpdate: (DragUpdateDetails update) {
+                    _onDragUpdate(update, constraints.maxHeight);
+                  },
+                  onVerticalDragEnd: _onDragEnd,
+                ),
+              ),
+              builder: (context, child) => child,
             ),
           );
         },

@@ -6,8 +6,10 @@ import 'package:shopuo/Styles/Typography.dart';
 
 class PaymentInstructionsComponent extends StatefulWidget {
   final Function dismissCallback;
+  final Function onOkay;
 
-  const PaymentInstructionsComponent({Key key, this.dismissCallback})
+  const PaymentInstructionsComponent(
+      {Key key, this.dismissCallback, this.onOkay})
       : super(key: key);
   @override
   _PaymentInstructionsComponentState createState() =>
@@ -75,12 +77,15 @@ class _PaymentInstructionsComponentState
               height: 1,
               color: Color(0xffE6E4EA),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 15),
-              child: Text(
-                "Okay",
-                style: MyTypography.heading5L.copyWith(
-                  color: MyColor.primaryPurple,
+            GestureDetector(
+              onTap: widget.onOkay,
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 15),
+                child: Text(
+                  "Okay",
+                  style: MyTypography.heading5L.copyWith(
+                    color: MyColor.primaryPurple,
+                  ),
                 ),
               ),
             )

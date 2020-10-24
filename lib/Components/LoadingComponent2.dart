@@ -7,8 +7,10 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoadingComponent2 extends StatefulWidget {
   final Function dismissCallback;
+  final Function onCancel;
 
-  const LoadingComponent2({Key key, this.dismissCallback}) : super(key: key);
+  const LoadingComponent2({Key key, this.dismissCallback, this.onCancel})
+      : super(key: key);
 
   @override
   _LoadingComponent2State createState() => _LoadingComponent2State();
@@ -53,10 +55,13 @@ class _LoadingComponent2State extends State<LoadingComponent2> {
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 15),
-              child: Text(
-                "Cancel",
-                style: MyTypography.heading5L.copyWith(
-                  color: MyColor.primaryPurple,
+              child: GestureDetector(
+                onTap: widget.onCancel,
+                child: Text(
+                  "Cancel",
+                  style: MyTypography.heading5L.copyWith(
+                    color: MyColor.primaryPurple,
+                  ),
                 ),
               ),
             )

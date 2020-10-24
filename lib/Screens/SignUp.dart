@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shopuo/Components/Button/ButtonComponent.dart';
 import 'package:shopuo/Components/Input/TextInputComponent.dart';
+import 'package:shopuo/Services/OverlayService.dart';
 import 'package:shopuo/Styles/Color.dart';
 import 'package:shopuo/Styles/Typography.dart';
+import 'package:shopuo/locator.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -11,6 +13,8 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  final overlayService = locator<OverlayService>();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -133,7 +137,10 @@ class _SignUpState extends State<SignUp> {
                     text: "Continue with Google",
                     icon: "assets/svg_icons/google.svg",
                     color: MyColor.primaryBlue1,
-                    onTap: () => {},
+                    onTap: () async {
+                      bool value = await overlayService.showPaymentDialog();
+                      print(value);
+                    },
                   ),
                   SizedBox(
                     height: 44,
