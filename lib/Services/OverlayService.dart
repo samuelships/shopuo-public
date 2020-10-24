@@ -1,6 +1,10 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+
 class OverlayService {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
   // YES NO DIALOG
   Completer<bool> yesNoDialogCompleter;
   Function yesNoDialogCallback;

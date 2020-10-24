@@ -19,9 +19,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(scaffoldBackgroundColor: Colors.white),
       title: 'Shopuo',
-      builder: (BuildContext context, Widget child) => OverlayManager(
-        child: child,
-      ),
+      builder: (BuildContext context, Widget child) =>
+          OverlayManager.create(child: child),
       home: SignUp(),
       onGenerateRoute: generateRoute,
       navigatorKey: locator<NavigationService>().navigatorKey,
