@@ -32,6 +32,8 @@ dependencies:
   flutter_easyloading: ^2.0.0
   flutter_spinkit: ^4.1.2+1
   get_it: ^5.0.1
+  firebase_core: ^0.5.0+1
+  firebase_auth: ^0.18.1+2
 
 dev_dependencies:
   flutter_test:
