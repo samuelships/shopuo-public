@@ -8,6 +8,7 @@ class FirebaseMessagingService {
   }
 
   register() {
+    print("registering..");
     _firebaseMessaging.configure(
         onMessage: (Map<String, dynamic> message) async {
       print('on message $message');

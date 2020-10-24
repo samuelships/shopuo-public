@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shopuo/Components/DeleteComponent.dart';
-import 'package:shopuo/Components/LoadingComponent.dart';
 import 'package:shopuo/Components/LoadingComponent2.dart';
 import 'package:shopuo/Components/PaymentInstructionsComponent.dart';
 import 'package:shopuo/Services/OverlayService.dart';
 
+import 'Services/FirebaseMessagingService.dart';
 import 'locator.dart';
 
 class OverlayManager extends StatefulWidget {
@@ -18,6 +18,7 @@ class OverlayManager extends StatefulWidget {
 class _OverlayManagerState extends State<OverlayManager> {
   @override
   void initState() {
+    firebaseMessagingService.register();
     overlayService.registerYesNoDialogCallback(showYesNoDialog);
     overlayService.registerLoadingDialogCallback(showLoadingDialog);
     overlayService.registerPaymentDialogCallback(showPaymentDialog);
@@ -25,6 +26,8 @@ class _OverlayManagerState extends State<OverlayManager> {
   }
 
   final overlayService = locator<OverlayService>();
+  final FirebaseMessagingService firebaseMessagingService =
+      locator<FirebaseMessagingService>();
 
   // SHOW YES DIALOG
   bool _showYesNoDialog = false;
