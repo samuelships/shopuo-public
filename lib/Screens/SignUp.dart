@@ -5,6 +5,8 @@ import 'package:shopuo/Components/Input/TextInputComponent.dart';
 import 'package:shopuo/Services/OverlayService.dart';
 import 'package:shopuo/Styles/Color.dart';
 import 'package:shopuo/Styles/Typography.dart';
+import 'package:shopuo/Validators/EmailValidator.dart';
+import 'package:shopuo/Validators/FormValidator.dart';
 import 'package:shopuo/locator.dart';
 
 class SignUp extends StatefulWidget {
@@ -14,6 +16,7 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   final overlayService = locator<OverlayService>();
+  FormValidator form = emailValidator;
 
   @override
   Widget build(BuildContext context) {
@@ -92,6 +95,12 @@ class _SignUpState extends State<SignUp> {
                   TextInputComponent(
                     hintText: "johndoe@gmail.com",
                     header: "Email Address",
+                    onChanged: (value) {
+                      setState(() {
+                        form.change(value);
+                      });
+                    },
+                    error: form.error,
                   ),
                   SizedBox(
                     height: 20,
@@ -106,7 +115,11 @@ class _SignUpState extends State<SignUp> {
                   ),
                   ButtonComponent(
                     text: "Sign In",
-                    onTap: () => {},
+                    onTap: () => {
+                      setState(() {
+                        form.localError = "lj";
+                      })
+                    },
                   ),
                   SizedBox(
                     height: 20,
@@ -139,7 +152,6 @@ class _SignUpState extends State<SignUp> {
                     color: MyColor.primaryBlue1,
                     onTap: () async {
                       bool value = await overlayService.showPaymentDialog();
-                      print(value);
                     },
                   ),
                   SizedBox(

@@ -39,6 +39,7 @@ dependencies:
   firebase_storage: ^4.0.1
   provider: ^4.3.2+2
   data_connection_checker: ^0.3.4
+  formz: ^0.3.2
 
 dev_dependencies:
   flutter_test:

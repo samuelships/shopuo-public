@@ -95,7 +95,6 @@ class _TextInputComponentState extends State<TextInputComponent> {
                     ),
                   ),
                   obscureText: widget.obscure == true ? true : false,
-                  onChanged: widget.onChanged,
                 ),
               ),
               if (widget.trailingIcon != null)
@@ -114,7 +113,7 @@ class _TextInputComponentState extends State<TextInputComponent> {
             "${widget.error}",
             style: TextStyle(
               fontFamily: "SF Pro Display",
-              fontSize: 11,
+              fontSize: MyTypography.body1.fontSize,
               color: MyColor.primaryRed,
             ),
           )

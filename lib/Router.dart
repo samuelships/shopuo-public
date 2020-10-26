@@ -3,7 +3,7 @@ import 'package:shopuo/Screens/SignIn.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
-    case "Signin":
+    case "SigIn":
       return getPageRoute(
         builder: SignIn(),
         name: settings.name,
@@ -23,7 +23,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
 getPageRoute({builder, name, arguments}) {
   return MaterialPageRoute(
-    builder: builder,
+    builder: (_) => builder,
     settings: RouteSettings(name: name, arguments: arguments),
   );
 }

@@ -27,7 +27,7 @@ class OverlayManagerViewModel with ChangeNotifier {
       switch (status) {
         case DataConnectionStatus.connected:
           if (value != 0) {
-            print("internet is working");
+            // print("internet is working");
             overrlayService.scaffoldKey.currentState.showSnackBar(SnackBar(
               backgroundColor: Colors.green,
               content: Text("Internet connection is available"),
@@ -38,7 +38,7 @@ class OverlayManagerViewModel with ChangeNotifier {
           break;
         case DataConnectionStatus.disconnected:
           if (value != 0) {
-            print("internet is not working");
+            // print("internet is not working");
             overrlayService.scaffoldKey.currentState.showSnackBar(SnackBar(
               backgroundColor: Colors.red,
               content: Text("Internet connection is not available"),
