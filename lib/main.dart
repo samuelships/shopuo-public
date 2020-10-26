@@ -1,37 +1,30 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:shopuo/Screens/Address.dart';
-import 'package:shopuo/Screens/Categories.dart';
-import 'package:shopuo/Screens/ChangeEmail.dart';
-import 'package:shopuo/Screens/ChangeName.dart';
-import 'package:shopuo/Screens/ChangePassword.dart';
-import 'package:shopuo/Screens/Congratulations.dart';
-import 'package:shopuo/Screens/EditAddress.dart';
-import 'package:shopuo/Screens/OnSale.dart';
-import 'package:shopuo/Screens/Orders.dart';
-import 'package:shopuo/Screens/PrivacyPolicy.dart';
-import 'package:shopuo/Screens/ProductDetails.dart';
-import 'package:shopuo/Screens/Profile.dart';
-import 'package:shopuo/Screens/PushNotification.dart';
-import 'package:shopuo/Screens/ResetPassword.dart';
-import 'package:shopuo/Screens/Search.dart';
-import 'package:shopuo/Screens/Settings.dart';
-import 'package:shopuo/Screens/SignIn.dart';
-import 'package:shopuo/Screens/SignUp.dart';
+import 'package:shopuo/OverlayManager.dart';
+import 'package:shopuo/Router.dart';
+import 'package:shopuo/Screens/EntryPoint.dart';
+import 'package:shopuo/Services/NavigationService.dart';
+import 'package:shopuo/locator.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  setupLocator();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  // Open pull request for v1.0.0
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(scaffoldBackgroundColor: Colors.white),
       title: 'Shopuo',
-      home: SignUp(),
+      builder: (BuildContext context, Widget child) =>
+          OverlayManager.create(child: child),
+      home: EntryPoint.create(),
+      onGenerateRoute: generateRoute,
+      navigatorKey: locator<NavigationService>().navigatorKey,
     );
   }
 }

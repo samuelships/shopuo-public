@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shopuo/Components/Button/ButtonComponent.dart';
 import 'package:shopuo/Components/Input/TextInputComponent.dart';
+import 'package:shopuo/Services/OverlayService.dart';
 import 'package:shopuo/Styles/Color.dart';
 import 'package:shopuo/Styles/Typography.dart';
+import 'package:shopuo/Validators/EmailValidator.dart';
+import 'package:shopuo/Validators/FormValidator.dart';
+import 'package:shopuo/locator.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -11,6 +15,9 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  final overlayService = locator<OverlayService>();
+  FormValidator form = emailValidator;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -88,6 +95,12 @@ class _SignUpState extends State<SignUp> {
                   TextInputComponent(
                     hintText: "johndoe@gmail.com",
                     header: "Email Address",
+                    onChanged: (value) {
+                      setState(() {
+                        form.change(value);
+                      });
+                    },
+                    error: form.error,
                   ),
                   SizedBox(
                     height: 20,
@@ -102,7 +115,11 @@ class _SignUpState extends State<SignUp> {
                   ),
                   ButtonComponent(
                     text: "Sign In",
-                    onTap: () => {},
+                    onTap: () => {
+                      setState(() {
+                        form.localError = "lj";
+                      })
+                    },
                   ),
                   SizedBox(
                     height: 20,
@@ -133,7 +150,9 @@ class _SignUpState extends State<SignUp> {
                     text: "Continue with Google",
                     icon: "assets/svg_icons/google.svg",
                     color: MyColor.primaryBlue1,
-                    onTap: () => {},
+                    onTap: () async {
+                      bool value = await overlayService.showPaymentDialog();
+                    },
                   ),
                   SizedBox(
                     height: 44,

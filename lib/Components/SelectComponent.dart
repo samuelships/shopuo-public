@@ -3,8 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shopuo/Styles/Color.dart';
 import 'package:shopuo/Styles/Typography.dart';
 
-import '../ModalBottomSheetInspection.dart';
-
 class SelectComponent extends StatefulWidget {
   final Widget child;
   final Function onChanged;
@@ -30,7 +28,7 @@ class _SelectComponentState extends State<SelectComponent> {
   int selectedIndex;
 
   Future<String> showAlert() async {
-    return await showModalBottomSheetMine<String>(
+    return await showModalBottomSheet<String>(
       isScrollControlled: true,
       context: context,
       builder: (context) => Container(

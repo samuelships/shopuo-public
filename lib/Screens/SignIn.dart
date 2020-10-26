@@ -38,6 +38,7 @@ class _SignInState extends State<SignIn> {
                       "assets/svg_icons/chevron-left.svg",
                       height: 28,
                       width: 28,
+                      color: Colors.white,
                     ),
                   )
                 ],
