@@ -15,5 +15,7 @@ class EntryPointViewModel with ChangeNotifier {
     user == null
         ? _navigationService.navigateToAndClear("SigIn")
         : _navigationService.navigateToAndClear("Home");
+
+    print(user);
   }
 }

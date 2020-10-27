@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:shopuo/Styles/Color.dart';
 
 class OverlayService {
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -42,5 +43,24 @@ class OverlayService {
     showPaymentDialogCompleter = Completer<bool>();
     showPaymentDialogCallback();
     return showPaymentDialogCompleter.future;
+  }
+
+  // SNACKBAR NOTIFICATIONS
+  showSnackBarSuccess({Widget widget}) {
+    scaffoldKey.currentState.showSnackBar(
+      SnackBar(
+        content: widget,
+        backgroundColor: MyColor.primaryGreen,
+      ),
+    );
+  }
+
+  showSnackBarFailure({Widget widget}) {
+    scaffoldKey.currentState.showSnackBar(
+      SnackBar(
+        content: widget,
+        backgroundColor: MyColor.primaryRed,
+      ),
+    );
   }
 }
