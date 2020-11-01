@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:shopuo/Components/BottomNavComponent.dart';
 import 'package:shopuo/Components/Button/ButtonComponent.dart';
 import 'package:shopuo/Components/CartProductCard.dart';
 import 'package:shopuo/Components/HeaderComponent.dart';
@@ -102,15 +101,7 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
                 )
               ],
             ),
-            bottomNavigationBar: BottomNavComponent(
-              currentIndex: 2,
-            ),
           ),
-          // DeleteComponent(
-          //   dismissCallback: () {
-          //     print("dismdissed...");
-          //   },
-          // )
         ],
       ),
     );

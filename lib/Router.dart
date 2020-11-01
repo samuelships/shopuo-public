@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:shopuo/Screens/Categories.dart';
+import 'package:shopuo/Screens/NestedNavigagtion.dart';
 import 'package:shopuo/Screens/ResetPassword.dart';
+import 'package:shopuo/Screens/Settings.dart';
 import 'package:shopuo/Screens/SignIn.dart';
 import 'package:shopuo/Screens/SignUp.dart';
 
+import 'Screens/Cart.dart';
+
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
-    case "SigIn":
-      return getPageRoute(
-        builder: SignIn.create(),
-        name: settings.name,
-        arguments: settings.arguments,
-      );
-      break;
-
-    case "Home":
+    case "SignIn":
       return getPageRoute(
         builder: SignIn.create(),
         name: settings.name,
@@ -37,9 +34,41 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
       break;
 
+    case "OnSale":
+      return getPageRoute(
+        builder: NestedNavigation(),
+        name: settings.name,
+        arguments: settings.arguments,
+      );
+      break;
+
+    case "Categories":
+      return getPageRoute(
+        builder: Categories(),
+        name: settings.name,
+        arguments: settings.arguments,
+      );
+      break;
+
+    case "Cart":
+      return getPageRoute(
+        builder: Cart(),
+        name: settings.name,
+        arguments: settings.arguments,
+      );
+      break;
+
+    case "Settings":
+      return getPageRoute(
+        builder: Settings(),
+        name: settings.name,
+        arguments: settings.arguments,
+      );
+      break;
+
     default:
       return getPageRoute(
-        builder: SignIn(),
+        builder: SignIn.create(),
         name: settings.name,
         arguments: settings.arguments,
       );

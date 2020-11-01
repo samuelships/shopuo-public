@@ -1,6 +1,16 @@
 import 'package:flutter/cupertino.dart';
+import 'package:shopuo/Components/BottomNavComponent.dart';
 
 class NavigationService {
+  TabItem currentTab = TabItem.One;
+
+  Map<TabItem, GlobalKey<NavigatorState>> tabKey = {
+    TabItem.One: GlobalKey<NavigatorState>(),
+    TabItem.Two: GlobalKey<NavigatorState>(),
+    TabItem.Three: GlobalKey<NavigatorState>(),
+    TabItem.Four: GlobalKey<NavigatorState>(),
+  };
+
   GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
   GlobalKey<NavigatorState> get navigatorKey => _navigatorKey;

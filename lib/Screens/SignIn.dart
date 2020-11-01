@@ -9,7 +9,7 @@ import 'package:shopuo/ViewModels/SignInViewModel.dart';
 import '../locator.dart';
 
 class SignIn extends StatefulWidget {
-  static Widget create({child}) {
+  static Widget create() {
     return ChangeNotifierProvider<SignInViewModel>(
       create: (_) => locator<SignInViewModel>(),
       child: SignIn(),
