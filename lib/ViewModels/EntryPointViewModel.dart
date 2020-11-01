@@ -13,9 +13,7 @@ class EntryPointViewModel with ChangeNotifier {
 
     // redirect user
     user == null
-        ? _navigationService.navigateToAndClear("SigIn")
-        : _navigationService.navigateToAndClear("Home");
-
-    print(user);
+        ? _navigationService.navigateToAndClear("SignIn")
+        : _navigationService.navigateToAndClear("OnSale");
   }
 }

@@ -5,8 +5,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shopuo/Styles/Color.dart';
 import 'package:shopuo/Styles/Typography.dart';
 
+enum TabItem { One, Two, Three, Four }
+
 class BottomNavComponent extends StatelessWidget {
   final currentIndex;
+  final Function(TabItem tabItem) onChange;
+
   final List<List<String>> icons = [
     ["assets/svg_icons/home.svg", "On Sale"],
     ["assets/svg_icons/layers.svg", "Categories"],
@@ -14,17 +18,21 @@ class BottomNavComponent extends StatelessWidget {
     ["assets/svg_icons/settings.svg", "Settings"]
   ];
 
-  BottomNavComponent({Key key, @required this.currentIndex}) : super(key: key);
+  BottomNavComponent({
+    Key key,
+    @required this.currentIndex,
+    this.onChange,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ClipRect(
-        child: BackdropFilter(
-      filter: ImageFilter.blur(
-        sigmaX: 5.0,
-        sigmaY: 5.0,
-      ),
-      child: Container(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(
+          sigmaX: 5.0,
+          sigmaY: 5.0,
+        ),
+        child: Container(
           height: 82,
           decoration: BoxDecoration(
             color: Color(0xffF8F8F8).withOpacity(.92),
@@ -45,38 +53,50 @@ class BottomNavComponent extends StatelessWidget {
                   children: [
                     ...icons
                         .asMap()
-                        .map((index, value) => MapEntry(
-                              index,
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SvgPicture.asset(
-                                    "${value[0]}",
-                                    color: currentIndex == index
-                                        ? MyColor.primaryPurple
-                                        : MyColor.neutralGrey3,
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(
-                                    "${value[1]}",
-                                    style: MyTypography.smallText.copyWith(
+                        .map(
+                          (index, value) => MapEntry(
+                            index,
+                            GestureDetector(
+                              onTap: () {
+                                onChange(TabItem.values[index]);
+                              },
+                              child: Container(
+                                color: Colors.transparent,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                      "${value[0]}",
                                       color: currentIndex == index
                                           ? MyColor.primaryPurple
                                           : MyColor.neutralGrey3,
                                     ),
-                                  )
-                                ],
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      "${value[1]}",
+                                      style: MyTypography.smallText.copyWith(
+                                        color: currentIndex == index
+                                            ? MyColor.primaryPurple
+                                            : MyColor.neutralGrey3,
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ))
+                            ),
+                          ),
+                        )
                         .values
                         .toList()
                   ],
                 ),
               ),
             ],
-          )),
-    ));
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -51,7 +51,7 @@ class SignInViewModel with ChangeNotifier {
           password: password.formz.value,
         );
 
-        //await _navigationService.navigateToAndClear("Home");
+        await _navigationService.navigateToAndClear("OnSale");
       } on FirebaseAuthException catch (error) {
         if (error.code == "invalid-email") {
           email.localError = "Email is invalid";
@@ -77,6 +77,9 @@ class SignInViewModel with ChangeNotifier {
   }
 
   continueWithGoogle() async {
-    await _authenticationService.signInWithGoogle();
+    bool result = await _authenticationService.signInWithGoogle();
+    if (result) {
+      await _navigationService.navigateToAndClear("OnSale");
+    }
   }
 }
