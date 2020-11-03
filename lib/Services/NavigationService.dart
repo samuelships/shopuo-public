@@ -26,6 +26,27 @@ class NavigationService {
     );
   }
 
+  Future<dynamic> navigateInner(
+    String routeName, {
+    dynamic arguments,
+  }) async {
+    return await tabKey[currentTab].currentState.pushNamed(
+          routeName,
+          arguments: arguments,
+        );
+  }
+
+  Future<dynamic> navigateInnerAndClear(
+    String routeName, {
+    dynamic arguments,
+  }) async {
+    return await tabKey[currentTab].currentState.pushNamedAndRemoveUntil(
+          routeName,
+          (Route<dynamic> route) => false,
+          arguments: arguments,
+        );
+  }
+
   Future<dynamic> navigateToAndClear(
     String routeName, {
     dynamic arguments,

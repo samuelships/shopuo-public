@@ -1,7 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 class FirestoreService {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  FirestoreService() {
+    String host = defaultTargetPlatform == TargetPlatform.android
+        ? '10.0.2.2:8080'
+        : 'localhost:8080';
+
+    // FirebaseFirestore.instance.settings =
+    //     Settings(host: host, sslEnabled: false, persistenceEnabled: false);
+    _firestore = FirebaseFirestore.instance;
+  }
+
+  FirebaseFirestore _firestore;
   Future<void> setData({String path, Map<String, dynamic> data}) async {
     await _firestore.doc(path).set(data, SetOptions(merge: true));
   }
