@@ -30,7 +30,8 @@ class _SettingsState extends State<Settings> {
           "icon": "user",
           "heading": "Profile Information",
           "sub heading": "Name, Email",
-          "color": Color(0xffA6D6FF)
+          "color": Color(0xffA6D6FF),
+          "callback": (model) => model.goToProfile()
         },
         {
           "icon": "lock",
