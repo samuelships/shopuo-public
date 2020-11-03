@@ -1,5 +1,4 @@
 import 'package:get_it/get_it.dart';
-import 'package:shopuo/Screens/SignUpInfo.dart';
 import 'package:shopuo/Services/AuthenticationService.dart';
 import 'package:shopuo/Services/CloudFunctionService.dart';
 import 'package:shopuo/Services/FirestoreService.dart';

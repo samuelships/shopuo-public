@@ -63,7 +63,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
     case "Profile":
       return getPageRoute(
-        builder: Profile.create(),
+        builder: Profile(),
         name: settings.name,
         arguments: settings.arguments,
       );

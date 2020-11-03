@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shopuo/Services/AuthenticationService.dart';
+import 'package:shopuo/Services/FirestoreService.dart';
 import 'package:shopuo/Services/NavigationService.dart';
 import 'package:shopuo/Validators/EmailValidator.dart';
 import 'package:shopuo/Validators/FormValidator.dart';
@@ -14,6 +15,7 @@ class SignUpViewModel with ChangeNotifier {
   // services
   final _authenticationService = locator<AuthenticationService>();
   final _navigationService = locator<NavigationService>();
+  final _firestoreService = locator<FirestoreService>();
 
   // validation
   FormValidator password = FormValidator(validators: passwordValidators);
@@ -34,6 +36,31 @@ class SignUpViewModel with ChangeNotifier {
 
   // methods
 
+  redirectToAppropriateScreen() async {
+    // get current user
+    final user = _authenticationService.currentUser();
+
+    final docSnapshot =
+        await _firestoreService.getData("user_info/${user.uid}");
+
+    // document does not exist
+    if (!docSnapshot.exists) {
+      return _navigationService.navigateToAndClear("SignUpInfo");
+    }
+
+    // if document exists but not verified
+    final docSnapshotData = docSnapshot.data();
+
+    if (!docSnapshotData["verified"]) {
+      _navigationService.navigateToAndClear("SignUpInfo");
+      return _navigationService.navigateTo("SignUpVerify",
+          arguments: {"phone_number": docSnapshotData["phone_number"]});
+    }
+
+    // if verified
+    _navigationService.navigateToAndClear("OnSale");
+  }
+
   goToResetPassword() async {
     await _navigationService.navigateTo("ResetPassword");
   }
@@ -49,7 +76,7 @@ class SignUpViewModel with ChangeNotifier {
           password: password.formz.value,
         );
 
-        //await _navigationService.navigateToAndClear("Home");
+        redirectToAppropriateScreen();
       } on FirebaseAuthException catch (error) {
         if (error.code == "invalid-email") {
           email.localError = "Email is invalid";

@@ -13,7 +13,7 @@ class SignUpVerifyViewModel with ChangeNotifier {
   final _overlayService = locator<OverlayService>();
 
   // page data
-  int timeToSend;
+  int timeToSend = 0;
 
   bool _isTimeToSend = true;
   get isTimeToSend => _isTimeToSend;
