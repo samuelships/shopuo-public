@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:shopuo/Screens/Categories.dart';
 import 'package:shopuo/Screens/NestedNavigagtion.dart';
+import 'package:shopuo/Screens/Profile.dart';
 import 'package:shopuo/Screens/ResetPassword.dart';
 import 'package:shopuo/Screens/Settings.dart';
 import 'package:shopuo/Screens/SignIn.dart';
 import 'package:shopuo/Screens/SignUp.dart';
+import 'package:shopuo/Screens/SignUpInfo.dart';
+import 'package:shopuo/Screens/SignUpVerify.dart';
 
 import 'Screens/Cart.dart';
 
@@ -58,9 +61,34 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
       break;
 
+    case "Profile":
+      return getPageRoute(
+        builder: Profile.create(),
+        name: settings.name,
+        arguments: settings.arguments,
+      );
+      break;
+
     case "Settings":
       return getPageRoute(
         builder: Settings(),
+        name: settings.name,
+        arguments: settings.arguments,
+      );
+      break;
+
+    case "SignUpInfo":
+      return getPageRoute(
+        builder: SignUpInfo.create(),
+        name: settings.name,
+        arguments: settings.arguments,
+      );
+      break;
+
+    case "SignUpVerify":
+      var args = settings.arguments as Map;
+      return getPageRoute(
+        builder: SignUpVerify.create(phoneNumber: args["phoneNumber"]),
         name: settings.name,
         arguments: settings.arguments,
       );
