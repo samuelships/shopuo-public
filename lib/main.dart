@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:shopuo/OverlayManager.dart';
 import 'package:shopuo/Router.dart';
 import 'package:shopuo/Screens/EntryPoint.dart';
+import 'package:shopuo/Screens/SignUpInfo.dart';
+import 'package:shopuo/Screens/SignUpVerify.dart';
 import 'package:shopuo/Services/NavigationService.dart';
 import 'package:shopuo/ViewModels/CartViewModel.dart';
 import 'package:shopuo/ViewModels/CategoriesViewModel.dart';
@@ -42,8 +44,9 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(scaffoldBackgroundColor: Colors.white),
         title: 'Shopuo',
-        builder: (BuildContext context, Widget child) =>
-            OverlayManager.create(child: child),
+        builder: (BuildContext context, Widget child) => OverlayManager.create(
+          child: child,
+        ),
         home: EntryPoint.create(),
         onGenerateRoute: generateRoute,
         navigatorKey: locator<NavigationService>().navigatorKey,
