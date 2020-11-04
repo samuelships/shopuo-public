@@ -37,7 +37,8 @@ class _SettingsState extends State<Settings> {
           "icon": "lock",
           "heading": "Change Password",
           "sub heading": "Change your current password",
-          "color": Color(0xff00C48C)
+          "color": Color(0xff00C48C),
+          "callback": (model) => model.goToInner("ChangePassword")
         },
         {
           "icon": "map-pin",

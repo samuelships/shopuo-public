@@ -12,6 +12,7 @@ import 'package:shopuo/Services/OverlayService.dart';
 import 'package:shopuo/Validators/EmailValidator.dart';
 import 'package:shopuo/Validators/FormValidator.dart';
 import 'package:shopuo/Validators/FullNameValidator.dart';
+import 'package:shopuo/Validators/PasswordValidator.dart';
 
 import '../locator.dart';
 
@@ -35,6 +36,12 @@ class SettingsViewModel with ChangeNotifier {
   FormValidator emailForm = FormValidator(validators: emailValidators);
   get isEmailValid {
     final inputs = <FormzInput>[emailForm.formz];
+    return Formz.validate(inputs) == FormzStatus.valid ? true : false;
+  }
+
+  FormValidator passwordForm = FormValidator(validators: passwordValidators);
+  get isPasswordValid {
+    final inputs = <FormzInput>[passwordForm.formz];
     return Formz.validate(inputs) == FormzStatus.valid ? true : false;
   }
 
@@ -199,6 +206,33 @@ class SettingsViewModel with ChangeNotifier {
       }
 
       uploadProfileInProgress = false;
+    }
+  }
+
+  //  change password
+  bool _changePasswordInProgress = false;
+  get changePasswordInProgress => _changePasswordInProgress;
+  set changePasswordInProgress(value) {
+    _changePasswordInProgress = value;
+    notifyListeners();
+  }
+
+  changePassword() async {
+    if (!changePasswordInProgress && isPasswordValid) {
+      changePasswordInProgress = true;
+
+      try {
+        await _authenticationService.changePassword(passwordForm.formz.value);
+        _overlayService.showSnackBarSuccess(
+            widget: Text("Password changed successfully"));
+      } on FirebaseAuthException catch (e) {
+        if (e.code == "requires-recent-login") {
+          passwordForm.localError =
+              "Changing your password requires recent login";
+        }
+      } finally {
+        changePasswordInProgress = false;
+      }
     }
   }
 
