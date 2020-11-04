@@ -12,6 +12,7 @@ import 'package:shopuo/Services/OverlayService.dart';
 import 'package:shopuo/Validators/EmailValidator.dart';
 import 'package:shopuo/Validators/FormValidator.dart';
 import 'package:shopuo/Validators/FullNameValidator.dart';
+import 'package:shopuo/Validators/NonEmptyTextValidator.dart';
 import 'package:shopuo/Validators/PasswordValidator.dart';
 
 import '../locator.dart';
@@ -25,7 +26,6 @@ class SettingsViewModel with ChangeNotifier {
   final _firebaseStorageService = locator<FirebaseStorageService>();
 
   // PROFILE INFORMATION
-
   // validation
   FormValidator fullNameForm = FormValidator(validators: fullNameValidators);
   get isFullNameValid {
@@ -66,6 +66,52 @@ class SettingsViewModel with ChangeNotifier {
   List<Map> sections = [
     {"heading": "", "sub heading": "Full name"},
   ];
+
+  /// ADDRESS
+  FormValidator addressName = FormValidator(validators: nonEmptyTextValidators);
+  FormValidator addressDescription =
+      FormValidator(validators: nonEmptyTextValidators);
+
+  get isAddressValid {
+    final inputs = <FormzInput>[
+      addressName.formz,
+      addressDescription.formz,
+    ];
+    return Formz.validate(inputs) == FormzStatus.valid ? true : false;
+  }
+
+  bool _addressInProgress = false;
+  get addressInProgress => _addressInProgress;
+  set addressInProgress(value) {
+    _addressInProgress = value;
+    notifyListeners();
+  }
+
+  addAddress() async {
+    if (isAddressValid && !addressInProgress) {
+      addressInProgress = true;
+
+      try {
+        await _firestoreService.addDocument(path: "addresses", data: {
+          "name": addressName.formz.value,
+          "description": addressDescription.formz.value,
+          "user_id": uid
+        });
+
+        _overlayService.showSnackBarSuccess(
+            widget: Text("Address added successfully"));
+
+        _navigationService.popInner();
+        notifyListeners();
+      } catch (e) {
+        print(e);
+      }
+
+      addressInProgress = false;
+    }
+  }
+
+  editAddress({id}) {}
 
   // methods
   setUpProfile() async {

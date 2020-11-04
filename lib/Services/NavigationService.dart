@@ -19,6 +19,10 @@ class NavigationService {
     return _navigatorKey.currentState.pop();
   }
 
+  void popInner() {
+    return tabKey[currentTab].currentState.pop();
+  }
+
   Future<dynamic> navigateTo(String routeName, {dynamic arguments}) async {
     return await _navigatorKey.currentState.pushNamed(
       routeName,

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:shopuo/Screens/Address.dart';
 import 'package:shopuo/Screens/Categories.dart';
 import 'package:shopuo/Screens/ChangeEmail.dart';
 import 'package:shopuo/Screens/ChangeName.dart';
 import 'package:shopuo/Screens/ChangePassword.dart';
+import 'package:shopuo/Screens/EditAddress.dart';
 import 'package:shopuo/Screens/NestedNavigagtion.dart';
 import 'package:shopuo/Screens/Profile.dart';
 import 'package:shopuo/Screens/ResetPassword.dart';
@@ -116,6 +118,22 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case "ChangePassword":
       return getPageRoute(
         builder: ChangePassword(),
+        name: settings.name,
+        arguments: settings.arguments,
+      );
+      break;
+
+    case "Address":
+      return getPageRoute(
+        builder: Address(),
+        name: settings.name,
+        arguments: settings.arguments,
+      );
+      break;
+
+    case "AddAddress":
+      return getPageRoute(
+        builder: EditAddress(),
         name: settings.name,
         arguments: settings.arguments,
       );
