@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopuo/Screens/Categories.dart';
+import 'package:shopuo/Screens/ChangeEmail.dart';
+import 'package:shopuo/Screens/ChangeName.dart';
 import 'package:shopuo/Screens/NestedNavigagtion.dart';
 import 'package:shopuo/Screens/Profile.dart';
 import 'package:shopuo/Screens/ResetPassword.dart';
@@ -63,7 +65,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
     case "Profile":
       return getPageRoute(
-        builder: Profile.create(),
+        builder: Profile(),
         name: settings.name,
         arguments: settings.arguments,
       );
@@ -89,6 +91,22 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       var args = settings.arguments as Map;
       return getPageRoute(
         builder: SignUpVerify.create(phoneNumber: args["phoneNumber"]),
+        name: settings.name,
+        arguments: settings.arguments,
+      );
+      break;
+
+    case "ChangeName":
+      return getPageRoute(
+        builder: ChangeName(),
+        name: settings.name,
+        arguments: settings.arguments,
+      );
+      break;
+
+    case "ChangeEmail":
+      return getPageRoute(
+        builder: ChangeEmail(),
         name: settings.name,
         arguments: settings.arguments,
       );

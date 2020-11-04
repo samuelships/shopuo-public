@@ -1,20 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:shopuo/Styles/Color.dart';
 import 'package:shopuo/Styles/Typography.dart';
-import 'package:shopuo/ViewModels/ProfileViewModel.dart';
-
-import '../locator.dart';
+import 'package:shopuo/ViewModels/SettingsViewModel.dart';
 
 class Profile extends StatefulWidget {
-  static Widget create() {
-    return ChangeNotifierProvider<ProfileViewModel>(
-      create: (_) => locator<ProfileViewModel>(),
-      child: Profile(),
-    );
-  }
-
   @override
   _ProfileState createState() => _ProfileState();
 }
@@ -23,17 +15,17 @@ class _ProfileState extends State<Profile> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      model = Provider.of<ProfileViewModel>(context, listen: false);
+      model = Provider.of<SettingsViewModel>(context, listen: false);
       model.setUpModel();
     });
     super.initState();
   }
 
-  ProfileViewModel model;
+  SettingsViewModel model;
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ProfileViewModel>(
+    return Consumer<SettingsViewModel>(
       builder: (context, model, child) => SafeArea(
         child: Scaffold(
           body: ListView(
@@ -65,27 +57,43 @@ class _ProfileState extends State<Profile> {
                       height: 10,
                     ),
                     Text(
-                      "Tana Mojo",
+                      model.fullName,
                       style: MyTypography.heading4R,
                     ),
                     SizedBox(
                       height: 5,
                     ),
                     Text(
-                      "tanamojo@gmail.com",
+                      model.email,
                       style: MyTypography.heading6R,
                     ),
                     SizedBox(
                       height: 20,
                     ),
-                    Container(
-                      height: 80,
-                      width: 80,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          image: AssetImage("assets/images/profile.png"),
-                          fit: BoxFit.cover,
+                    GestureDetector(
+                      onTap: model.uploadProfile,
+                      child: CachedNetworkImage(
+                        imageUrl: model.profile,
+                        placeholder: (context, string) => Container(
+                          height: 80,
+                          width: 80,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: MyColor.primaryPurple,
+                          ),
+                        ),
+                        imageBuilder: (context, imageProvider) => Container(
+                          height: 80,
+                          width: 80,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Colors.white.withOpacity(.7), width: 2),
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                         ),
                       ),
                     )
@@ -99,7 +107,7 @@ class _ProfileState extends State<Profile> {
                   .map((item) => Material(
                         color: Colors.transparent,
                         child: InkWell(
-                          onTap: () {},
+                          onTap: item["onTap"],
                           splashColor: Colors.transparent,
                           child: Container(
                             decoration: BoxDecoration(
@@ -114,11 +122,21 @@ class _ProfileState extends State<Profile> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       item["heading"],
                                       style: MyTypography.heading6R.copyWith(
                                         color: MyColor.neutralBlack,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      item["sub heading"],
+                                      style: MyTypography.heading6R.copyWith(
+                                        color: MyColor.neutralGrey3,
                                       ),
                                     )
                                   ],

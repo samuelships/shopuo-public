@@ -40,6 +40,7 @@ dependencies:
   formz: ^0.3.2
   get_it: ^5.0.1
   google_sign_in: ^4.5.5
+  image_picker: ^0.6.7+12
   pinput: ^0.2.6
   provider: ^4.3.2+2
 
