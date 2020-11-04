@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:shopuo/Services/AuthenticationService.dart';
 import 'package:shopuo/Services/CloudFunctionService.dart';
+import 'package:shopuo/Services/FirebaseStorageService.dart';
 import 'package:shopuo/Services/FirestoreService.dart';
 import 'package:shopuo/Services/NavigationService.dart';
 import 'package:shopuo/Services/OverlayService.dart';
@@ -40,4 +41,5 @@ setupLocator() {
   locator.registerLazySingleton(() => OverlayService());
   locator.registerLazySingleton(() => FirebaseMessagingService());
   locator.registerLazySingleton(() => CloudFunctionService());
+  locator.registerLazySingleton(() => FirebaseStorageService());
 }

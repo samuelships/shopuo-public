@@ -70,24 +70,29 @@ class _ProfileState extends State<Profile> {
                     SizedBox(
                       height: 20,
                     ),
-                    CachedNetworkImage(
-                      imageUrl: model.profile,
-                      placeholder: (context, string) => Container(
-                        height: 80,
-                        width: 80,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: MyColor.primaryPurple,
+                    GestureDetector(
+                      onTap: model.uploadProfile,
+                      child: CachedNetworkImage(
+                        imageUrl: model.profile,
+                        placeholder: (context, string) => Container(
+                          height: 80,
+                          width: 80,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: MyColor.primaryPurple,
+                          ),
                         ),
-                      ),
-                      imageBuilder: (context, imageProvider) => Container(
-                        height: 80,
-                        width: 80,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.cover,
+                        imageBuilder: (context, imageProvider) => Container(
+                          height: 80,
+                          width: 80,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Colors.white.withOpacity(.7), width: 2),
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),
@@ -102,7 +107,7 @@ class _ProfileState extends State<Profile> {
                   .map((item) => Material(
                         color: Colors.transparent,
                         child: InkWell(
-                          onTap: () {},
+                          onTap: item["onTap"],
                           splashColor: Colors.transparent,
                           child: Container(
                             decoration: BoxDecoration(

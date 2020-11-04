@@ -9,6 +9,7 @@ class FirestoreService {
 
     // FirebaseFirestore.instance.settings =
     //     Settings(host: host, sslEnabled: false, persistenceEnabled: false);
+    //FirebaseFirestore.instance.settings = Settings(persistenceEnabled: false);
     _firestore = FirebaseFirestore.instance;
   }
 
