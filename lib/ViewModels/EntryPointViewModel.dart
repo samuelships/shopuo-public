@@ -12,7 +12,6 @@ class EntryPointViewModel with ChangeNotifier {
   setUpModel() async {
     // get current user
     final user = _authenticationService.currentUser();
-
     // user is not logged in
     if (user != null) {
       final docSnapshot =

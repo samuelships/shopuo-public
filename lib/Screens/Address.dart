@@ -12,7 +12,14 @@ class Address extends StatefulWidget {
 }
 
 class _AddressState extends State<Address> {
-  final List<AddressModel> _addreses = addresses;
+  SettingsViewModel model;
+
+  @override
+  void initState() {
+    model = Provider.of<SettingsViewModel>(context, listen: false);
+    model.setUpAddress();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +51,7 @@ class _AddressState extends State<Address> {
                 height: 40,
               ),
               AddressResultComponent(
-                results: _addreses,
+                results: model.addresses,
               )
             ],
           ),

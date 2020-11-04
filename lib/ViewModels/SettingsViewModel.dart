@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shopuo/Models/AddressModel.dart';
 import 'package:shopuo/Services/AuthenticationService.dart';
 import 'package:shopuo/Services/FirebaseStorageService.dart';
 import 'package:shopuo/Services/FirestoreService.dart';
@@ -68,6 +70,7 @@ class SettingsViewModel with ChangeNotifier {
   ];
 
   /// ADDRESS
+  List<AddressModel> addresses = [];
   FormValidator addressName = FormValidator(validators: nonEmptyTextValidators);
   FormValidator addressDescription =
       FormValidator(validators: nonEmptyTextValidators);
@@ -87,15 +90,22 @@ class SettingsViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _addressFetched = false;
+  get addressFetched => _addressFetched;
+  set addressFetched(value) {
+    _addressFetched = value;
+    notifyListeners();
+  }
+
   addAddress() async {
     if (isAddressValid && !addressInProgress) {
       addressInProgress = true;
 
       try {
         await _firestoreService.addDocument(path: "addresses", data: {
-          "name": addressName.formz.value,
+          "title": addressName.formz.value,
           "description": addressDescription.formz.value,
-          "user_id": uid
+          "user_id": _authenticationService.currentUser().uid
         });
 
         _overlayService.showSnackBarSuccess(
@@ -112,6 +122,31 @@ class SettingsViewModel with ChangeNotifier {
   }
 
   editAddress({id}) {}
+
+  StreamSubscription addressSubscription;
+  fetchAddress() async {
+    final addressSubscription = _firestoreService
+        .collectionStream<AddressModel>(
+      path: "addresses",
+      builder: (data, documentId) =>
+          AddressModel.fromMap(data: data, documentId: documentId),
+      queryBuilder: (query) => query.where(
+        "user_id",
+        isEqualTo: _authenticationService.currentUser().uid,
+      ),
+    )
+        .listen((data) {
+      addresses = data;
+      addressFetched = true;
+      notifyListeners();
+    });
+  }
+
+  setUpAddress() {
+    if (!addressFetched) {
+      fetchAddress();
+    }
+  }
 
   // methods
   setUpProfile() async {
@@ -293,5 +328,11 @@ class SettingsViewModel with ChangeNotifier {
 
   goToInner(String route) async {
     await _navigationService.navigateInner(route);
+  }
+
+  @override
+  void dispose() {
+    addressSubscription.cancel();
+    super.dispose();
   }
 }

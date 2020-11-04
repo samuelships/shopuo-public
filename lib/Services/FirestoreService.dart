@@ -64,7 +64,7 @@ class FirestoreService {
   }) {
     Query query = _firestore.collection(path);
 
-    if (query != null) {
+    if (queryBuilder != null) {
       query = queryBuilder(query);
     }
 
