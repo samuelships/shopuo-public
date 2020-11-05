@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shopuo/Components/HeaderComponent.dart';
 import 'package:shopuo/Components/ToggleComponent.dart';
 import 'package:shopuo/Styles/Color.dart';
 import 'package:shopuo/Styles/Typography.dart';
+import 'package:shopuo/ViewModels/SettingsViewModel.dart';
 
 class PushNotification extends StatefulWidget {
   @override
@@ -11,11 +13,20 @@ class PushNotification extends StatefulWidget {
 
 class _PushNotificationState extends State<PushNotification> {
   @override
+  void initState() {
+    final model = Provider.of<SettingsViewModel>(context, listen: false);
+    model.getPushNotification();
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         appBar: HeaderComponent(
           leading: "assets/svg_icons/chevron-left.svg",
+          leadingCallback: Navigator.of(context).pop,
           title: "Push Notification",
         ),
         body: ListView(
@@ -46,10 +57,11 @@ class _PushNotificationState extends State<PushNotification> {
                           color: MyColor.neutralBlack,
                         ),
                       ),
-                      ToggleComponent(
-                        onTap: () {},
-                        color: MyColor.primaryPurple,
-                        position: "end",
+                      Consumer<SettingsViewModel>(
+                        builder: (context, model, child) => ToggleComponent(
+                            onTap: model.togglePushNotification,
+                            color: MyColor.primaryPurple,
+                            position: model.pushNotification),
                       )
                     ],
                   ),

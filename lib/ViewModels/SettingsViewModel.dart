@@ -409,6 +409,64 @@ class SettingsViewModel with ChangeNotifier {
   // ---------------------------->>>
   // ---------------------------->>>
 
+  // -------------------------------------------------------------------------->
+
+  // START PUSH NOT ------------->>>
+  // ---------------------------->>>
+  // ---------------------------->>>
+  // ---------------------------->>>
+  // ---------------------------->>>
+
+  // PAGE DATA
+  bool pushNotification = false;
+
+  bool _isTogglePushNotificationInprogress = false;
+  get isTogglePushNotificationInprogress => _isTogglePushNotificationInprogress;
+  set isTogglePushNotificationInprogress(value) {
+    _isTogglePushNotificationInprogress = value;
+    notifyListeners();
+  }
+
+  // METHODS
+  togglePushNotification() async {
+    if (!isTogglePushNotificationInprogress) {
+      isTogglePushNotificationInprogress = true;
+
+      try {
+        final uid = _authenticationService.currentUser().uid;
+        await _firestoreService.setData(path: "user_info/$uid", data: {
+          "send_push_notifications": !pushNotification,
+        });
+
+        pushNotification = !pushNotification;
+        notifyListeners();
+      } catch (e) {}
+
+      isTogglePushNotificationInprogress = false;
+    }
+  }
+
+  getPushNotification() async {
+    try {
+      final uid = _authenticationService.currentUser().uid;
+      final snapshot = await _firestoreService.getData("user_info/${uid}");
+      final push = snapshot.data()["send_push_notifications"];
+
+      pushNotification = push;
+      notifyListeners();
+
+      print(push);
+    } catch (e) {
+      //
+    }
+  }
+
+  // END PUSH NOT --------------->>>
+  // ---------------------------->>>
+  // ---------------------------->>>
+  // ---------------------------->>>
+  // ---------------------------->>>
+
   logOut() async {
     await _authenticationService.logout();
     await _navigationService.navigateToAndClear("SignIn");

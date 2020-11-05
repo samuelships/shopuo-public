@@ -7,6 +7,7 @@ import 'package:shopuo/Screens/ChangePassword.dart';
 import 'package:shopuo/Screens/EditAddress.dart';
 import 'package:shopuo/Screens/NestedNavigagtion.dart';
 import 'package:shopuo/Screens/Profile.dart';
+import 'package:shopuo/Screens/PushNotification.dart';
 import 'package:shopuo/Screens/ResetPassword.dart';
 import 'package:shopuo/Screens/Settings.dart';
 import 'package:shopuo/Screens/SignIn.dart';
@@ -147,6 +148,14 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
       return getPageRoute(
         builder: builder,
+        name: settings.name,
+        arguments: settings.arguments,
+      );
+      break;
+
+    case "PushNotification":
+      return getPageRoute(
+        builder: PushNotification(),
         name: settings.name,
         arguments: settings.arguments,
       );
