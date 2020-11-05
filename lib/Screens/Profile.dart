@@ -16,7 +16,7 @@ class _ProfileState extends State<Profile> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       model = Provider.of<SettingsViewModel>(context, listen: false);
-      model.setUpModel();
+      model.setUpProfile();
     });
     super.initState();
   }

@@ -44,7 +44,8 @@ class _SettingsState extends State<Settings> {
           "icon": "map-pin",
           "heading": "Add Addresses",
           "sub heading": "Add your shipping addresses",
-          "color": Color(0xff00C48C)
+          "color": Color(0xff00C48C),
+          "callback": (model) => model.goToInner("Address")
         },
         {
           "icon": "x-square",

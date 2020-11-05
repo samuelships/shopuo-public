@@ -23,8 +23,7 @@ class HeaderComponent extends StatelessWidget implements PreferredSizeWidget {
     this.background,
     this.leadingColor,
     this.titleStyle,
-  })  : assert(leading != null),
-        super(key: key);
+  }) : super(key: key);
 
   static final fontStyle = MyTypography.heading5SB.copyWith(
     color: MyColor.neutralBlack,

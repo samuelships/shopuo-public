@@ -49,7 +49,6 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
         children: [
           Scaffold(
             appBar: HeaderComponent(
-              leading: "assets/svg_icons/chevron-left.svg",
               title: "Cart",
             ),
             body: Column(

@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shopuo/Models/AddressModel.dart';
 import 'package:shopuo/Services/AuthenticationService.dart';
 import 'package:shopuo/Services/FirebaseStorageService.dart';
 import 'package:shopuo/Services/FirestoreService.dart';
@@ -12,6 +14,7 @@ import 'package:shopuo/Services/OverlayService.dart';
 import 'package:shopuo/Validators/EmailValidator.dart';
 import 'package:shopuo/Validators/FormValidator.dart';
 import 'package:shopuo/Validators/FullNameValidator.dart';
+import 'package:shopuo/Validators/NonEmptyTextValidator.dart';
 import 'package:shopuo/Validators/PasswordValidator.dart';
 
 import '../locator.dart';
@@ -24,9 +27,43 @@ class SettingsViewModel with ChangeNotifier {
   final _overlayService = locator<OverlayService>();
   final _firebaseStorageService = locator<FirebaseStorageService>();
 
-  // PROFILE INFORMATION
+  // START PROFILE INFORMATION ---->>>
+  // ------------------------------>>>
+  // ------------------------------>>>
+  // ------------------------------>>>
+  // ------------------------------>>>
 
-  // validation
+  // PAGE DATA
+  bool loadedProfileInfo = false;
+  String profile = "https://uifaces.co/our-content/donated/KtCFjlD4.jpg";
+
+  String currentUserId;
+  List<Map> sections = [
+    {"heading": "", "sub heading": "Full name"},
+  ];
+
+  bool _changeNameInProgress = false;
+  get changeNameInProgress => _changeNameInProgress;
+  set changeNameInProgress(value) {
+    _changeNameInProgress = value;
+    notifyListeners();
+  }
+
+  String _fullName = "";
+  get fullName => _fullName;
+  set fullName(value) {
+    _fullName = value;
+    notifyListeners();
+  }
+
+  String _email = "";
+  get email => _email;
+  set email(value) {
+    _email = value;
+    notifyListeners();
+  }
+
+  // VALIDATION
   FormValidator fullNameForm = FormValidator(validators: fullNameValidators);
   get isFullNameValid {
     final inputs = <FormzInput>[fullNameForm.formz];
@@ -45,33 +82,13 @@ class SettingsViewModel with ChangeNotifier {
     return Formz.validate(inputs) == FormzStatus.valid ? true : false;
   }
 
-  bool loadedProfileInfo = false;
-  String uid;
-  String _fullName = "";
-  get fullName => _fullName;
-  set fullName(value) {
-    _fullName = value;
-    notifyListeners();
-  }
+  // METHODS
 
-  String _email = "";
-  get email => _email;
-  set email(value) {
-    _email = value;
-    notifyListeners();
-  }
-
-  String profile = "https://uifaces.co/our-content/donated/KtCFjlD4.jpg";
-
-  List<Map> sections = [
-    {"heading": "", "sub heading": "Full name"},
-  ];
-
-  // methods
   setUpProfile() async {
     final currentUser = _authenticationService.currentUser();
-    uid = currentUser.uid;
-    final userData = (await _firestoreService.getData("user_info/$uid")).data();
+    currentUserId = currentUser.uid;
+    final userData =
+        (await _firestoreService.getData("user_info/$currentUserId")).data();
 
     sections[0]["heading"] = userData["full_name"];
     fullName = userData["full_name"];
@@ -102,32 +119,13 @@ class SettingsViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  setUpModel() async {
-    setUpProfile();
-  }
-
-  // add ontap callbacks
-  addCallbacks() {
-    sections[0]["onTap"] = () {
-      goToInner("ChangeName");
-    };
-  }
-
-  // change name
-  bool _changeNameInProgress = false;
-  get changeNameInProgress => _changeNameInProgress;
-  set changeNameInProgress(value) {
-    _changeNameInProgress = value;
-    notifyListeners();
-  }
-
   changeName() async {
     if (isFullNameValid && !changeNameInProgress) {
       changeNameInProgress = true;
 
       try {
         await _firestoreService.setData(
-            path: "user_info/$uid",
+            path: "user_info/$currentUserId",
             data: {"full_name": fullNameForm.formz.value});
 
         _overlayService.showSnackBarSuccess(
@@ -190,11 +188,11 @@ class SettingsViewModel with ChangeNotifier {
         try {
           final downloadUrl = await _firebaseStorageService.uploadFile(
             file: File(pickedFile.path),
-            title: "$uid/profile_",
+            title: "$currentUserId/profile_",
           );
 
           await _firestoreService.setData(
-            path: "user_info/$uid",
+            path: "user_info/$currentUserId",
             data: {"profile_photo": downloadUrl},
           );
 
@@ -208,6 +206,22 @@ class SettingsViewModel with ChangeNotifier {
       uploadProfileInProgress = false;
     }
   }
+
+  // END PROFILE INFORMATION ---->>>
+  // ---------------------------->>>
+  // ---------------------------->>>
+  // ---------------------------->>>
+  // ---------------------------->>>
+
+  // -------------------------------------------------------------------------->
+
+  // START CHANGE PASSWORD ------>>>
+  // ---------------------------->>>
+  // ---------------------------->>>
+  // ---------------------------->>>
+  // ---------------------------->>>
+
+  // METHODS
 
   //  change password
   bool _changePasswordInProgress = false;
@@ -236,6 +250,165 @@ class SettingsViewModel with ChangeNotifier {
     }
   }
 
+  // END CHANGE PASSWORD -------->>>
+  // ---------------------------->>>
+  // ---------------------------->>>
+  // ---------------------------->>>
+  // ---------------------------->>>
+
+  // -------------------------------------------------------------------------->
+
+  // START ADDRESS PAGE --------->>>
+  // ---------------------------->>>
+  // ---------------------------->>>
+  // ---------------------------->>>
+  // ---------------------------->>>
+
+  // PAGE DATA
+  String _search = "";
+  get search => _search;
+  set search(value) {
+    _search = value;
+    notifyListeners();
+  }
+
+  StreamSubscription addressSubscription;
+  List<AddressModel> addresses = [];
+  List<AddressModel> get filteredAddresses => addresses.where((e) {
+        if (search.isNotEmpty) {
+          if (e.title.toLowerCase().startsWith(search) ||
+              e.description.toLowerCase().startsWith(search)) {
+            return true;
+          }
+        } else {
+          return true;
+        }
+
+        return false;
+      }).toList();
+
+  bool _addressInProgress = false;
+
+  get addressInProgress => _addressInProgress;
+  set addressInProgress(value) {
+    _addressInProgress = value;
+    notifyListeners();
+  }
+
+  bool _addressFetched = false;
+  get addressFetched => _addressFetched;
+  set addressFetched(value) {
+    _addressFetched = value;
+    notifyListeners();
+  }
+
+  // VALIDATION
+  FormValidator addressName = FormValidator(validators: nonEmptyTextValidators);
+  FormValidator addressDescription =
+      FormValidator(validators: nonEmptyTextValidators);
+
+  get isAddressValid {
+    final inputs = <FormzInput>[
+      addressName.formz,
+      addressDescription.formz,
+    ];
+    return Formz.validate(inputs) == FormzStatus.valid ? true : false;
+  }
+
+  // METHODS
+  addCallbacks() {
+    sections[0]["onTap"] = () {
+      goToInner("ChangeName");
+    };
+  }
+
+  setUpAddress() {
+    if (!addressFetched) {
+      fetchAddress();
+    }
+  }
+
+  fetchAddress() async {
+    final addressSubscription = _firestoreService
+        .collectionStream<AddressModel>(
+      path: "addresses",
+      builder: (data, documentId) =>
+          AddressModel.fromMap(data: data, documentId: documentId),
+      queryBuilder: (query) => query.where(
+        "user_id",
+        isEqualTo: _authenticationService.currentUser().uid,
+      ),
+    )
+        .listen((data) {
+      addresses = data;
+      addressFetched = true;
+      notifyListeners();
+    });
+  }
+
+  addAddress() async {
+    if (isAddressValid && !addressInProgress) {
+      addressInProgress = true;
+
+      try {
+        await _firestoreService.addDocument(path: "addresses", data: {
+          "title": addressName.formz.value,
+          "description": addressDescription.formz.value,
+          "user_id": _authenticationService.currentUser().uid
+        });
+
+        _overlayService.showSnackBarSuccess(
+            widget: Text("Address added successfully"));
+
+        _navigationService.popInner();
+        notifyListeners();
+      } catch (e) {
+        print(e);
+      }
+
+      addressInProgress = false;
+    }
+  }
+
+  editAddress({id}) async {
+    try {
+      await _firestoreService.setData(path: "addresses/$id", data: {
+        "title": addressName.formz.value,
+        "description": addressDescription.formz.value,
+      });
+
+      _overlayService.showSnackBarSuccess(
+          widget: Text("Address added successfully"));
+
+      _navigationService.popInner();
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  navigateToEditAddress({id, title, description}) {
+    goToInner("AddAddress",
+        arguments: {"id": id, "title": title, "description": description});
+  }
+
+  deleteAddress({id}) async {
+    final status = await _overlayService.showYesNoDialog();
+    if (status) {
+      try {
+        await _firestoreService.deleteData("addresses/$id");
+      } catch (e) {
+        print(e);
+      }
+    }
+  }
+
+  // END ADDRESS PAGE ----------->>>
+  // ---------------------------->>>
+  // ---------------------------->>>
+  // ---------------------------->>>
+  // ---------------------------->>>
+
   logOut() async {
     await _authenticationService.logout();
     await _navigationService.navigateToAndClear("SignIn");
@@ -245,7 +418,13 @@ class SettingsViewModel with ChangeNotifier {
     await _navigationService.navigateInner("Profile");
   }
 
-  goToInner(String route) async {
-    await _navigationService.navigateInner(route);
+  goToInner(String route, {arguments}) async {
+    await _navigationService.navigateInner(route, arguments: arguments);
+  }
+
+  @override
+  void dispose() {
+    addressSubscription.cancel();
+    super.dispose();
   }
 }

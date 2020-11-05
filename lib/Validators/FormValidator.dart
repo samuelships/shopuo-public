@@ -6,6 +6,10 @@ class FormValidator {
 
   FormzInput<String, String> formz;
 
+  reset() {
+    formz = Input.pure(validators: validators);
+  }
+
   get error {
     if (localError != null)
       return localError;
