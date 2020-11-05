@@ -24,6 +24,13 @@ class AddressResultComponent extends StatelessWidget {
         ...results
             .map((AddressModel e) => AddressCard(
                   key: ValueKey(e.id),
+                  onEdit: () {
+                    Provider.of<SettingsViewModel>(context, listen: false)
+                        .navigateToEditAddress(
+                            id: e.id,
+                            title: e.title,
+                            description: e.description);
+                  },
                   onDelete: () {
                     Provider.of<SettingsViewModel>(context, listen: false)
                         .deleteAddress(id: e.id);

@@ -350,7 +350,27 @@ class SettingsViewModel with ChangeNotifier {
     }
   }
 
-  editAddress({id}) {}
+  editAddress({id}) async {
+    try {
+      await _firestoreService.setData(path: "addresses/$id", data: {
+        "title": addressName.formz.value,
+        "description": addressDescription.formz.value,
+      });
+
+      _overlayService.showSnackBarSuccess(
+          widget: Text("Address added successfully"));
+
+      _navigationService.popInner();
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  navigateToEditAddress({id, title, description}) {
+    goToInner("AddAddress",
+        arguments: {"id": id, "title": title, "description": description});
+  }
 
   deleteAddress({id}) async {
     try {
@@ -376,8 +396,8 @@ class SettingsViewModel with ChangeNotifier {
     await _navigationService.navigateInner("Profile");
   }
 
-  goToInner(String route) async {
-    await _navigationService.navigateInner(route);
+  goToInner(String route, {arguments}) async {
+    await _navigationService.navigateInner(route, arguments: arguments);
   }
 
   @override

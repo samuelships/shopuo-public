@@ -132,8 +132,21 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       break;
 
     case "AddAddress":
+      var args = settings.arguments as Map;
+      EditAddress builder;
+
+      if (args != null) {
+        builder = EditAddress(
+          id: args["id"],
+          title: args["title"],
+          description: args["description"],
+        );
+      } else {
+        builder = EditAddress();
+      }
+
       return getPageRoute(
-        builder: EditAddress(),
+        builder: builder,
         name: settings.name,
         arguments: settings.arguments,
       );

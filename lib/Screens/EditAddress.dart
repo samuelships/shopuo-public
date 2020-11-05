@@ -9,17 +9,36 @@ import 'package:shopuo/Styles/Typography.dart';
 import 'package:shopuo/ViewModels/SettingsViewModel.dart';
 
 class EditAddress extends StatefulWidget {
-  final name;
+  final title;
   final description;
   final id;
 
-  const EditAddress({Key key, this.name, this.description, this.id})
+  const EditAddress({Key key, this.title, this.description, this.id})
       : super(key: key);
   @override
   _EditAddressState createState() => _EditAddressState();
 }
 
 class _EditAddressState extends State<EditAddress> {
+  TextEditingController titleController;
+  TextEditingController descriptioncontroller;
+
+  @override
+  void initState() {
+    if (widget.title != null) {
+      titleController = TextEditingController(text: widget.title);
+      descriptioncontroller = TextEditingController(text: widget.description);
+      SettingsViewModel model =
+          Provider.of<SettingsViewModel>(context, listen: false);
+      model.addressName.change(widget.title);
+      model.addressDescription.change(widget.description);
+    } else {
+      titleController = TextEditingController();
+      descriptioncontroller = TextEditingController();
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<SettingsViewModel>(
@@ -29,7 +48,7 @@ class _EditAddressState extends State<EditAddress> {
           appBar: HeaderComponent(
               leading: "assets/svg_icons/chevron-left.svg",
               leadingCallback: Navigator.of(context).pop,
-              title: widget.name == null ? "Add Address" : "Edit Address"),
+              title: widget.title == null ? "Add Address" : "Edit Address"),
           body: Stack(
             children: [
               ListView(
@@ -39,6 +58,7 @@ class _EditAddressState extends State<EditAddress> {
                     height: 25,
                   ),
                   TextInputComponent(
+                    controller: titleController,
                     header: "Name",
                     headerStyle: MyTypography.heading6SB.copyWith(
                       color: MyColor.neutralBlack,
@@ -55,6 +75,7 @@ class _EditAddressState extends State<EditAddress> {
                     height: 45,
                   ),
                   MultilineInputComponent(
+                    controller: descriptioncontroller,
                     header: "Description",
                     headerStyle: MyTypography.heading6SB.copyWith(
                       color: MyColor.neutralBlack,
@@ -72,10 +93,11 @@ class _EditAddressState extends State<EditAddress> {
                   ),
                   Container(
                     child: ButtonComponent(
-                      text: widget.name == null ? "Add Address" : "SaveChanges",
+                      text:
+                          widget.title == null ? "Add Address" : "SaveChanges",
                       active: !model.addressInProgress,
                       onTap: () {
-                        if (widget.name == null) {
+                        if (widget.title == null) {
                           model.addAddress();
                         } else {
                           model.editAddress(id: widget.id);
