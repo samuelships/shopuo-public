@@ -373,11 +373,14 @@ class SettingsViewModel with ChangeNotifier {
   }
 
   deleteAddress({id}) async {
-    try {
-      await _firestoreService.deleteData("addresses/$id");
-      print("deleted data");
-    } catch (e) {
-      print(e);
+    final status = await _overlayService.showYesNoDialog();
+    if (status) {
+      try {
+        await _firestoreService.deleteData("addresses/$id");
+        print("deleted data");
+      } catch (e) {
+        print(e);
+      }
     }
   }
 
