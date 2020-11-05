@@ -308,6 +308,24 @@ class SettingsViewModel with ChangeNotifier {
     }
   }
 
+  fetchAddress() async {
+    final addressSubscription = _firestoreService
+        .collectionStream<AddressModel>(
+      path: "addresses",
+      builder: (data, documentId) =>
+          AddressModel.fromMap(data: data, documentId: documentId),
+      queryBuilder: (query) => query.where(
+        "user_id",
+        isEqualTo: _authenticationService.currentUser().uid,
+      ),
+    )
+        .listen((data) {
+      addresses = data;
+      addressFetched = true;
+      notifyListeners();
+    });
+  }
+
   addAddress() async {
     if (isAddressValid && !addressInProgress) {
       addressInProgress = true;
@@ -334,22 +352,13 @@ class SettingsViewModel with ChangeNotifier {
 
   editAddress({id}) {}
 
-  fetchAddress() async {
-    final addressSubscription = _firestoreService
-        .collectionStream<AddressModel>(
-      path: "addresses",
-      builder: (data, documentId) =>
-          AddressModel.fromMap(data: data, documentId: documentId),
-      queryBuilder: (query) => query.where(
-        "user_id",
-        isEqualTo: _authenticationService.currentUser().uid,
-      ),
-    )
-        .listen((data) {
-      addresses = data;
-      addressFetched = true;
-      notifyListeners();
-    });
+  deleteAddress({id}) async {
+    try {
+      await _firestoreService.deleteData("addresses/$id");
+      print("deleted data");
+    } catch (e) {
+      print(e);
+    }
   }
 
   // END ADDRESS PAGE ----------->>>

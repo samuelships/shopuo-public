@@ -7,8 +7,10 @@ import 'package:shopuo/Styles/Typography.dart';
 
 class AddressCard extends StatelessWidget {
   final AddressModel address;
+  final VoidCallback onDelete;
 
-  const AddressCard({Key key, this.address}) : super(key: key);
+  AddressCard({Key key, this.address, this.onDelete}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Slidable(
@@ -37,10 +39,13 @@ class AddressCard extends StatelessWidget {
             child: SvgPicture.asset("assets/svg_icons/edit-2.svg"),
           ),
         ),
-        Container(
-          color: MyColor.primaryRed,
-          child: Center(
-            child: SvgPicture.asset("assets/svg_icons/trash-2.svg"),
+        GestureDetector(
+          onTap: onDelete ?? () {},
+          child: Container(
+            color: MyColor.primaryRed,
+            child: Center(
+              child: SvgPicture.asset("assets/svg_icons/trash-2.svg"),
+            ),
           ),
         ),
       ],
