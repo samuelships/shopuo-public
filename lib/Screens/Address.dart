@@ -44,13 +44,16 @@ class _AddressState extends State<Address> {
                 child: SearchComponent(
                   icon: "assets/svg_icons/search.svg",
                   hintText: "Search addresses...",
+                  onChanged: (value) {
+                    model.search = value;
+                  },
                 ),
               ),
               SizedBox(
                 height: 40,
               ),
               AddressResultComponent(
-                results: model.addresses,
+                results: model.filteredAddresses,
               )
             ],
           ),

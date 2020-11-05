@@ -265,8 +265,28 @@ class SettingsViewModel with ChangeNotifier {
   // ---------------------------->>>
 
   // PAGE DATA
+  String _search = "";
+  get search => _search;
+  set search(value) {
+    _search = value;
+    notifyListeners();
+  }
+
   StreamSubscription addressSubscription;
   List<AddressModel> addresses = [];
+  List<AddressModel> get filteredAddresses => addresses.where((e) {
+        if (search.isNotEmpty) {
+          if (e.title.toLowerCase().startsWith(search) ||
+              e.description.toLowerCase().startsWith(search)) {
+            return true;
+          }
+        } else {
+          return true;
+        }
+
+        return false;
+      }).toList();
+
   bool _addressInProgress = false;
 
   get addressInProgress => _addressInProgress;
@@ -377,7 +397,6 @@ class SettingsViewModel with ChangeNotifier {
     if (status) {
       try {
         await _firestoreService.deleteData("addresses/$id");
-        print("deleted data");
       } catch (e) {
         print(e);
       }
