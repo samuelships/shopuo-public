@@ -63,7 +63,8 @@ class _SettingsState extends State<Settings> {
           "icon": "bell",
           "heading": "Push Notifications",
           "sub heading": "Turn on and off push notifications",
-          "color": Color(0xffFF98A8)
+          "color": Color(0xffFF98A8),
+          "callback": (model) => model.goToInner("PushNotification")
         }
       ]
     },
