@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:shopuo/Components/AddressResultComponent.dart';
 import 'package:shopuo/Components/HeaderComponent.dart';
 import 'package:shopuo/Components/SearchComponent.dart';
-import 'package:shopuo/Models/AddressModel.dart';
 import 'package:shopuo/ViewModels/SettingsViewModel.dart';
 
 class Address extends StatefulWidget {
