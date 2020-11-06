@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shopuo/Models/CategoryModel.dart';
 import 'package:shopuo/Styles/Typography.dart';
@@ -18,11 +19,38 @@ class _CategoryCardState extends State<CategoryCard> {
       fit: StackFit.expand,
       alignment: Alignment.center,
       children: [
-        Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(widget.category.image),
-              fit: BoxFit.cover,
+        CachedNetworkImage(
+          fadeOutDuration: Duration(milliseconds: 0),
+          fadeInDuration: Duration(milliseconds: 0),
+          fadeInCurve: Curves.linear,
+          fit: BoxFit.cover,
+          imageUrl: widget.category.image,
+          imageBuilder: (context, imageProvider) => Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: imageProvider,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          placeholder: (context, url) => Container(
+            color: Colors.grey,
+          ),
+        ),
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: 0,
+          top: 0,
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              splashColor: Colors.white,
+              highlightColor: Colors.transparent,
+              onTap: () {},
+              child: Container(
+                color: Colors.black.withOpacity(.4),
+              ),
             ),
           ),
         ),
