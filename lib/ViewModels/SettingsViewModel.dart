@@ -20,12 +20,119 @@ import 'package:shopuo/Validators/PasswordValidator.dart';
 import '../locator.dart';
 
 class SettingsViewModel with ChangeNotifier {
-  // services
+  // SERVICES
   final _authenticationService = locator<AuthenticationService>();
   final _navigationService = locator<NavigationService>();
   final _firestoreService = locator<FirestoreService>();
   final _overlayService = locator<OverlayService>();
   final _firebaseStorageService = locator<FirebaseStorageService>();
+
+  // START GENERAL -------------->>>
+  // ---------------------------->>>
+  // ---------------------------->>>
+  // ---------------------------->>>
+  // ---------------------------->>>
+
+  // PAGE DATA
+  List<Map<String, dynamic>> settingsSections = [
+    {
+      "title": "Account settings",
+      "items": <Map<String, dynamic>>[
+        {
+          "icon": "user",
+          "heading": "Profile Information",
+          "sub heading": "Name, Email",
+          "color": Color(0xffA6D6FF),
+          "callback": (model) => model.goToProfile()
+        },
+        // {
+        //   "icon": "lock",
+        //   "heading": "Change Password",
+        //   "sub heading": "Change your current password",
+        //   "color": Color(0xff00C48C),
+        //   "callback": (model) => model.goToInner("ChangePassword")
+        // },
+        {
+          "icon": "map-pin",
+          "heading": "Add Addresses",
+          "sub heading": "Add your shipping addresses",
+          "color": Color(0xff00C48C),
+          "callback": (model) => model.goToInner("Address")
+        },
+        {
+          "icon": "x-square",
+          "heading": "Logout",
+          "sub heading": "Logout of your account",
+          "color": Color(0xffFF98A8),
+          "callback": (model) => model.logOut()
+        },
+      ]
+    },
+    {
+      "title": "Notifications settings",
+      "items": [
+        {
+          "icon": "bell",
+          "heading": "Push Notifications",
+          "sub heading": "Turn on and off push notifications",
+          "color": Color(0xffFF98A8),
+          "callback": (model) => model.goToInner("PushNotification")
+        }
+      ]
+    },
+    {
+      "title": "General",
+      "items": [
+        // {
+        //   "icon": "heart",
+        //   "heading": "Rate our App",
+        //   "sub heading": "Rate & review us",
+        //   "color": Color(0xffF6BB86)
+        // },
+        // {
+        //   "icon": "mail",
+        //   "heading": "Send Feedback",
+        //   "sub heading": "Share your thought",
+        //   "color": Color(0xffFFDF92)
+        // },
+        {
+          "icon": "eye-off",
+          "heading": "Privacy Policy",
+          "sub heading": "Review our privacy policy",
+          "color": Color(0xff96FFE1),
+          "callback": (model) => model.goToInner("PrivacyPolicy")
+        }
+      ]
+    },
+  ];
+
+  // METHODS
+  setUpModel() {
+    final currentUser = _authenticationService.currentUser();
+    final userInfo = currentUser.providerData[0];
+    if (userInfo.providerId != "google.com") {
+      final itemList = (settingsSections[0]["items"]);
+      itemList.insert(
+        1,
+        {
+          "icon": "lock",
+          "heading": "Change Password",
+          "sub heading": "Change your current password",
+          "color": Color(0xff00C48C),
+          "callback": (model) => model.goToInner("ChangePassword")
+        },
+      );
+      notifyListeners();
+    }
+  }
+
+  // END GENERAL ---------------->>>
+  // ---------------------------->>>
+  // ---------------------------->>>
+  // ---------------------------->>>
+  // ---------------------------->>>
+
+  // -------------------------------------------------------------------------->
 
   // START PROFILE INFORMATION ---->>>
   // ------------------------------>>>
