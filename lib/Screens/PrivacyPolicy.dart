@@ -27,6 +27,7 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
       child: Scaffold(
         appBar: HeaderComponent(
           leading: "assets/svg_icons/chevron-left.svg",
+          leadingCallback: Navigator.of(context).pop,
           title: "Privacy Policy",
           background: MyColor.primaryPurple,
           leadingColor: Colors.white,
@@ -67,10 +68,10 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
             SizedBox(
               height: 20,
             ),
-            ButtonComponent(
-              text: "I've agreed with this",
-              onTap: () {},
-            ),
+            // ButtonComponent(
+            //   text: "I've agreed with this",
+            //   onTap: () {},
+            // ),
             SizedBox(
               height: 20,
             )

@@ -71,23 +71,24 @@ class _SettingsState extends State<Settings> {
     {
       "title": "General",
       "items": [
-        {
-          "icon": "heart",
-          "heading": "Rate our App",
-          "sub heading": "Rate & review us",
-          "color": Color(0xffF6BB86)
-        },
-        {
-          "icon": "mail",
-          "heading": "Send Feedback",
-          "sub heading": "Share your thought",
-          "color": Color(0xffFFDF92)
-        },
+        // {
+        //   "icon": "heart",
+        //   "heading": "Rate our App",
+        //   "sub heading": "Rate & review us",
+        //   "color": Color(0xffF6BB86)
+        // },
+        // {
+        //   "icon": "mail",
+        //   "heading": "Send Feedback",
+        //   "sub heading": "Share your thought",
+        //   "color": Color(0xffFFDF92)
+        // },
         {
           "icon": "eye-off",
           "heading": "Privacy Policy",
           "sub heading": "Review our privacy policy",
-          "color": Color(0xff96FFE1)
+          "color": Color(0xff96FFE1),
+          "callback": (model) => model.goToInner("PrivacyPolicy")
         }
       ]
     },
