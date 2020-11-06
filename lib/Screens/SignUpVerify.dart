@@ -179,7 +179,7 @@ class _SignUpVerifyState extends State<SignUpVerify> {
                         textStyle: resendStyle,
                         widgetBuilder: (_, CurrentRemainingTime time) {
                           final minute = time.min == null ? "" : "${time.min}:";
-                          final timer = "$minute${time.sec}";
+                          final timer = "$minute${time.sec} secs";
                           return Text(
                             "Resend code in $timer",
                             style: MyTypography.heading6R.copyWith(
