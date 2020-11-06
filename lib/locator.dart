@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:shopuo/Screens/ProductDetails.dart';
 import 'package:shopuo/Services/AuthenticationService.dart';
 import 'package:shopuo/Services/CloudFunctionService.dart';
 import 'package:shopuo/Services/FirebaseStorageService.dart';
@@ -34,6 +35,7 @@ setupLocator() {
   locator.registerFactory(() => ProfileViewModel());
   locator.registerFactory(() => SignUpInfoViewModel());
   locator.registerFactory(() => SignUpVerifyViewModel());
+  locator.registerFactory(() => ProductDetails());
 
   locator.registerLazySingleton(() => NavigationService());
   locator.registerLazySingleton(() => FirestoreService());

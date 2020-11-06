@@ -1,12 +1,29 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:shopuo/Components/Button/ButtonComponent.dart';
 import 'package:shopuo/Components/HeaderComponent.dart';
 import 'package:shopuo/Models/ProductModel.dart';
 import 'package:shopuo/Styles/Color.dart';
 import 'package:shopuo/Styles/Typography.dart';
+import 'package:shopuo/ViewModels/ProductDetailsViewModel.dart';
+
+import '../locator.dart';
 
 class ProductDetails extends StatefulWidget {
+  static Widget create({product}) {
+    return ChangeNotifierProvider<ProductDetailsViewModel>(
+      create: (_) => locator<ProductDetailsViewModel>(),
+      child: ProductDetails(
+        product: product,
+      ),
+    );
+  }
+
+  final ProductModel product;
+
+  const ProductDetails({Key key, this.product}) : super(key: key);
   @override
   _ProductDetailsState createState() => _ProductDetailsState();
 }
@@ -24,8 +41,8 @@ class _ProductDetailsState extends State<ProductDetails> {
       child: Scaffold(
         appBar: HeaderComponent(
           leading: "assets/svg_icons/chevron-left.svg",
+          leadingCallback: Navigator.of(context).pop,
           title: "Product Details",
-          trailing: "assets/svg_icons/search.svg",
         ),
         body: ListView(
           children: [
@@ -40,9 +57,23 @@ class _ProductDetailsState extends State<ProductDetails> {
                   overflow: Overflow.clip,
                   fit: StackFit.expand,
                   children: [
-                    Image.asset(
-                      "assets/images/details.png",
+                    CachedNetworkImage(
+                      fadeOutDuration: Duration(milliseconds: 0),
+                      fadeInDuration: Duration(milliseconds: 0),
+                      fadeInCurve: Curves.linear,
                       fit: BoxFit.cover,
+                      imageUrl: widget.product.image,
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      placeholder: (context, url) => Container(
+                        color: Colors.grey,
+                      ),
                     ),
                     Positioned(
                       left: 0,
@@ -65,7 +96,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                       left: 25,
                       bottom: 25,
                       child: Text(
-                        "\$340",
+                        "\$${widget.product.price}",
                         style: MyTypography.bigHeader.copyWith(
                           color: Colors.white,
                         ),
@@ -82,7 +113,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               height: 70,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: _product.secondaryImages.length,
+                itemCount: widget.product.secondaryImages.length,
                 itemBuilder: (context, index) => Container(
                   margin: EdgeInsets.only(right: 10),
                   height: 70,
@@ -91,7 +122,24 @@ class _ProductDetailsState extends State<ProductDetails> {
                     borderRadius: BorderRadius.all(
                       Radius.circular(10),
                     ),
-                    child: Image.asset(_product.secondaryImages[index]),
+                    child: CachedNetworkImage(
+                      fadeOutDuration: Duration(milliseconds: 0),
+                      fadeInDuration: Duration(milliseconds: 0),
+                      fadeInCurve: Curves.linear,
+                      fit: BoxFit.cover,
+                      imageUrl: widget.product.secondaryImages[index],
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      placeholder: (context, url) => Container(
+                        color: Colors.grey,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -105,7 +153,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Shirts",
+                    "${widget.product.category}",
                     style: MyTypography.heading5SB.copyWith(
                       color: MyColor.primaryPurple,
                     ),
@@ -116,7 +164,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   SizedBox(
                     width: 255,
                     child: Text(
-                      "A.P.C Collection Spring 2015",
+                      "${widget.product.name}",
                       style: MyTypography.heading1SB.copyWith(
                         color: MyColor.neutralBlack,
                       ),
@@ -126,9 +174,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     height: 30,
                   ),
                   Text(
-                    """Enjoy the beauty of italian cotton all over your body. This item will fit your body and warm you up all over and during spring. This item will fit your body and warm you up all over and during spring. 
-
-And over and over again, this is the text. """,
+                    "${widget.product.description}",
                     style: MyTypography.heading6R.copyWith(
                       color: MyColor.neutralBlack,
                     ),
@@ -151,22 +197,22 @@ And over and over again, this is the text. """,
                   SizedBox(
                     height: 22,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Wrap(
                     children: [
-                      ..._product.sizes
+                      ...widget.product.sizes
                           .asMap()
                           .map(
                             (index, value) => MapEntry(
                               index,
                               GestureDetector(
                                 onTap: () {
-                                  print(index);
                                   setState(() {
                                     _currentSize = index;
                                   });
                                 },
                                 child: Container(
+                                  margin:
+                                      EdgeInsets.only(right: 20, bottom: 20),
                                   height: 35,
                                   width: 35,
                                   decoration: BoxDecoration(
@@ -179,7 +225,7 @@ And over and over again, this is the text. """,
                                   ),
                                   child: Center(
                                     child: Text(
-                                      value.name,
+                                      value,
                                       style: _currentSize == index
                                           ? MyTypography.heading6SB
                                           : MyTypography.heading6SB.copyWith(
@@ -208,7 +254,7 @@ And over and over again, this is the text. """,
                   ),
                   Wrap(
                     children: [
-                      ..._product.colors
+                      ...widget.product.colors
                           .asMap()
                           .map(
                             (index, value) => MapEntry(
@@ -326,7 +372,9 @@ And over and over again, this is the text. """,
                       GestureDetector(
                         onTap: () {
                           setState(() {
-                            _currentQuantity--;
+                            if (_currentQuantity > 0) {
+                              _currentQuantity--;
+                            }
                           });
                         },
                         child: Container(

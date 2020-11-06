@@ -6,8 +6,9 @@ import 'package:shopuo/Styles/Typography.dart';
 
 class ProductCard extends StatefulWidget {
   final ProductModel product;
+  final VoidCallback onTap;
 
-  const ProductCard({Key key, this.product}) : super(key: key);
+  const ProductCard({Key key, this.product, this.onTap}) : super(key: key);
 
   @override
   _ProductCardState createState() => _ProductCardState();
@@ -21,7 +22,7 @@ class _ProductCardState extends State<ProductCard> {
       child: InkWell(
         splashColor: Colors.transparent,
         highlightColor: MyColor.primaryPurple.withAlpha(20),
-        onTap: () {},
+        onTap: widget.onTap,
         child: Column(
           children: [
             Expanded(
