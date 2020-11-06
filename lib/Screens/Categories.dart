@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:shopuo/Components/CategoryCard.dart';
 import 'package:shopuo/Components/HeaderComponent.dart';
 import 'package:shopuo/ViewModels/CategoriesViewModel.dart';
-import "../Models/CategoryModel.dart";
 
 class Categories extends StatefulWidget {
   @override
@@ -11,7 +10,14 @@ class Categories extends StatefulWidget {
 }
 
 class _CategoriesState extends State<Categories> {
-  final List<CategoryModel> _categories = categories;
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final model = Provider.of<CategoriesViewModel>(context, listen: false);
+      model.setUpModel();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +39,9 @@ class _CategoriesState extends State<Categories> {
                   mainAxisSpacing: 0,
                   childAspectRatio: 1,
                 ),
-                itemCount: _categories.length,
+                itemCount: model.categories.length,
                 itemBuilder: (contex, index) => CategoryCard(
-                  category: _categories[index],
+                  category: model.categories[index],
                 ),
               )
             ],
