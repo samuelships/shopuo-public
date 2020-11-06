@@ -47,6 +47,7 @@ class OverlayService {
 
   // SNACKBAR NOTIFICATIONS
   showSnackBarSuccess({Widget widget}) {
+    scaffoldKey.currentState.hideCurrentSnackBar();
     scaffoldKey.currentState.showSnackBar(
       SnackBar(
         content: widget,

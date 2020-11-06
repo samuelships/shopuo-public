@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopuo/Components/BottomNavComponent.dart';
+import 'package:shopuo/Router.dart';
 import 'package:shopuo/Screens/Categories.dart';
 import 'package:shopuo/Screens/OnSale.dart';
 import 'package:shopuo/Services/NavigationService.dart';
@@ -38,9 +39,13 @@ class _NestedNavigationState extends State<NestedNavigation> {
       offstage: navigationService.currentTab != tab,
       child: Navigator(
         key: navigationService.tabKey[tab],
-        onGenerateRoute: (settings) => MaterialPageRoute(
-          builder: (context) => tabContent[tab],
-        ),
+        onGenerateRoute: (settings) {
+          if (settings.name == "/")
+            return MaterialPageRoute(
+              builder: (context) => tabContent[tab],
+            );
+          return generateRoute(settings);
+        },
       ),
     );
   }
@@ -72,7 +77,7 @@ class _NestedNavigationState extends State<NestedNavigation> {
           children: [
             _buildNavigator(tab: TabItem.One),
             _buildNavigator(tab: TabItem.Two),
-            _buildNavigator(tab: TabItem.Three),
+            // _buildNavigator(tab: TabItem.Three),
             _buildNavigator(tab: TabItem.Four),
           ],
         ),

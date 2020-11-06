@@ -105,6 +105,7 @@ class _OnSaleState extends State<OnSale> {
                 Positioned.fill(child: InternetErrorComponent())
               else
                 GridView.builder(
+                  cacheExtent: 5000,
                   controller: scrollController,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,

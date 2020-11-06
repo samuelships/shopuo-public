@@ -94,6 +94,7 @@ class _OverlayManagerState extends State<OverlayManager> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         key: overlayService.scaffoldKey,
         body: Stack(
           fit: StackFit.expand,

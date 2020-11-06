@@ -1,9 +1,29 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 class FirestoreService {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  FirestoreService() {
+    String host = defaultTargetPlatform == TargetPlatform.android
+        ? '10.0.2.2:8080'
+        : 'localhost:8080';
+
+    // FirebaseFirestore.instance.settings =
+    //     Settings(host: host, sslEnabled: false, persistenceEnabled: false);
+    FirebaseFirestore.instance.settings = Settings(persistenceEnabled: false);
+    _firestore = FirebaseFirestore.instance;
+  }
+
+  FirebaseFirestore _firestore;
   Future<void> setData({String path, Map<String, dynamic> data}) async {
     await _firestore.doc(path).set(data, SetOptions(merge: true));
+  }
+
+  Future<DocumentReference> addDocument({
+    String path,
+    Map<String, dynamic> data,
+  }) async {
+    final reference = _firestore.collection(path);
+    return reference.add(data);
   }
 
   Future<DocumentSnapshot> getData(String path) async {
@@ -44,7 +64,7 @@ class FirestoreService {
   }) {
     Query query = _firestore.collection(path);
 
-    if (query != null) {
+    if (queryBuilder != null) {
       query = queryBuilder(query);
     }
 

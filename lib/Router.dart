@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:shopuo/Screens/Address.dart';
 import 'package:shopuo/Screens/Categories.dart';
+import 'package:shopuo/Screens/ChangeEmail.dart';
+import 'package:shopuo/Screens/ChangeName.dart';
+import 'package:shopuo/Screens/ChangePassword.dart';
+import 'package:shopuo/Screens/EditAddress.dart';
 import 'package:shopuo/Screens/NestedNavigagtion.dart';
+import 'package:shopuo/Screens/PrivacyPolicy.dart';
+import 'package:shopuo/Screens/Profile.dart';
+import 'package:shopuo/Screens/PushNotification.dart';
 import 'package:shopuo/Screens/ResetPassword.dart';
 import 'package:shopuo/Screens/Settings.dart';
 import 'package:shopuo/Screens/SignIn.dart';
 import 'package:shopuo/Screens/SignUp.dart';
+import 'package:shopuo/Screens/SignUpInfo.dart';
+import 'package:shopuo/Screens/SignUpVerify.dart';
 
 import 'Screens/Cart.dart';
 
@@ -58,9 +68,103 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
       break;
 
+    case "Profile":
+      return getPageRoute(
+        builder: Profile(),
+        name: settings.name,
+        arguments: settings.arguments,
+      );
+      break;
+
     case "Settings":
       return getPageRoute(
         builder: Settings(),
+        name: settings.name,
+        arguments: settings.arguments,
+      );
+      break;
+
+    case "SignUpInfo":
+      return getPageRoute(
+        builder: SignUpInfo.create(),
+        name: settings.name,
+        arguments: settings.arguments,
+      );
+      break;
+
+    case "SignUpVerify":
+      var args = settings.arguments as Map;
+      return getPageRoute(
+        builder: SignUpVerify.create(phoneNumber: args["phone_number"]),
+        name: settings.name,
+        arguments: settings.arguments,
+      );
+      break;
+
+    case "ChangeName":
+      return getPageRoute(
+        builder: ChangeName(),
+        name: settings.name,
+        arguments: settings.arguments,
+      );
+      break;
+
+    case "ChangeEmail":
+      return getPageRoute(
+        builder: ChangeEmail(),
+        name: settings.name,
+        arguments: settings.arguments,
+      );
+      break;
+
+    case "ChangePassword":
+      return getPageRoute(
+        builder: ChangePassword(),
+        name: settings.name,
+        arguments: settings.arguments,
+      );
+      break;
+
+    case "Address":
+      return getPageRoute(
+        builder: Address(),
+        name: settings.name,
+        arguments: settings.arguments,
+      );
+      break;
+
+    case "AddAddress":
+      var args = settings.arguments as Map;
+      EditAddress builder;
+
+      if (args != null) {
+        builder = EditAddress(
+          id: args["id"],
+          title: args["title"],
+          description: args["description"],
+        );
+      } else {
+        builder = EditAddress();
+      }
+
+      return getPageRoute(
+        builder: builder,
+        name: settings.name,
+        arguments: settings.arguments,
+      );
+      break;
+
+    case "PushNotification":
+      return getPageRoute(
+        builder: PushNotification(),
+        name: settings.name,
+        arguments: settings.arguments,
+      );
+      break;
+
+    case "PrivacyPolicy":
+      return getPageRoute(
+        builder: PrivacyPolicy(),
         name: settings.name,
         arguments: settings.arguments,
       );

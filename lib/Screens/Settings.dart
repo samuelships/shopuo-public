@@ -16,78 +16,13 @@ class _SettingsState extends State<Settings> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       model = Provider.of<SettingsViewModel>(context, listen: false);
+      model.setUpModel();
     });
     super.initState();
   }
 
   SettingsViewModel model;
 
-  final sections = [
-    {
-      "title": "Account settings",
-      "items": [
-        {
-          "icon": "user",
-          "heading": "Profile Information",
-          "sub heading": "Name, Email",
-          "color": Color(0xffA6D6FF)
-        },
-        {
-          "icon": "lock",
-          "heading": "Change Password",
-          "sub heading": "Change your current password",
-          "color": Color(0xff00C48C)
-        },
-        {
-          "icon": "map-pin",
-          "heading": "Add Addresses",
-          "sub heading": "Add your shipping addresses",
-          "color": Color(0xff00C48C)
-        },
-        {
-          "icon": "x-square",
-          "heading": "Logout",
-          "sub heading": "Logout of your account",
-          "color": Color(0xffFF98A8),
-          "callback": (model) => model.logOut()
-        },
-      ]
-    },
-    {
-      "title": "Notifications settings",
-      "items": [
-        {
-          "icon": "bell",
-          "heading": "Push Notifications",
-          "sub heading": "Turn on and off push notifications",
-          "color": Color(0xffFF98A8)
-        }
-      ]
-    },
-    {
-      "title": "General",
-      "items": [
-        {
-          "icon": "heart",
-          "heading": "Rate our App",
-          "sub heading": "Rate & review us",
-          "color": Color(0xffF6BB86)
-        },
-        {
-          "icon": "mail",
-          "heading": "Send Feedback",
-          "sub heading": "Share your thought",
-          "color": Color(0xffFFDF92)
-        },
-        {
-          "icon": "eye-off",
-          "heading": "Privacy Policy",
-          "sub heading": "Review our privacy policy",
-          "color": Color(0xff96FFE1)
-        }
-      ]
-    },
-  ];
   @override
   Widget build(BuildContext context) {
     return Consumer<SettingsViewModel>(
@@ -103,7 +38,7 @@ class _SettingsState extends State<Settings> {
               SizedBox(
                 height: 25,
               ),
-              ...sections
+              ...model.settingsSections
                   .map(
                     (object) => Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
