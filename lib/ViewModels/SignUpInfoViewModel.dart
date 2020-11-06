@@ -54,7 +54,7 @@ class SignUpInfoViewModel with ChangeNotifier {
           _overlayService.showSnackBarSuccess(widget: Text(data["message"]));
 
           _navigationService.navigateTo("SignUpVerify", arguments: {
-            phoneNumber: phoneNumber.formz.value,
+            "phone_number": phoneNumber.formz.value,
           });
         }
       } on PlatformException catch (e) {

@@ -113,5 +113,6 @@ class SignUpViewModel with ChangeNotifier {
 
     // Once signed in, return the UserCredential
     await FirebaseAuth.instance.signInWithCredential(credential);
+    redirectToAppropriateScreen();
   }
 }

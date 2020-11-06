@@ -11,8 +11,7 @@ import 'package:shopuo/ViewModels/SignUpVerifyViewModel.dart';
 import '../locator.dart';
 
 class SignUpVerify extends StatefulWidget {
-  const SignUpVerify({Key key, this.phoneNumber = "05xxxxxxx"})
-      : super(key: key);
+  const SignUpVerify({Key key, this.phoneNumber}) : super(key: key);
 
   static Widget create({phoneNumber}) {
     return ChangeNotifierProvider<SignUpVerifyViewModel>(
@@ -67,6 +66,7 @@ class _SignUpVerifyState extends State<SignUpVerify> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.phoneNumber);
     return Consumer<SignUpVerifyViewModel>(
       builder: (context, model, child) => Scaffold(
         resizeToAvoidBottomInset: false,
@@ -179,7 +179,7 @@ class _SignUpVerifyState extends State<SignUpVerify> {
                         textStyle: resendStyle,
                         widgetBuilder: (_, CurrentRemainingTime time) {
                           final minute = time.min == null ? "" : "${time.min}:";
-                          final timer = "$minute${time.sec}";
+                          final timer = "$minute${time.sec} secs";
                           return Text(
                             "Resend code in $timer",
                             style: MyTypography.heading6R.copyWith(
