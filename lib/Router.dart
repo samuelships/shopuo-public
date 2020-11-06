@@ -95,7 +95,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case "SignUpVerify":
       var args = settings.arguments as Map;
       return getPageRoute(
-        builder: SignUpVerify.create(phoneNumber: args["phoneNumber"]),
+        builder: SignUpVerify.create(phoneNumber: args["phone_number"]),
         name: settings.name,
         arguments: settings.arguments,
       );
