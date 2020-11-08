@@ -27,7 +27,6 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
   List<AddressModel> _shippingAddresses = addresses;
 
   int _currentDeliveryMethod = 0;
-  List<DeliveryMethod> _deliveryMethods = deliveryMethods;
 
   PaymentMethod _currentPaymentMethod = PaymentMethod.MtnMobileMoney;
   MobileMoneyModel _mobileMoney = MobileMoneyModel();
@@ -136,7 +135,7 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
         SizedBox(
           height: 50,
         ),
-        ..._deliveryMethods
+        ...model.deliveryMethods
             .asMap()
             .map(
               (index, value) => MapEntry(
@@ -149,8 +148,8 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
                   },
                   index: index,
                   selected: _currentDeliveryMethod == index ? true : false,
-                  primary: _deliveryMethods[index].name,
-                  secondary: _deliveryMethods[index].description,
+                  primary: model.deliveryMethods[index].name,
+                  secondary: "\$${model.deliveryMethods[index].price}",
                 ),
               ),
             )
@@ -377,7 +376,7 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
             selectedIndex: _currentDeliveryMethod,
             heading: "Select delivery type",
             options: [
-              ..._deliveryMethods.map((e) => "${e.name} - ${e.description}"),
+              ...model.deliveryMethods.map((e) => "${e.name} - ${e.price}"),
             ],
             onChanged: (key) {
               setState(() {
@@ -393,7 +392,7 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
           ),
           primary: "Delivery details",
           secondary:
-              "${_deliveryMethods[_currentDeliveryMethod].name} - ${_deliveryMethods[_currentDeliveryMethod].description}",
+              "${model.deliveryMethods[_currentDeliveryMethod].name} - ${model.deliveryMethods[_currentDeliveryMethod].price}",
         ),
         SizedBox(
           height: 70,

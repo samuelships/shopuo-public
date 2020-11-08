@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shopuo/Models/CartProductModel.dart';
+import 'package:shopuo/Models/DeliveryMethod.dart';
 import 'package:shopuo/Services/AuthenticationService.dart';
 import 'package:shopuo/Services/FirestoreService.dart';
 import 'package:shopuo/Services/OverlayService.dart';
@@ -16,7 +18,10 @@ class CartViewModel with ChangeNotifier {
 
   // PAGE DATA
   List<CartProductModel> cartproducts = [];
+  List<DeliveryMethod> deliveryMethods = [];
+
   StreamSubscription cartSubscription;
+
   bool _cartFetched = false;
   get cartFetched => _cartFetched;
   set cartFetched(value) {
@@ -24,9 +29,17 @@ class CartViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _deliveryMethodsFetched = false;
+  get deliveryMethodsFetched => _deliveryMethodsFetched;
+  set deliveryMethodsFetched(value) {
+    _deliveryMethodsFetched = value;
+    notifyListeners();
+  }
+
   // METHODS
   setUpModel() {
     fetchCart();
+    fetchDelivery();
   }
 
   fetchCart() {
@@ -39,14 +52,32 @@ class CartViewModel with ChangeNotifier {
           CartProductModel.fromMap(data: data, documentId: documentId),
     )
         .listen((data) {
-      print(data);
       cartproducts = data;
       cartFetched = true;
       notifyListeners();
     });
   }
 
-  fetchDelivery() {}
+  fetchDelivery() async {
+    try {
+      deliveryMethods =
+          await _firestoreService.getDataCollection<DeliveryMethod>(
+        path: "delivery_methods",
+        builder: ({
+          Map<String, dynamic> data,
+          String documentID,
+          DocumentSnapshot snapshot,
+        }) =>
+            DeliveryMethod.fromMap(
+          data: data,
+          documentId: documentID,
+        ),
+      );
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   void dispose() {
