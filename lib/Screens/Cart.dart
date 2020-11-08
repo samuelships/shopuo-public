@@ -123,6 +123,9 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
               (index, value) => MapEntry(
                 index,
                 CartProductCard(
+                  onDelete: () {
+                    model.deleteCartItem(id: model.cartproducts[index].id);
+                  },
                   product: model.cartproducts[index],
                 ),
               ),

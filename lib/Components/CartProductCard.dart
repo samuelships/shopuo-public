@@ -8,8 +8,10 @@ import 'package:shopuo/Styles/Typography.dart';
 
 class CartProductCard extends StatelessWidget {
   final CartProductModel product;
+  final VoidCallback onTap;
+  final VoidCallback onDelete;
 
-  CartProductCard({this.product});
+  CartProductCard({this.product, this.onTap, this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -133,21 +135,16 @@ class CartProductCard extends StatelessWidget {
         ),
       ),
       secondaryActions: <Widget>[
-        Container(
-          color: MyColor.primaryGreen,
-          child: Center(
-            child: SvgPicture.asset(
-              "assets/svg_icons/edit-2.svg",
-              height: 52,
-            ),
-          ),
-        ),
-        Container(
-          color: MyColor.primaryRed,
-          child: Center(
-            child: SvgPicture.asset(
-              "assets/svg_icons/trash-2.svg",
-              height: 52,
+        GestureDetector(
+          onTap: () {
+            if (onDelete != null) onDelete();
+          },
+          child: Container(
+            color: MyColor.primaryRed,
+            child: Center(
+              child: SvgPicture.asset(
+                "assets/svg_icons/trash-2.svg",
+              ),
             ),
           ),
         ),

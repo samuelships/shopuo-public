@@ -53,6 +53,17 @@ class CartViewModel with ChangeNotifier {
     fetchDelivery();
   }
 
+  deleteCartItem({id}) async {
+    final uid = _authenticationService.currentUser().uid;
+
+    try {
+      await _firestoreService.deleteData("cart/$uid/items/$id");
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
   fetchCart() {
     final uid = _authenticationService.currentUser().uid;
 
