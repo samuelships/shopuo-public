@@ -25,6 +25,7 @@ class ProductDetailsViewModel with ChangeNotifier {
     String color,
     int quantity,
     String size,
+    Function callback,
   }) {
     final uid = _authenticationService.currentUser().uid;
 
@@ -42,6 +43,7 @@ class ProductDetailsViewModel with ChangeNotifier {
         });
 
         _overlayService.showSnackBarSuccess(widget: Text("Added to cart"));
+        callback();
       } catch (e) {
         _overlayService.showSnackBarFailure(
             widget: Text("Error adding to cart"));

@@ -29,6 +29,13 @@ class ProductDetails extends StatefulWidget {
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
+  bool _addedToCart = false;
+  _addToCartCallback() {
+    setState(() {
+      _addedToCart = true;
+    });
+  }
+
   int _currentSize = 0;
   int _currentColor = 0;
   int _currentQuantity = 1;
@@ -423,14 +430,16 @@ class _ProductDetailsState extends State<ProductDetails> {
                       height: 50,
                     ),
                     ButtonComponent(
-                      text: "Add to cart",
+                      text: _addedToCart ? "Update cart" : "Add to cart",
                       active: !model.isAddProductToCartInProgress,
                       onTap: () {
                         model.addProductToCart(
-                            product: widget.product,
-                            quantity: _currentQuantity,
-                            color: widget.product.colors[_currentColor].name,
-                            size: widget.product.sizes[_currentSize]);
+                          product: widget.product,
+                          quantity: _currentQuantity,
+                          color: widget.product.colors[_currentColor].name,
+                          size: widget.product.sizes[_currentSize],
+                          callback: _addToCartCallback,
+                        );
                       },
                     ),
                     SizedBox(
