@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shopuo/Components/Button/ButtonComponent.dart';
 import 'package:shopuo/Components/HeaderComponent.dart';
 import 'package:shopuo/Styles/Color.dart';
 import 'package:shopuo/Styles/Typography.dart';

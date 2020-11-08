@@ -117,6 +117,12 @@ class _OnSaleState extends State<OnSale> {
                   itemBuilder: (contex, index) {
                     List<ProductModel> products = getProducts(model);
                     return ProductCard(
+                      onTap: () {
+                        Navigator.of(context).pushNamed(
+                          "ProductDetails",
+                          arguments: {"product": products[index]},
+                        );
+                      },
                       product: products[index],
                     );
                   },

@@ -75,6 +75,10 @@ class ProductModel {
       snapshot: snapshot,
     );
   }
+
+  toString() {
+    return "{documentId : ${this.documentId}, name : ${this.name}, description : ${this.description}, price : ${this.price}}";
+  }
 }
 
 final List<ProductModel> products = [
