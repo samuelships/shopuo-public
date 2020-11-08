@@ -55,15 +55,17 @@ class HeaderComponent extends StatelessWidget implements PreferredSizeWidget {
                 onTap: () {
                   if (leadingCallback != null) leadingCallback();
                 },
-                child: Transform.translate(
-                  offset: Offset(-10, 0),
-                  child: SvgPicture.asset(
-                    "$leading",
-                    height: 28,
-                    width: 28,
-                    color: leadingColor ?? MyColor.neutralBlack,
-                  ),
-                ),
+                child: leading == null
+                    ? SizedBox()
+                    : Transform.translate(
+                        offset: Offset(-10, 0),
+                        child: SvgPicture.asset(
+                          "$leading",
+                          height: 28,
+                          width: 28,
+                          color: leadingColor ?? MyColor.neutralBlack,
+                        ),
+                      ),
               ),
               Text(
                 "${title ?? ''}",
