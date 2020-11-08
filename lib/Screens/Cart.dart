@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:shopuo/Components/Button/ButtonComponent.dart';
 import 'package:shopuo/Components/CartProductCard.dart';
 import 'package:shopuo/Components/HeaderComponent.dart';
@@ -8,11 +9,11 @@ import 'package:shopuo/Components/PaymentComponent.dart';
 import 'package:shopuo/Components/SelectComponent.dart';
 import 'package:shopuo/Components/ShippingCard.dart';
 import 'package:shopuo/Models/AddressModel.dart';
-import 'package:shopuo/Models/CartProductModel.dart';
 import 'package:shopuo/Models/DeliveryMethod.dart';
 import 'package:shopuo/Models/PaymentModels.dart';
 import 'package:shopuo/Styles/Color.dart';
 import 'package:shopuo/Styles/Typography.dart';
+import 'package:shopuo/ViewModels/CartViewModel.dart';
 
 class Cart extends StatefulWidget {
   @override
@@ -21,7 +22,6 @@ class Cart extends StatefulWidget {
 
 class _CartState extends State<Cart> with TickerProviderStateMixin {
   TabController _controller;
-  List<CartProductModel> _cartproducts = cartproducts;
 
   int _currentShippingAddress = 0;
   List<AddressModel> _shippingAddresses = addresses;
@@ -39,94 +39,95 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
   @override
   void initState() {
     _controller = TabController(length: 3, vsync: this);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      model = Provider.of<CartViewModel>(context, listen: false);
+      model.setUpModel();
+    });
     super.initState();
   }
 
+  CartViewModel model;
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Stack(
-        children: [
-          Scaffold(
-            appBar: HeaderComponent(
-              title: "Cart",
-            ),
-            body: Column(
-              children: [
-                SizedBox(
-                  height: 25,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25),
-                  child: Theme(
-                    data: ThemeData(
-                      highlightColor: Colors.transparent,
-                      splashColor: Colors.transparent,
-                    ),
-                    child: TabBar(
-                      controller: _controller,
-                      indicatorColor: MyColor.primaryPurple,
-                      indicatorWeight: 5,
-                      labelColor: MyColor.primaryPurple,
-                      unselectedLabelColor: MyColor.neutralGrey3,
-                      labelStyle: MyTypography.body2,
-                      onTap: (index) {},
-                      tabs: [
-                        Tab(
-                          text: "CART",
-                        ),
-                        Tab(
-                          text: "CHECKOUT",
-                        ),
-                        Tab(
-                          text: "PAYMENT",
-                        )
-                      ],
+    return Consumer<CartViewModel>(
+      builder: (context, model, child) => SafeArea(
+        child: Stack(
+          children: [
+            Scaffold(
+              appBar: HeaderComponent(
+                title: "Cart",
+              ),
+              body: Column(
+                children: [
+                  SizedBox(
+                    height: 25,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 25),
+                    child: Theme(
+                      data: ThemeData(
+                        highlightColor: Colors.transparent,
+                        splashColor: Colors.transparent,
+                      ),
+                      child: TabBar(
+                        controller: _controller,
+                        indicatorColor: MyColor.primaryPurple,
+                        indicatorWeight: 5,
+                        labelColor: MyColor.primaryPurple,
+                        unselectedLabelColor: MyColor.neutralGrey3,
+                        labelStyle: MyTypography.body2,
+                        onTap: (index) {},
+                        tabs: [
+                          Tab(
+                            text: "CART",
+                          ),
+                          Tab(
+                            text: "CHECKOUT",
+                          ),
+                          Tab(
+                            text: "PAYMENT",
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                Expanded(
-                  child: Container(
-                    height: 500,
-                    child: TabBarView(
-                      controller: _controller,
-                      children: [
-                        tabOne(),
-                        tabTwo(),
-                        tabThree(),
-                      ],
+                  Expanded(
+                    child: Container(
+                      height: 500,
+                      child: TabBarView(
+                        controller: _controller,
+                        children: [
+                          tabOne(model),
+                          tabTwo(model),
+                          tabThree(model),
+                        ],
+                      ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  tabOne() {
+  tabOne(CartViewModel model) {
     return ListView(
       padding: EdgeInsets.symmetric(horizontal: 25),
       children: [
         SizedBox(
-          height: 50,
-        ),
-        Text(
-          "Order number is 458765342",
-          style: MyTypography.heading5SB.copyWith(color: MyColor.neutralBlack),
-        ),
-        SizedBox(
           height: 40,
         ),
-        ..._cartproducts
+        ...model.cartproducts
             .asMap()
             .map(
               (index, value) => MapEntry(
                 index,
                 CartProductCard(
-                  product: _cartproducts[index],
+                  product: model.cartproducts[index],
                 ),
               ),
             )
@@ -251,19 +252,10 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
     );
   }
 
-  tabTwo() {
+  tabTwo(CartViewModel model) {
     return ListView(
       padding: EdgeInsets.symmetric(horizontal: 25),
       children: [
-        SizedBox(
-          height: 50,
-        ),
-        Text(
-          "Order number is 458765342",
-          style: MyTypography.heading5SB.copyWith(
-            color: MyColor.neutralBlack,
-          ),
-        ),
         SizedBox(
           height: 50,
         ),
@@ -349,19 +341,10 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
     );
   }
 
-  tabThree() {
+  tabThree(CartViewModel model) {
     return ListView(
       padding: EdgeInsets.symmetric(horizontal: 25),
       children: [
-        SizedBox(
-          height: 50,
-        ),
-        Text(
-          "Order number is 458765342",
-          style: MyTypography.heading5SB.copyWith(
-            color: MyColor.neutralBlack,
-          ),
-        ),
         SizedBox(
           height: 40,
         ),

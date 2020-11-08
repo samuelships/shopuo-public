@@ -1,4 +1,6 @@
 class CartProductModel {
+  final String id;
+  final String productId;
   final String name;
   final double price;
   final String size;
@@ -7,6 +9,8 @@ class CartProductModel {
   final String image;
 
   CartProductModel({
+    this.id,
+    this.productId,
     this.image,
     this.name,
     this.price,
@@ -14,6 +18,26 @@ class CartProductModel {
     this.color,
     this.quantity,
   });
+
+  factory CartProductModel.fromMap({
+    Map<String, dynamic> data,
+    String documentId,
+  }) {
+    return CartProductModel(
+      id: documentId,
+      color: data["color"],
+      image: data["image"],
+      name: data["name"],
+      price: double.parse("${data["price"]}"),
+      productId: data["product_id"],
+      quantity: data["quantity"],
+      size: data["size"],
+    );
+  }
+
+  toString() {
+    return "{id: $id, color : $color , name : $name, price : $price, productId : $productId, quantity : $quantity, size : $size}";
+  }
 }
 
 List<CartProductModel> cartproducts = [

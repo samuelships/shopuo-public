@@ -38,6 +38,7 @@ class ProductDetailsViewModel with ChangeNotifier {
           "price": product.price,
           "size": size,
           "name": product.name,
+          "image": product.image,
           "color": color,
           "quantity": quantity,
         });

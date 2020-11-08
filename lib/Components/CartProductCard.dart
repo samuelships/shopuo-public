@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
@@ -28,13 +29,23 @@ class CartProductCard extends StatelessWidget {
             Container(
               height: 75,
               width: 75,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(4),
+              child: CachedNetworkImage(
+                fadeOutDuration: Duration(milliseconds: 0),
+                fadeInDuration: Duration(milliseconds: 0),
+                fadeInCurve: Curves.linear,
+                fit: BoxFit.cover,
+                imageUrl: product.image,
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
-                image: DecorationImage(
-                  image: AssetImage(product.image),
-                  fit: BoxFit.cover,
+                placeholder: (context, url) => Container(
+                  color: Colors.grey,
                 ),
               ),
             ),
@@ -47,13 +58,17 @@ class CartProductCard extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Text(
+                      Expanded(
+                          child: Text(
                         product.name,
+                        overflow: TextOverflow.ellipsis,
                         style: MyTypography.heading6SB.copyWith(
                           color: MyColor.neutralBlack,
                         ),
+                      )),
+                      SizedBox(
+                        width: 20,
                       ),
-                      Spacer(),
                       Text(
                         "\$${product.price}",
                         style: MyTypography.smallText,
