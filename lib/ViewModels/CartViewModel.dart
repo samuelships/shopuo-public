@@ -19,6 +19,17 @@ class CartViewModel with ChangeNotifier {
   // PAGE DATA
   List<CartProductModel> cartproducts = [];
   List<DeliveryMethod> deliveryMethods = [];
+  get deliveryAmount => deliveryMethods[currentDeliveryMethod].price;
+  get orderAmount =>
+      cartproducts.fold(0, (acc, curr) => acc + curr.price * curr.quantity);
+  get totalAmount => deliveryAmount + orderAmount;
+
+  int _currentDeliveryMethod = 0;
+  get currentDeliveryMethod => _currentDeliveryMethod;
+  set currentDeliveryMethod(value) {
+    _currentDeliveryMethod = value;
+    notifyListeners();
+  }
 
   StreamSubscription cartSubscription;
 

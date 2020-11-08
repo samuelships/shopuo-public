@@ -9,7 +9,6 @@ import 'package:shopuo/Components/PaymentComponent.dart';
 import 'package:shopuo/Components/SelectComponent.dart';
 import 'package:shopuo/Components/ShippingCard.dart';
 import 'package:shopuo/Models/AddressModel.dart';
-import 'package:shopuo/Models/DeliveryMethod.dart';
 import 'package:shopuo/Models/PaymentModels.dart';
 import 'package:shopuo/Styles/Color.dart';
 import 'package:shopuo/Styles/Typography.dart';
@@ -25,8 +24,6 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
 
   int _currentShippingAddress = 0;
   List<AddressModel> _shippingAddresses = addresses;
-
-  int _currentDeliveryMethod = 0;
 
   PaymentMethod _currentPaymentMethod = PaymentMethod.MtnMobileMoney;
   MobileMoneyModel _mobileMoney = MobileMoneyModel();
@@ -143,11 +140,11 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
                 ShippingCard(
                   callback: (key) {
                     setState(() {
-                      _currentDeliveryMethod = key;
+                      model.currentDeliveryMethod = key;
                     });
                   },
                   index: index,
-                  selected: _currentDeliveryMethod == index ? true : false,
+                  selected: model.currentDeliveryMethod == index ? true : false,
                   primary: model.deliveryMethods[index].name,
                   secondary: "\$${model.deliveryMethods[index].price}",
                 ),
@@ -168,29 +165,9 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
             ),
             Spacer(),
             Text(
-              "\$445.00",
+              "\$${model.orderAmount}",
               style: MyTypography.heading6R.copyWith(
                 color: MyColor.neutralBlack,
-              ),
-            )
-          ],
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Row(
-          children: [
-            Text(
-              "Discount:",
-              style: MyTypography.heading6R.copyWith(
-                color: MyColor.neutralBlack,
-              ),
-            ),
-            Spacer(),
-            Text(
-              "\$-445.00",
-              style: MyTypography.heading6R.copyWith(
-                color: MyColor.primaryGreen,
               ),
             )
           ],
@@ -208,7 +185,7 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
             ),
             Spacer(),
             Text(
-              "\$10.00",
+              "\$${model.deliveryAmount}",
               style: MyTypography.heading6R.copyWith(
                 color: MyColor.neutralBlack,
               ),
@@ -229,7 +206,7 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
             ),
             Spacer(),
             Text(
-              "\$10.00",
+              "\$${model.totalAmount}",
               style: MyTypography.heading6R.copyWith(
                 color: MyColor.neutralBlack,
                 fontWeight: FontWeight.w500,
@@ -373,14 +350,14 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
         ),
         DetailsCard(
           trailing: SelectComponent(
-            selectedIndex: _currentDeliveryMethod,
+            selectedIndex: model.currentDeliveryMethod,
             heading: "Select delivery type",
             options: [
               ...model.deliveryMethods.map((e) => "${e.name} - ${e.price}"),
             ],
             onChanged: (key) {
               setState(() {
-                _currentDeliveryMethod = key;
+                model.currentDeliveryMethod = key;
               });
             },
             child: Text(
@@ -392,7 +369,7 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
           ),
           primary: "Delivery details",
           secondary:
-              "${model.deliveryMethods[_currentDeliveryMethod].name} - ${model.deliveryMethods[_currentDeliveryMethod].price}",
+              "${model.deliveryMethods[model.currentDeliveryMethod].name} - ${model.deliveryMethods[model.currentDeliveryMethod].price}",
         ),
         SizedBox(
           height: 70,
