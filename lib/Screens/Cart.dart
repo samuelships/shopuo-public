@@ -246,7 +246,7 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
         SizedBox(
           height: 17,
         ),
-        ...model.shippingAddresses
+        ...model2.addresses
             .asMap()
             .map(
               (index, value) => MapEntry(
@@ -320,7 +320,6 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
   }
 
   tabThree(CartViewModel model, SettingsViewModel model2) {
-    print(model2.addresses);
     return ListView(
       padding: EdgeInsets.symmetric(horizontal: 25),
       children: [
@@ -328,27 +327,27 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
           height: 40,
         ),
         DetailsCard(
-            trailing: SelectComponent(
-              heading: "Select shipping address",
-              onChanged: (key) {
-                setState(() {
-                  model.currentShippingAddress = key;
-                });
-              },
-              options: [
-                ...model.shippingAddresses.map((e) => e.title),
-              ],
-              selectedIndex: model.currentShippingAddress,
-              child: Text(
-                "Change",
-                style: MyTypography.body2.copyWith(
-                  color: MyColor.primaryRed,
-                ),
+          trailing: SelectComponent(
+            heading: "Select shipping address",
+            onChanged: (key) {
+              setState(() {
+                model.currentShippingAddress = key;
+              });
+            },
+            options: [
+              ...model2.addresses.map((e) => e.title),
+            ],
+            selectedIndex: model.currentShippingAddress,
+            child: Text(
+              "Change",
+              style: MyTypography.body2.copyWith(
+                color: MyColor.primaryRed,
               ),
             ),
-            primary: "Shipping address",
-            secondary: model
-                .shippingAddresses[model.currentShippingAddress].description),
+          ),
+          primary: "Shipping address",
+          secondary: model2.addresses[model.currentShippingAddress].description,
+        ),
         SizedBox(
           height: 20,
         ),

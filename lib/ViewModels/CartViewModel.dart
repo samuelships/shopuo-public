@@ -21,8 +21,6 @@ class CartViewModel with ChangeNotifier {
   List<CartProductModel> cartproducts = [];
   List<DeliveryMethod> deliveryMethods = [];
 
-  List<AddressModel> shippingAddresses = addresses;
-
   int _currentShippingAddress = 0;
   get currentShippingAddress => _currentShippingAddress;
   set currentShippingAddress(value) {

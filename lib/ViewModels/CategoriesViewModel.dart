@@ -12,7 +12,6 @@ class CategoriesViewModel with ChangeNotifier {
 
   //  METHODS
   setUpModel() async {
-    print("starting...");
     try {
       List<CategoryModel> result =
           await _firestoreService.getDataCollection<CategoryModel>(

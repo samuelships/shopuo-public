@@ -108,6 +108,10 @@ class SettingsViewModel with ChangeNotifier {
 
   // METHODS
   setUpModel() {
+    setUpAddress();
+    setUpProfile();
+
+    ///
     final currentUser = _authenticationService.currentUser();
     final userInfo = currentUser.providerData[0];
     if (userInfo.providerId != "google.com") {
@@ -561,8 +565,6 @@ class SettingsViewModel with ChangeNotifier {
 
       pushNotification = push;
       notifyListeners();
-
-      print(push);
     } catch (e) {
       //
     }

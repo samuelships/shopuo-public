@@ -57,7 +57,6 @@ class SignUpVerifyViewModel with ChangeNotifier {
           _overlayService.showSnackBarFailure(widget: Text(data["message"]));
         }
       } on PlatformException catch (e) {
-        print(e);
         _overlayService.showSnackBarFailure(
             widget: Text("Something wrong happened."));
       } finally {
@@ -81,7 +80,6 @@ class SignUpVerifyViewModel with ChangeNotifier {
         notifyListeners();
       }
     } on PlatformException catch (e) {
-      print(e);
       _overlayService.showSnackBarFailure(
           widget: Text("Something wrong happened."));
     } finally {}
