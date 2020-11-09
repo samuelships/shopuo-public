@@ -8,11 +8,11 @@ import 'package:shopuo/Components/Input/TextInputComponent.dart';
 import 'package:shopuo/Components/PaymentComponent.dart';
 import 'package:shopuo/Components/SelectComponent.dart';
 import 'package:shopuo/Components/ShippingCard.dart';
-import 'package:shopuo/Models/AddressModel.dart';
 import 'package:shopuo/Models/PaymentModels.dart';
 import 'package:shopuo/Styles/Color.dart';
 import 'package:shopuo/Styles/Typography.dart';
 import 'package:shopuo/ViewModels/CartViewModel.dart';
+import 'package:shopuo/ViewModels/SettingsViewModel.dart';
 
 class Cart extends StatefulWidget {
   @override
@@ -21,9 +21,6 @@ class Cart extends StatefulWidget {
 
 class _CartState extends State<Cart> with TickerProviderStateMixin {
   TabController _controller;
-
-  int _currentShippingAddress = 0;
-  List<AddressModel> _shippingAddresses = addresses;
 
   PaymentMethod _currentPaymentMethod = PaymentMethod.MtnMobileMoney;
   MobileMoneyModel _mobileMoney = MobileMoneyModel();
@@ -46,71 +43,73 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<CartViewModel>(
-      builder: (context, model, child) => SafeArea(
-        child: Stack(
-          children: [
-            Scaffold(
-              appBar: HeaderComponent(
-                title: "Cart",
-              ),
-              body: Column(
-                children: [
-                  SizedBox(
-                    height: 25,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 25),
-                    child: Theme(
-                      data: ThemeData(
-                        highlightColor: Colors.transparent,
-                        splashColor: Colors.transparent,
-                      ),
-                      child: TabBar(
-                        controller: _controller,
-                        indicatorColor: MyColor.primaryPurple,
-                        indicatorWeight: 5,
-                        labelColor: MyColor.primaryPurple,
-                        unselectedLabelColor: MyColor.neutralGrey3,
-                        labelStyle: MyTypography.body2,
-                        onTap: (index) {},
-                        tabs: [
-                          Tab(
-                            text: "CART",
-                          ),
-                          Tab(
-                            text: "CHECKOUT",
-                          ),
-                          Tab(
-                            text: "PAYMENT",
-                          )
-                        ],
+    return Consumer<SettingsViewModel>(
+      builder: (context2, model2, child2) => Consumer<CartViewModel>(
+        builder: (context, model, child) => SafeArea(
+          child: Stack(
+            children: [
+              Scaffold(
+                appBar: HeaderComponent(
+                  title: "Cart",
+                ),
+                body: Column(
+                  children: [
+                    SizedBox(
+                      height: 25,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 25),
+                      child: Theme(
+                        data: ThemeData(
+                          highlightColor: Colors.transparent,
+                          splashColor: Colors.transparent,
+                        ),
+                        child: TabBar(
+                          controller: _controller,
+                          indicatorColor: MyColor.primaryPurple,
+                          indicatorWeight: 5,
+                          labelColor: MyColor.primaryPurple,
+                          unselectedLabelColor: MyColor.neutralGrey3,
+                          labelStyle: MyTypography.body2,
+                          onTap: (index) {},
+                          tabs: [
+                            Tab(
+                              text: "CART",
+                            ),
+                            Tab(
+                              text: "CHECKOUT",
+                            ),
+                            Tab(
+                              text: "PAYMENT",
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      height: 500,
-                      child: TabBarView(
-                        controller: _controller,
-                        children: [
-                          tabOne(model),
-                          tabTwo(model),
-                          tabThree(model),
-                        ],
+                    Expanded(
+                      child: Container(
+                        height: 500,
+                        child: TabBarView(
+                          controller: _controller,
+                          children: [
+                            tabOne(model, model2),
+                            tabTwo(model, model2),
+                            tabThree(model, model2),
+                          ],
+                        ),
                       ),
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
-  tabOne(CartViewModel model) {
+  tabOne(CartViewModel model, SettingsViewModel model2) {
     return ListView(
       padding: EdgeInsets.symmetric(horizontal: 25),
       children: [
@@ -231,7 +230,7 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
     );
   }
 
-  tabTwo(CartViewModel model) {
+  tabTwo(CartViewModel model, SettingsViewModel model2) {
     return ListView(
       padding: EdgeInsets.symmetric(horizontal: 25),
       children: [
@@ -247,7 +246,7 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
         SizedBox(
           height: 17,
         ),
-        ..._shippingAddresses
+        ...model.shippingAddresses
             .asMap()
             .map(
               (index, value) => MapEntry(
@@ -255,7 +254,7 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
                 GestureDetector(
                   onTap: () {
                     setState(() {
-                      _currentShippingAddress = index;
+                      model.currentShippingAddress = index;
                     });
                   },
                   child: Container(
@@ -276,19 +275,19 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
                           height: 24,
                           width: 24,
                           decoration: BoxDecoration(
-                            color: index == _currentShippingAddress
+                            color: index == model.currentShippingAddress
                                 ? MyColor.primaryPurple
                                 : Colors.white,
                             borderRadius: BorderRadius.all(
                               Radius.circular(5),
                             ),
                             border: Border.all(
-                              color: index == _currentShippingAddress
+                              color: index == model.currentShippingAddress
                                   ? MyColor.primaryPurple
                                   : MyColor.dividerLight,
                             ),
                           ),
-                          child: index == _currentShippingAddress
+                          child: index == model.currentShippingAddress
                               ? SvgPicture.asset("assets/svg_icons/check.svg")
                               : Container(),
                         ),
@@ -320,7 +319,8 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
     );
   }
 
-  tabThree(CartViewModel model) {
+  tabThree(CartViewModel model, SettingsViewModel model2) {
+    print(model2.addresses);
     return ListView(
       padding: EdgeInsets.symmetric(horizontal: 25),
       children: [
@@ -332,13 +332,13 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
               heading: "Select shipping address",
               onChanged: (key) {
                 setState(() {
-                  _currentShippingAddress = key;
+                  model.currentShippingAddress = key;
                 });
               },
               options: [
-                ..._shippingAddresses.map((e) => e.title),
+                ...model.shippingAddresses.map((e) => e.title),
               ],
-              selectedIndex: _currentShippingAddress,
+              selectedIndex: model.currentShippingAddress,
               child: Text(
                 "Change",
                 style: MyTypography.body2.copyWith(
@@ -347,7 +347,8 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
               ),
             ),
             primary: "Shipping address",
-            secondary: _shippingAddresses[_currentShippingAddress].description),
+            secondary: model
+                .shippingAddresses[model.currentShippingAddress].description),
         SizedBox(
           height: 20,
         ),
