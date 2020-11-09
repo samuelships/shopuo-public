@@ -22,11 +22,6 @@ class Cart extends StatefulWidget {
 class _CartState extends State<Cart> with TickerProviderStateMixin {
   TabController _controller;
 
-  PaymentMethod _currentPaymentMethod = PaymentMethod.MtnMobileMoney;
-  MobileMoneyModel _mobileMoney = MobileMoneyModel();
-
-  CardModel _card = CardModel();
-
   final chevronDown = "assets/svg_icons/chevron-down.svg";
 
   @override
@@ -45,63 +40,66 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Consumer<SettingsViewModel>(
       builder: (context2, model2, child2) => Consumer<CartViewModel>(
-        builder: (context, model, child) => SafeArea(
+        builder: (context, CartViewModel model, child) => SafeArea(
           child: Stack(
             children: [
-              Scaffold(
-                appBar: HeaderComponent(
-                  title: "Cart",
-                ),
-                body: Column(
-                  children: [
-                    SizedBox(
-                      height: 25,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 25),
-                      child: Theme(
-                        data: ThemeData(
-                          highlightColor: Colors.transparent,
-                          splashColor: Colors.transparent,
-                        ),
-                        child: TabBar(
-                          controller: _controller,
-                          indicatorColor: MyColor.primaryPurple,
-                          indicatorWeight: 5,
-                          labelColor: MyColor.primaryPurple,
-                          unselectedLabelColor: MyColor.neutralGrey3,
-                          labelStyle: MyTypography.body2,
-                          onTap: (index) {},
-                          tabs: [
-                            Tab(
-                              text: "CART",
-                            ),
-                            Tab(
-                              text: "CHECKOUT",
-                            ),
-                            Tab(
-                              text: "PAYMENT",
-                            )
-                          ],
+              if (!model.modelReady)
+                Text("Loading...")
+              else
+                Scaffold(
+                  appBar: HeaderComponent(
+                    title: "Cart",
+                  ),
+                  body: Column(
+                    children: [
+                      SizedBox(
+                        height: 25,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 25),
+                        child: Theme(
+                          data: ThemeData(
+                            highlightColor: Colors.transparent,
+                            splashColor: Colors.transparent,
+                          ),
+                          child: TabBar(
+                            controller: _controller,
+                            indicatorColor: MyColor.primaryPurple,
+                            indicatorWeight: 5,
+                            labelColor: MyColor.primaryPurple,
+                            unselectedLabelColor: MyColor.neutralGrey3,
+                            labelStyle: MyTypography.body2,
+                            onTap: (index) {},
+                            tabs: [
+                              Tab(
+                                text: "CART",
+                              ),
+                              Tab(
+                                text: "CHECKOUT",
+                              ),
+                              Tab(
+                                text: "PAYMENT",
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        height: 500,
-                        child: TabBarView(
-                          controller: _controller,
-                          children: [
-                            tabOne(model, model2),
-                            tabTwo(model, model2),
-                            tabThree(model, model2),
-                          ],
+                      Expanded(
+                        child: Container(
+                          height: 500,
+                          child: TabBarView(
+                            controller: _controller,
+                            children: [
+                              tabOne(model, model2),
+                              tabTwo(model, model2),
+                              tabThree(model, model2),
+                            ],
+                          ),
                         ),
-                      ),
-                    )
-                  ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
             ],
           ),
         ),
@@ -141,9 +139,7 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
                 index,
                 ShippingCard(
                   callback: (key) {
-                    setState(() {
-                      model.currentDeliveryMethod = key;
-                    });
+                    model.currentDeliveryMethod = key;
                   },
                   index: index,
                   selected: model.currentDeliveryMethod == index ? true : false,
@@ -253,9 +249,7 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
                 index,
                 GestureDetector(
                   onTap: () {
-                    setState(() {
-                      model.currentShippingAddress = index;
-                    });
+                    model.currentShippingAddress = index;
                   },
                   child: Container(
                     padding: EdgeInsets.all(12),
@@ -330,9 +324,7 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
           trailing: SelectComponent(
             heading: "Select shipping address",
             onChanged: (key) {
-              setState(() {
-                model.currentShippingAddress = key;
-              });
+              model.currentShippingAddress = key;
             },
             options: [
               ...model2.addresses.map((e) => e.title),
@@ -359,9 +351,7 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
               ...model.deliveryMethods.map((e) => "${e.name} - ${e.price}"),
             ],
             onChanged: (key) {
-              setState(() {
-                model.currentDeliveryMethod = key;
-              });
+              model.currentDeliveryMethod = key;
             },
             child: Text(
               "Change",
@@ -404,16 +394,14 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
         ),
         SelectPaymentMethodComponent(
           onChange: (PaymentMethod method) {
-            setState(() {
-              _currentPaymentMethod = method;
-            });
+            model.currentPaymentMethod = method;
           },
         ),
         SizedBox(
           height: 30,
         ),
-        if (_currentPaymentMethod == PaymentMethod.Mastercard ||
-            _currentPaymentMethod == PaymentMethod.Visa)
+        if (model.currentPaymentMethod == PaymentMethod.Mastercard ||
+            model.currentPaymentMethod == PaymentMethod.Visa)
           card()
         else
           momo(),
