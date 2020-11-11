@@ -132,7 +132,7 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
         SizedBox(
           height: 50,
         ),
-        ...model.deliveryMethods
+        ...model.shippingPlans
             .asMap()
             .map(
               (index, value) => MapEntry(
@@ -143,8 +143,8 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
                   },
                   index: index,
                   selected: model.currentDeliveryMethod == index ? true : false,
-                  primary: model.deliveryMethods[index].name,
-                  secondary: "\$${model.deliveryMethods[index].price}",
+                  primary: model.shippingPlans[index].name,
+                  secondary: "\$${model.shippingPlans[index].price}",
                 ),
               ),
             )
@@ -349,7 +349,7 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
             selectedIndex: model.currentDeliveryMethod,
             heading: "Select delivery type",
             options: [
-              ...model.deliveryMethods.map((e) => "${e.name} - ${e.price}"),
+              ...model.shippingPlans.map((e) => "${e.name} - ${e.price}"),
             ],
             onChanged: (key) {
               model.currentDeliveryMethod = key;
@@ -363,7 +363,7 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
           ),
           primary: "Delivery details",
           secondary:
-              "${model.deliveryMethods[model.currentDeliveryMethod].name} - ${model.deliveryMethods[model.currentDeliveryMethod].price}",
+              "${model.shippingPlans[model.currentDeliveryMethod].name} - ${model.shippingPlans[model.currentDeliveryMethod].price}",
         ),
         SizedBox(
           height: 70,

@@ -65,12 +65,12 @@ class CartViewModel with ChangeNotifier {
   }
 
   // delivery methods
-  List<ShippingPlan> deliveryMethods = [];
+  List<ShippingPlan> shippingPlans = [];
 
-  bool _deliveryMethodsFetched = false;
-  get deliveryMethodsFetched => _deliveryMethodsFetched;
-  set deliveryMethodsFetched(value) {
-    _deliveryMethodsFetched = value;
+  bool _shippingPlansFetched = false;
+  get shippingPlansFetched => _shippingPlansFetched;
+  set shippingPlansFetched(value) {
+    _shippingPlansFetched = value;
     notifyListeners();
   }
 
@@ -82,9 +82,9 @@ class CartViewModel with ChangeNotifier {
   }
 
   // delivery calculations
-  get deliveryAmount => deliveryMethods.length == 0
+  get deliveryAmount => shippingPlans.length == 0
       ? 0
-      : deliveryMethods[currentDeliveryMethod].price;
+      : shippingPlans[currentDeliveryMethod].price;
   get orderAmount =>
       cartproducts.fold(0, (acc, curr) => acc + curr.price * curr.quantity);
   get totalAmount => deliveryAmount + orderAmount;
@@ -98,12 +98,12 @@ class CartViewModel with ChangeNotifier {
   }
 
   // model ready
-  get modelReady => cartFetched && deliveryMethodsFetched;
+  get modelReady => cartFetched && shippingPlansFetched;
 
   // METHODS
   setUpModel() {
     fetchCart();
-    fetchDelivery();
+    fetchShippingPlans();
   }
 
   deleteCartItem({id}) async {
@@ -133,10 +133,10 @@ class CartViewModel with ChangeNotifier {
     });
   }
 
-  fetchDelivery() async {
+  fetchShippingPlans() async {
     try {
-      deliveryMethods = await _firestoreService.getDataCollection<ShippingPlan>(
-        path: "delivery_methods",
+      shippingPlans = await _firestoreService.getDataCollection<ShippingPlan>(
+        path: "shipping_plans",
         builder: ({
           Map<String, dynamic> data,
           String documentID,
@@ -147,7 +147,7 @@ class CartViewModel with ChangeNotifier {
           documentId: documentID,
         ),
       );
-      deliveryMethodsFetched = true;
+      shippingPlansFetched = true;
     } catch (e) {
       print(e);
     }
