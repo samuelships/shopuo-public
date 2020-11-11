@@ -182,7 +182,9 @@ class CartViewModel with ChangeNotifier {
   }
 
   makePayment() {
-    print("making payment...");
+    if (isValid) {
+      print("payload is valid...");
+    }
   }
 
   @override

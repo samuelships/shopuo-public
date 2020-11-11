@@ -457,7 +457,7 @@ card(CartViewModel model, {setState}) {
         children: [
           Expanded(
             child: TextInputComponent(
-              hintText: "05",
+              hintText: "10",
               onChanged: (value) {
                 setState(() {
                   model.cardMonth.change(value);
@@ -471,7 +471,7 @@ card(CartViewModel model, {setState}) {
           ),
           Expanded(
             child: TextInputComponent(
-              hintText: "2023",
+              hintText: "23",
               onChanged: (value) {
                 setState(() {
                   model.cardYear.change(value);
@@ -492,10 +492,10 @@ card(CartViewModel model, {setState}) {
               hintText: "123",
               onChanged: (value) {
                 setState(() {
-                  model.cardPin.change(value);
+                  model.cardCvv.change(value);
                 });
               },
-              error: model.cardPin.error,
+              error: model.cardCvv.error,
               // trailingIcon: chevronDown,
             ),
           ),
