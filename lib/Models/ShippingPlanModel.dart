@@ -1,15 +1,15 @@
-class DeliveryMethod {
+class ShippingPlan {
   final String id;
   final String name;
   final double price;
 
-  DeliveryMethod({this.name, this.price, this.id});
+  ShippingPlan({this.name, this.price, this.id});
 
-  factory DeliveryMethod.fromMap({
+  factory ShippingPlan.fromMap({
     Map<String, dynamic> data,
     String documentId,
   }) {
-    return DeliveryMethod(
+    return ShippingPlan(
       id: documentId,
       name: data["name"],
       price: double.parse("${data["price"]}"),
@@ -20,8 +20,3 @@ class DeliveryMethod {
     return "{id: $id, name : $name, price : $price";
   }
 }
-
-List<DeliveryMethod> deliveryMethods = [
-  DeliveryMethod(name: "Standard Delivery", price: 10.00),
-  DeliveryMethod(name: "Next Day Delivery", price: 25.00),
-];

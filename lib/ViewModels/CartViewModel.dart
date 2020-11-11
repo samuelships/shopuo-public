@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:formz/formz.dart';
 import 'package:shopuo/Models/CartProductModel.dart';
-import 'package:shopuo/Models/DeliveryMethod.dart';
+import 'package:shopuo/Models/ShippingPlanModel.dart';
 import 'package:shopuo/Models/PaymentModels.dart';
 import 'package:shopuo/Services/AuthenticationService.dart';
 import 'package:shopuo/Services/FirestoreService.dart';
@@ -65,26 +65,25 @@ class CartViewModel with ChangeNotifier {
   }
 
   // delivery methods
-  List<DeliveryMethod> deliveryMethods = [];
+  List<ShippingPlan> shippingPlans = [];
 
-  bool _deliveryMethodsFetched = false;
-  get deliveryMethodsFetched => _deliveryMethodsFetched;
-  set deliveryMethodsFetched(value) {
-    _deliveryMethodsFetched = value;
+  bool _shippingPlansFetched = false;
+  get shippingPlansFetched => _shippingPlansFetched;
+  set shippingPlansFetched(value) {
+    _shippingPlansFetched = value;
     notifyListeners();
   }
 
-  int _currentDeliveryMethod = 0;
-  get currentDeliveryMethod => _currentDeliveryMethod;
-  set currentDeliveryMethod(value) {
-    _currentDeliveryMethod = value;
+  int _currentShippingPlan = 0;
+  get currentShippingPlan => _currentShippingPlan;
+  set currentShippingPlan(value) {
+    _currentShippingPlan = value;
     notifyListeners();
   }
 
   // delivery calculations
-  get deliveryAmount => deliveryMethods.length == 0
-      ? 0
-      : deliveryMethods[currentDeliveryMethod].price;
+  get deliveryAmount =>
+      shippingPlans.length == 0 ? 0 : shippingPlans[currentShippingPlan].price;
   get orderAmount =>
       cartproducts.fold(0, (acc, curr) => acc + curr.price * curr.quantity);
   get totalAmount => deliveryAmount + orderAmount;
@@ -98,12 +97,12 @@ class CartViewModel with ChangeNotifier {
   }
 
   // model ready
-  get modelReady => cartFetched && deliveryMethodsFetched;
+  get modelReady => cartFetched && shippingPlansFetched;
 
   // METHODS
   setUpModel() {
     fetchCart();
-    fetchDelivery();
+    fetchShippingPlans();
   }
 
   deleteCartItem({id}) async {
@@ -133,22 +132,21 @@ class CartViewModel with ChangeNotifier {
     });
   }
 
-  fetchDelivery() async {
+  fetchShippingPlans() async {
     try {
-      deliveryMethods =
-          await _firestoreService.getDataCollection<DeliveryMethod>(
-        path: "delivery_methods",
+      shippingPlans = await _firestoreService.getDataCollection<ShippingPlan>(
+        path: "shipping_plans",
         builder: ({
           Map<String, dynamic> data,
           String documentID,
           DocumentSnapshot snapshot,
         }) =>
-            DeliveryMethod.fromMap(
+            ShippingPlan.fromMap(
           data: data,
           documentId: documentID,
         ),
       );
-      deliveryMethodsFetched = true;
+      shippingPlansFetched = true;
     } catch (e) {
       print(e);
     }
