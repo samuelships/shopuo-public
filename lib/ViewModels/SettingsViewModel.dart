@@ -54,7 +54,7 @@ class SettingsViewModel with ChangeNotifier {
         // },
         {
           "icon": "map-pin",
-          "heading": "Add Addresses",
+          "heading": "Add Shipping Addresses",
           "sub heading": "Add your shipping addresses",
           "color": Color(0xff00C48C),
           "callback": (model) => model.goToInner("Address")
@@ -444,7 +444,7 @@ class SettingsViewModel with ChangeNotifier {
   fetchAddress() async {
     final addressSubscription = _firestoreService
         .collectionStream<ShippingAddressModel>(
-      path: "addresses",
+      path: "shipping_addresses",
       builder: (data, documentId) =>
           ShippingAddressModel.fromMap(data: data, documentId: documentId),
       queryBuilder: (query) => query.where(
@@ -464,14 +464,14 @@ class SettingsViewModel with ChangeNotifier {
       addressInProgress = true;
 
       try {
-        await _firestoreService.addDocument(path: "addresses", data: {
+        await _firestoreService.addDocument(path: "shipping_addresses", data: {
           "title": addressName.formz.value,
           "description": addressDescription.formz.value,
           "user_id": _authenticationService.currentUser().uid
         });
 
         _overlayService.showSnackBarSuccess(
-            widget: Text("Address added successfully"));
+            widget: Text("Shipping address added successfully"));
 
         _navigationService.popInner();
         notifyListeners();
@@ -485,7 +485,7 @@ class SettingsViewModel with ChangeNotifier {
 
   editAddress({id}) async {
     try {
-      await _firestoreService.setData(path: "addresses/$id", data: {
+      await _firestoreService.setData(path: "shipping_addresses/$id", data: {
         "title": addressName.formz.value,
         "description": addressDescription.formz.value,
       });
@@ -509,7 +509,7 @@ class SettingsViewModel with ChangeNotifier {
     final status = await _overlayService.showYesNoDialog();
     if (status) {
       try {
-        await _firestoreService.deleteData("addresses/$id");
+        await _firestoreService.deleteData("shipping_addresses/$id");
       } catch (e) {
         print(e);
       }
