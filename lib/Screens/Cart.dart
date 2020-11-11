@@ -402,14 +402,14 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
         ),
         if (model.currentPaymentMethod == PaymentMethod.Mastercard ||
             model.currentPaymentMethod == PaymentMethod.Visa)
-          card()
+          card(model, setState: setState)
         else
-          momo(),
+          momo(model, setState: setState),
         SizedBox(
           height: 30,
         ),
         ButtonComponent(
-          text: "Confirmation",
+          text: "Make Payment",
           onTap: () {},
         ),
         SizedBox(
@@ -420,17 +420,29 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
   }
 }
 
-card() {
+card(CartViewModel model, {setState}) {
   return Column(
     children: [
       TextInputComponent(
         hintText: "Tiana Rosser",
+        onChanged: (value) {
+          setState(() {
+            model.fullName.change(value);
+          });
+        },
+        error: model.fullName.error,
       ),
       SizedBox(
         height: 15,
       ),
       TextInputComponent(
         hintText: "**** **** **** 3947",
+        onChanged: (value) {
+          setState(() {
+            model.cardNumber.change(value);
+          });
+        },
+        error: model.cardNumber.error,
       ),
       SizedBox(
         height: 15,
@@ -440,6 +452,12 @@ card() {
           Expanded(
             child: TextInputComponent(
               hintText: "05",
+              onChanged: (value) {
+                setState(() {
+                  model.cardDate.change(value);
+                });
+              },
+              error: model.cardDate.error,
             ),
           ),
           SizedBox(
@@ -448,6 +466,12 @@ card() {
           Expanded(
             child: TextInputComponent(
               hintText: "2023",
+              onChanged: (value) {
+                setState(() {
+                  model.cardYear.change(value);
+                });
+              },
+              error: model.cardYear.error,
             ),
           )
         ],
@@ -460,6 +484,12 @@ card() {
           Expanded(
             child: TextInputComponent(
               hintText: "123",
+              onChanged: (value) {
+                setState(() {
+                  model.cardPin.change(value);
+                });
+              },
+              error: model.cardPin.error,
               // trailingIcon: chevronDown,
             ),
           ),
@@ -480,36 +510,51 @@ card() {
   );
 }
 
-momo() {
+momo(CartViewModel model, {setState}) {
   return Column(
     children: [
       TextInputComponent(
+        key: ValueKey("phone-number"),
         hintText: "Phone Number",
+        onChanged: (value) {
+          setState(() {
+            model.phoneNumber.change(value);
+          });
+        },
+        error: model.phoneNumber.error,
       ),
-      SizedBox(
-        height: 15,
-      ),
-      Row(
-        children: [
-          Expanded(
-            child: TextInputComponent(
-              hintText: "152658",
-              // trailingIcon: chevronDown,
-            ),
-          ),
-          SizedBox(
-            width: 15,
-          ),
-          Expanded(
-            child: Text(
-              "Voucher code for vodafone cash.",
-              style: MyTypography.body2.copyWith(
-                color: MyColor.neutralGrey3,
+      if (model.currentPaymentMethod == PaymentMethod.VodafoneCash) ...[
+        SizedBox(
+          height: 15,
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: TextInputComponent(
+                hintText: "152658",
+                onChanged: (value) {
+                  setState(() {
+                    model.voucher.change(value);
+                  });
+                },
+                error: model.voucher.error,
+                // trailingIcon: chevronDown,
               ),
             ),
-          )
-        ],
-      ),
+            SizedBox(
+              width: 15,
+            ),
+            Expanded(
+              child: Text(
+                "Voucher code for vodafone cash.",
+                style: MyTypography.body2.copyWith(
+                  color: MyColor.neutralGrey3,
+                ),
+              ),
+            )
+          ],
+        ),
+      ]
     ],
   );
 }

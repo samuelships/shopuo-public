@@ -2,12 +2,21 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:formz/formz.dart';
 import 'package:shopuo/Models/CartProductModel.dart';
 import 'package:shopuo/Models/DeliveryMethod.dart';
 import 'package:shopuo/Models/PaymentModels.dart';
 import 'package:shopuo/Services/AuthenticationService.dart';
 import 'package:shopuo/Services/FirestoreService.dart';
 import 'package:shopuo/Services/OverlayService.dart';
+import 'package:shopuo/Validators/CardDateValidator.dart';
+import 'package:shopuo/Validators/CardNumberValidator.dart';
+import 'package:shopuo/Validators/CardPinValidator.dart';
+import 'package:shopuo/Validators/CardYearValidator.dart';
+import 'package:shopuo/Validators/FormValidator.dart';
+import 'package:shopuo/Validators/FullNameValidator.dart';
+import 'package:shopuo/Validators/PhoneNumberValidator.dart';
+import 'package:shopuo/Validators/VodafoneVoucherValidator.dart';
 
 import '../locator.dart';
 
@@ -18,6 +27,20 @@ class CartViewModel with ChangeNotifier {
   final _overlayService = locator<OverlayService>();
 
   // PAGE DATA
+
+  // form data
+  FormValidator phoneNumber = FormValidator(validators: phoneNumberValidators);
+  FormValidator fullName = FormValidator(validators: fullNameValidators);
+  FormValidator cardNumber = FormValidator(validators: cardNumberValidators);
+  FormValidator cardPin = FormValidator(validators: cardPinValidators);
+  FormValidator cardDate = FormValidator(validators: cardDateValidators);
+  FormValidator cardYear = FormValidator(validators: cardYearValidators);
+  FormValidator voucher = FormValidator(validators: vodafoneVoucherValidators);
+
+  get isMomoValid {
+    final inputs = <FormzInput>[phoneNumber.formz];
+    return Formz.validate(inputs) == FormzStatus.valid ? true : false;
+  }
 
   // payment methods
   PaymentMethod _currentPaymentMethod = PaymentMethod.MtnMobileMoney;
