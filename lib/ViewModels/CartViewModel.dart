@@ -9,9 +9,9 @@ import 'package:shopuo/Models/PaymentModels.dart';
 import 'package:shopuo/Services/AuthenticationService.dart';
 import 'package:shopuo/Services/FirestoreService.dart';
 import 'package:shopuo/Services/OverlayService.dart';
-import 'package:shopuo/Validators/CardDateValidator.dart';
+import 'package:shopuo/Validators/CardMonthValidator.dart';
 import 'package:shopuo/Validators/CardNumberValidator.dart';
-import 'package:shopuo/Validators/CardPinValidator.dart';
+import 'package:shopuo/Validators/CardCvvValidator.dart';
 import 'package:shopuo/Validators/CardYearValidator.dart';
 import 'package:shopuo/Validators/FormValidator.dart';
 import 'package:shopuo/Validators/FullNameValidator.dart';
@@ -27,19 +27,40 @@ class CartViewModel with ChangeNotifier {
   final _overlayService = locator<OverlayService>();
 
   // PAGE DATA
-
   // form data
   FormValidator phoneNumber = FormValidator(validators: phoneNumberValidators);
   FormValidator fullName = FormValidator(validators: fullNameValidators);
   FormValidator cardNumber = FormValidator(validators: cardNumberValidators);
-  FormValidator cardPin = FormValidator(validators: cardPinValidators);
-  FormValidator cardDate = FormValidator(validators: cardDateValidators);
+  FormValidator cardPin = FormValidator(validators: cardCvvValidators);
+  FormValidator cardMonth = FormValidator(validators: cardMonthValidators);
   FormValidator cardYear = FormValidator(validators: cardYearValidators);
   FormValidator voucher = FormValidator(validators: vodafoneVoucherValidators);
 
-  get isMomoValid {
-    final inputs = <FormzInput>[phoneNumber.formz];
-    return Formz.validate(inputs) == FormzStatus.valid ? true : false;
+  get isValid {
+    final cp = currentPaymentMethod;
+
+    // mtn and airteltigo
+    if (cp == PaymentMethod.MtnMobileMoney ||
+        cp == PaymentMethod.AirtelTigoMoney) {
+      final inputs = <FormzInput>[phoneNumber.formz];
+      return Formz.validate(inputs) == FormzStatus.valid ? true : false;
+
+      // vodafone cash
+    } else if (cp == PaymentMethod.VodafoneCash) {
+      final inputs = <FormzInput>[phoneNumber.formz, voucher.formz];
+      return Formz.validate(inputs) == FormzStatus.valid ? true : false;
+
+      // card
+    } else {
+      final inputs = <FormzInput>[
+        fullName.formz,
+        cardNumber.formz,
+        cardMonth.formz,
+        cardYear.formz,
+        cardYear.formz,
+      ];
+      return Formz.validate(inputs) == FormzStatus.valid ? true : false;
+    }
   }
 
   // payment methods
@@ -50,8 +71,8 @@ class CartViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  MobileMoneyModel mobileMoney = MobileMoneyModel();
-  CardModel card = CardModel();
+  // MobileMoneyModel mobileMoney = MobileMoneyModel();
+  // CardModel card = CardModel();
 
   // cart products
   StreamSubscription cartSubscription;
@@ -71,6 +92,13 @@ class CartViewModel with ChangeNotifier {
   get shippingPlansFetched => _shippingPlansFetched;
   set shippingPlansFetched(value) {
     _shippingPlansFetched = value;
+    notifyListeners();
+  }
+
+  bool _isMakePaymentInProgress = false;
+  get isMakePaymentInProgress => _isMakePaymentInProgress;
+  set isMakePaymentInProgress(value) {
+    _isMakePaymentInProgress = value;
     notifyListeners();
   }
 
@@ -100,6 +128,7 @@ class CartViewModel with ChangeNotifier {
   get modelReady => cartFetched && shippingPlansFetched;
 
   // METHODS
+
   setUpModel() {
     fetchCart();
     fetchShippingPlans();
@@ -150,6 +179,10 @@ class CartViewModel with ChangeNotifier {
     } catch (e) {
       print(e);
     }
+  }
+
+  makePayment() {
+    print("making payment...");
   }
 
   @override

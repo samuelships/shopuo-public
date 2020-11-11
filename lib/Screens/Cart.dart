@@ -216,8 +216,10 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
           height: 30,
         ),
         ButtonComponent(
-          text: "Place order",
-          onTap: () {},
+          text: "Next",
+          onTap: () {
+            _controller.animateTo(1);
+          },
         ),
         SizedBox(
           height: 50,
@@ -305,6 +307,9 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
         ),
         ButtonComponent(
           text: "Payment Method",
+          onTap: () {
+            _controller.animateTo(2);
+          },
         ),
         SizedBox(
           height: 50,
@@ -347,9 +352,9 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
         DetailsCard(
           trailing: SelectComponent(
             selectedIndex: model.currentShippingPlan,
-            heading: "Select delivery type",
+            heading: "Select shipping plan",
             options: [
-              ...model.shippingPlans.map((e) => "${e.name} - ${e.price}"),
+              ...model.shippingPlans.map((e) => "${e.name} - \$${e.price}"),
             ],
             onChanged: (key) {
               model.currentShippingPlan = key;
@@ -361,9 +366,9 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
               ),
             ),
           ),
-          primary: "Delivery details",
+          primary: "Shipping plan",
           secondary:
-              "${model.shippingPlans[model.currentShippingPlan].name} - ${model.shippingPlans[model.currentShippingPlan].price}",
+              "${model.shippingPlans[model.currentShippingPlan].name} - \$${model.shippingPlans[model.currentShippingPlan].price}",
         ),
         SizedBox(
           height: 70,
@@ -411,7 +416,7 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
         ),
         ButtonComponent(
           text: "Make Payment",
-          onTap: () {},
+          onTap: model.makePayment,
         ),
         SizedBox(
           height: 50,
@@ -455,10 +460,10 @@ card(CartViewModel model, {setState}) {
               hintText: "05",
               onChanged: (value) {
                 setState(() {
-                  model.cardDate.change(value);
+                  model.cardMonth.change(value);
                 });
               },
-              error: model.cardDate.error,
+              error: model.cardMonth.error,
             ),
           ),
           SizedBox(
