@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopuo/Components/AddressCard.dart';
-import 'package:shopuo/Models/AddressModel.dart';
+import 'package:shopuo/Models/ShippingAddressModel.dart';
 import 'package:shopuo/ViewModels/SettingsViewModel.dart';
 
 class AddressResultComponent extends StatelessWidget {

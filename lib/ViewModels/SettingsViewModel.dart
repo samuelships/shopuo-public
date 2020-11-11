@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shopuo/Models/AddressModel.dart';
+import 'package:shopuo/Models/ShippingAddressModel.dart';
 import 'package:shopuo/Services/AuthenticationService.dart';
 import 'package:shopuo/Services/FirebaseStorageService.dart';
 import 'package:shopuo/Services/FirestoreService.dart';

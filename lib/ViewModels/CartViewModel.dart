@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:formz/formz.dart';
 import 'package:shopuo/Models/CartProductModel.dart';
-import 'package:shopuo/Models/DeliveryMethod.dart';
+import 'package:shopuo/Models/ShippingPlanModel.dart';
 import 'package:shopuo/Models/PaymentModels.dart';
 import 'package:shopuo/Services/AuthenticationService.dart';
 import 'package:shopuo/Services/FirestoreService.dart';
