@@ -74,17 +74,16 @@ class CartViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  int _currentDeliveryMethod = 0;
-  get currentDeliveryMethod => _currentDeliveryMethod;
-  set currentDeliveryMethod(value) {
-    _currentDeliveryMethod = value;
+  int _currentShippingPlan = 0;
+  get currentShippingPlan => _currentShippingPlan;
+  set currentShippingPlan(value) {
+    _currentShippingPlan = value;
     notifyListeners();
   }
 
   // delivery calculations
-  get deliveryAmount => shippingPlans.length == 0
-      ? 0
-      : shippingPlans[currentDeliveryMethod].price;
+  get deliveryAmount =>
+      shippingPlans.length == 0 ? 0 : shippingPlans[currentShippingPlan].price;
   get orderAmount =>
       cartproducts.fold(0, (acc, curr) => acc + curr.price * curr.quantity);
   get totalAmount => deliveryAmount + orderAmount;

@@ -139,10 +139,10 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
                 index,
                 ShippingCard(
                   callback: (key) {
-                    model.currentDeliveryMethod = key;
+                    model.currentShippingPlan = key;
                   },
                   index: index,
-                  selected: model.currentDeliveryMethod == index ? true : false,
+                  selected: model.currentShippingPlan == index ? true : false,
                   primary: model.shippingPlans[index].name,
                   secondary: "\$${model.shippingPlans[index].price}",
                 ),
@@ -346,13 +346,13 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
         ),
         DetailsCard(
           trailing: SelectComponent(
-            selectedIndex: model.currentDeliveryMethod,
+            selectedIndex: model.currentShippingPlan,
             heading: "Select delivery type",
             options: [
               ...model.shippingPlans.map((e) => "${e.name} - ${e.price}"),
             ],
             onChanged: (key) {
-              model.currentDeliveryMethod = key;
+              model.currentShippingPlan = key;
             },
             child: Text(
               "Change",
@@ -363,7 +363,7 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
           ),
           primary: "Delivery details",
           secondary:
-              "${model.shippingPlans[model.currentDeliveryMethod].name} - ${model.shippingPlans[model.currentDeliveryMethod].price}",
+              "${model.shippingPlans[model.currentShippingPlan].name} - ${model.shippingPlans[model.currentShippingPlan].price}",
         ),
         SizedBox(
           height: 70,
