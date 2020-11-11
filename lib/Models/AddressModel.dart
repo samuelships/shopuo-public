@@ -1,15 +1,15 @@
-class AddressModel {
+class ShippingAddressModel {
   final String id;
   final String title;
   final String description;
 
-  AddressModel({this.title, this.description, this.id});
+  ShippingAddressModel({this.title, this.description, this.id});
 
-  factory AddressModel.fromMap({
+  factory ShippingAddressModel.fromMap({
     Map<String, dynamic> data,
     String documentId,
   }) {
-    return AddressModel(
+    return ShippingAddressModel(
       id: documentId,
       title: data["title"],
       description: data["description"],

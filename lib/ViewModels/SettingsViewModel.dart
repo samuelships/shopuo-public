@@ -384,9 +384,10 @@ class SettingsViewModel with ChangeNotifier {
   }
 
   StreamSubscription addressSubscription;
-  List<AddressModel> shippingAddresses = [];
+  List<ShippingAddressModel> shippingAddresses = [];
 
-  List<AddressModel> get filteredAddresses => shippingAddresses.where((e) {
+  List<ShippingAddressModel> get filteredAddresses =>
+      shippingAddresses.where((e) {
         if (search.isNotEmpty) {
           if (e.title.toLowerCase().startsWith(search) ||
               e.description.toLowerCase().startsWith(search)) {
@@ -442,10 +443,10 @@ class SettingsViewModel with ChangeNotifier {
 
   fetchAddress() async {
     final addressSubscription = _firestoreService
-        .collectionStream<AddressModel>(
+        .collectionStream<ShippingAddressModel>(
       path: "addresses",
       builder: (data, documentId) =>
-          AddressModel.fromMap(data: data, documentId: documentId),
+          ShippingAddressModel.fromMap(data: data, documentId: documentId),
       queryBuilder: (query) => query.where(
         "user_id",
         isEqualTo: _authenticationService.currentUser().uid,
