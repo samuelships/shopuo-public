@@ -384,8 +384,9 @@ class SettingsViewModel with ChangeNotifier {
   }
 
   StreamSubscription addressSubscription;
-  List<AddressModel> addresses = [];
-  List<AddressModel> get filteredAddresses => addresses.where((e) {
+  List<AddressModel> shippingAddresses = [];
+
+  List<AddressModel> get filteredAddresses => shippingAddresses.where((e) {
         if (search.isNotEmpty) {
           if (e.title.toLowerCase().startsWith(search) ||
               e.description.toLowerCase().startsWith(search)) {
@@ -451,7 +452,7 @@ class SettingsViewModel with ChangeNotifier {
       ),
     )
         .listen((data) {
-      addresses = data;
+      shippingAddresses = data;
       addressFetched = true;
       notifyListeners();
     });
