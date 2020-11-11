@@ -2,11 +2,15 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:formz/formz.dart';
 import 'package:shopuo/Models/CartProductModel.dart';
+import 'package:shopuo/Models/OrderModel.dart';
+import 'package:shopuo/Models/ShippingAddressModel.dart';
 import 'package:shopuo/Models/ShippingPlanModel.dart';
 import 'package:shopuo/Models/PaymentModels.dart';
 import 'package:shopuo/Services/AuthenticationService.dart';
+import 'package:shopuo/Services/CloudFunctionService.dart';
 import 'package:shopuo/Services/FirestoreService.dart';
 import 'package:shopuo/Services/OverlayService.dart';
 import 'package:shopuo/Validators/CardMonthValidator.dart';
@@ -25,6 +29,7 @@ class CartViewModel with ChangeNotifier {
   final _firestoreService = locator<FirestoreService>();
   final _authenticationService = locator<AuthenticationService>();
   final _overlayService = locator<OverlayService>();
+  final _cloudFunctionService = locator<CloudFunctionService>();
 
   // PAGE DATA
   // form data
@@ -76,6 +81,7 @@ class CartViewModel with ChangeNotifier {
 
   // cart products
   StreamSubscription cartSubscription;
+  StreamSubscription orderSubscription;
   List<CartProductModel> cartproducts = [];
 
   bool _cartFetched = false;
@@ -181,10 +187,105 @@ class CartViewModel with ChangeNotifier {
     }
   }
 
-  makePayment() {
-    if (isValid) {
-      print("payload is valid...");
+  makePayment(List<ShippingAddressModel> shippingAddresses) async {
+    print("lhh");
+    return false;
+    if (isValid && !isMakePaymentInProgress) {
+      isMakePaymentInProgress = true;
+      Map<String, dynamic> payload = {};
+
+      // set shipping plan and shipping address
+      payload["shipping_plan"] = shippingPlans[currentShippingPlan].name;
+      payload["shipping_address"] =
+          shippingAddresses[currentShippingAddress].title;
+
+      // set payment info
+      final cp = currentPaymentMethod;
+      if (cp == PaymentMethod.AirtelTigoMoney ||
+          cp == PaymentMethod.MtnMobileMoney ||
+          cp == PaymentMethod.VodafoneCash) {
+        payload["payment_method"] = "mobile_money";
+        payload["phone_number"] = phoneNumber.formz.value;
+      } else {
+        payload["payment_method"] = "card";
+        payload["card_number"] = cardNumber.formz.value;
+        payload["card_month"] = cardMonth.formz.value;
+        payload["card_year"] = cardYear.formz.value;
+        payload["card_cvv"] = cardCvv.formz.value;
+      }
+
+      if (cp == PaymentMethod.VodafoneCash) {
+        payload["network"] = "vodafone";
+        payload["voucher"] = voucher.formz.value;
+      }
+
+      if (cp == PaymentMethod.AirtelTigoMoney) {
+        payload["network"] = "airteltigo";
+      }
+
+      if (cp == PaymentMethod.MtnMobileMoney) {
+        payload["network"] = "mtn";
+      }
+
+      try {
+        final data = await _cloudFunctionService.call(
+          name: "makePayment",
+          data: payload,
+        );
+
+        // success
+        if (data["code"] == 2000) {
+          // show modal
+          if (data["data"]["redirect"]) {
+            // ask user before you redirect
+          } else {
+            // show loading
+            _overlayService.showLoadingDialog();
+          }
+
+          // subscribe to orderReference
+          orderSubscription = _firestoreService
+              .documentStream<OrderModel>(
+            path: "orders/${data['data']['orderReference']}",
+            builder: (data, documentId) =>
+                OrderModel.fromMap(data: data, documentId: documentId),
+          )
+              .listen((order) {
+            if (order.transactionStatus) {
+              // hide modal
+              hidePaymentModal();
+              // unsubscribe
+              orderSubscription.cancel();
+              // redirect to orders page
+              print("redirecting to orders page....");
+            }
+          });
+
+          // if redirect redirect
+          if (data["data"]["redirect"]) {
+            launchRedirectUrl(data["data"]["redirect_url"]);
+          }
+        }
+      } on PlatformException catch (e) {
+        _overlayService.showSnackBarFailure(
+            widget: Text("Something wrong happened."));
+      }
+
+      isMakePaymentInProgress = false;
     }
+  }
+
+  showPaymentModal() async {
+    final status = await _overlayService.showPaymentDialog();
+    print(status);
+  }
+
+  hidePaymentModal() {
+    // hiding payment dialog
+  }
+
+  launchRedirectUrl(url) {
+    print("launcing url....");
   }
 
   @override

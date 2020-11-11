@@ -416,7 +416,10 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
         ),
         ButtonComponent(
           text: "Make Payment",
-          onTap: model.makePayment,
+          onTap: () {
+            model.makePayment(model2.shippingAddresses);
+          },
+          active: !model.isMakePaymentInProgress,
         ),
         SizedBox(
           height: 50,
