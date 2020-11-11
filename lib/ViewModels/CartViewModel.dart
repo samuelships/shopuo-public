@@ -31,7 +31,7 @@ class CartViewModel with ChangeNotifier {
   FormValidator phoneNumber = FormValidator(validators: phoneNumberValidators);
   FormValidator fullName = FormValidator(validators: fullNameValidators);
   FormValidator cardNumber = FormValidator(validators: cardNumberValidators);
-  FormValidator cardPin = FormValidator(validators: cardCvvValidators);
+  FormValidator cardCvv = FormValidator(validators: cardCvvValidators);
   FormValidator cardMonth = FormValidator(validators: cardMonthValidators);
   FormValidator cardYear = FormValidator(validators: cardYearValidators);
   FormValidator voucher = FormValidator(validators: vodafoneVoucherValidators);
@@ -57,7 +57,7 @@ class CartViewModel with ChangeNotifier {
         cardNumber.formz,
         cardMonth.formz,
         cardYear.formz,
-        cardYear.formz,
+        cardCvv.formz,
       ];
       return Formz.validate(inputs) == FormzStatus.valid ? true : false;
     }
