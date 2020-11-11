@@ -65,7 +65,7 @@ class CartViewModel with ChangeNotifier {
   }
 
   // delivery methods
-  List<DeliveryMethod> deliveryMethods = [];
+  List<ShippingPlan> deliveryMethods = [];
 
   bool _deliveryMethodsFetched = false;
   get deliveryMethodsFetched => _deliveryMethodsFetched;
@@ -135,15 +135,14 @@ class CartViewModel with ChangeNotifier {
 
   fetchDelivery() async {
     try {
-      deliveryMethods =
-          await _firestoreService.getDataCollection<DeliveryMethod>(
+      deliveryMethods = await _firestoreService.getDataCollection<ShippingPlan>(
         path: "delivery_methods",
         builder: ({
           Map<String, dynamic> data,
           String documentID,
           DocumentSnapshot snapshot,
         }) =>
-            DeliveryMethod.fromMap(
+            ShippingPlan.fromMap(
           data: data,
           documentId: documentID,
         ),
