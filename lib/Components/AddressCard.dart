@@ -6,7 +6,7 @@ import 'package:shopuo/Styles/Color.dart';
 import 'package:shopuo/Styles/Typography.dart';
 
 class AddressCard extends StatelessWidget {
-  final AddressModel address;
+  final ShippingAddressModel address;
   final VoidCallback onDelete;
   final VoidCallback onEdit;
 
