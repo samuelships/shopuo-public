@@ -6,7 +6,7 @@ import 'package:shopuo/ViewModels/SettingsViewModel.dart';
 
 class AddressResultComponent extends StatelessWidget {
   final loading;
-  final List<AddressModel> results;
+  final List<ShippingAddressModel> results;
   final loaded;
 
   const AddressResultComponent({
@@ -22,7 +22,7 @@ class AddressResultComponent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ...results
-            .map((AddressModel e) => AddressCard(
+            .map((ShippingAddressModel e) => AddressCard(
                   key: ValueKey(e.id),
                   onEdit: () {
                     Provider.of<SettingsViewModel>(context, listen: false)

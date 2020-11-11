@@ -242,7 +242,7 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
         SizedBox(
           height: 17,
         ),
-        ...model2.addresses
+        ...model2.shippingAddresses
             .asMap()
             .map(
               (index, value) => MapEntry(
@@ -327,7 +327,7 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
               model.currentShippingAddress = key;
             },
             options: [
-              ...model2.addresses.map((e) => e.title),
+              ...model2.shippingAddresses.map((e) => e.title),
             ],
             selectedIndex: model.currentShippingAddress,
             child: Text(
@@ -338,7 +338,8 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
             ),
           ),
           primary: "Shipping address",
-          secondary: model2.addresses[model.currentShippingAddress].description,
+          secondary: model2
+              .shippingAddresses[model.currentShippingAddress].description,
         ),
         SizedBox(
           height: 20,
