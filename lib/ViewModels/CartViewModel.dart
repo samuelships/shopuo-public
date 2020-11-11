@@ -188,7 +188,8 @@ class CartViewModel with ChangeNotifier {
   }
 
   makePayment(List<ShippingAddressModel> shippingAddresses) async {
-    print("lhh");
+    final status = await _overlayService.showOkayDialog(primary: "Yoooo");
+    print(status);
     return false;
     if (isValid && !isMakePaymentInProgress) {
       isMakePaymentInProgress = true;
@@ -276,7 +277,7 @@ class CartViewModel with ChangeNotifier {
   }
 
   showPaymentModal() async {
-    final status = await _overlayService.showPaymentDialog();
+    final status = await _overlayService.showOkayDialog();
     print(status);
   }
 
