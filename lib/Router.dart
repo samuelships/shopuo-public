@@ -182,6 +182,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       break;
 
     case "Orders":
+      print("navigation to orders..");
       return getPageRoute(
         builder: Orders.create(),
         name: settings.name,

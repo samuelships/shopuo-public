@@ -31,6 +31,7 @@ class _OverlayManagerState extends State<OverlayManager> {
     firebaseMessagingService.register();
     overlayService.registerYesNoDialogCallback(showYesNoDialog);
     overlayService.registerLoadingDialogCallback(showLoadingDialog);
+    overlayService.registerHideLoadingDialogCallback(hideLoadingDialog);
     overlayService.registerOkayDialogCallback(showOkayDialog);
     WidgetsBinding.instance.addPostFrameCallback((_) => setUpModel(context));
     super.initState();
@@ -70,6 +71,10 @@ class _OverlayManagerState extends State<OverlayManager> {
   }
 
   hideLoadingDialog() {
+    if (overlayService.showOkayDialogCompleter != null) {
+      overlayService.showOkayDialogCompleter.complete(false);
+      overlayService.showLoadingDialogCompleter = null;
+    }
     setState(() {
       _showLoadingDialog = false;
     });

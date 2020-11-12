@@ -21,44 +21,46 @@ class Orders extends StatefulWidget {
 
 class _OrdersState extends State<Orders> {
   OrdersViewModel model;
-
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       model = Provider.of<OrdersViewModel>(context, listen: false);
       model.setUpModel();
     });
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: HeaderComponent(
-          title: "Your Orders",
-          leadingCallback: Navigator.of(context).pop,
-          leading: "assets/svg_icons/chevron-left.svg",
-        ),
-        body: ListView(
-          padding: EdgeInsets.symmetric(horizontal: 25),
-          children: [
-            SizedBox(
-              height: 25,
-            ),
-            ...model.orders
-                .asMap()
-                .map(
-                  (index, value) => MapEntry(
-                    index,
-                    OrderCard(
-                      order: model.orders[index],
+    return Consumer<OrdersViewModel>(
+      builder: (context, model, child) => SafeArea(
+        child: Scaffold(
+          appBar: HeaderComponent(
+            title: "Your Orders",
+            leadingCallback: Navigator.of(context).pop,
+            leading: "assets/svg_icons/chevron-left.svg",
+          ),
+          body: ListView(
+            padding: EdgeInsets.symmetric(horizontal: 25),
+            children: [
+              SizedBox(
+                height: 25,
+              ),
+              ...model.orders
+                  .asMap()
+                  .map(
+                    (index, value) => MapEntry(
+                      index,
+                      OrderCard(
+                        order: model.orders[index],
+                      ),
                     ),
-                  ),
-                )
-                .values
-                .toList()
-          ],
+                  )
+                  .values
+                  .toList()
+            ],
+          ),
         ),
       ),
     );

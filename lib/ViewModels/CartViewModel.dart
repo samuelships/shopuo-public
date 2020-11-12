@@ -12,6 +12,7 @@ import 'package:shopuo/Models/PaymentModels.dart';
 import 'package:shopuo/Services/AuthenticationService.dart';
 import 'package:shopuo/Services/CloudFunctionService.dart';
 import 'package:shopuo/Services/FirestoreService.dart';
+import 'package:shopuo/Services/NavigationService.dart';
 import 'package:shopuo/Services/OverlayService.dart';
 import 'package:shopuo/Validators/CardMonthValidator.dart';
 import 'package:shopuo/Validators/CardNumberValidator.dart';
@@ -30,6 +31,7 @@ class CartViewModel with ChangeNotifier {
   final _authenticationService = locator<AuthenticationService>();
   final _overlayService = locator<OverlayService>();
   final _cloudFunctionService = locator<CloudFunctionService>();
+  final _navigationService = locator<NavigationService>();
 
   // PAGE DATA
   // form data
@@ -188,9 +190,10 @@ class CartViewModel with ChangeNotifier {
   }
 
   makePayment(List<ShippingAddressModel> shippingAddresses) async {
-    //final status = await _overlayService.showOkayDialog(primary: "Yoooo");
-    // print(status);
-    //return false;
+    _overlayService.showLoadingDialog();
+    await Future.delayed(Duration(seconds: 5));
+    await _overlayService.hideLoadingDialog();
+    return;
     if (isValid && !isMakePaymentInProgress) {
       isMakePaymentInProgress = true;
       Map<String, dynamic> payload = {};
@@ -242,14 +245,13 @@ class CartViewModel with ChangeNotifier {
               OrderModel.fromMap(data: data, documentId: documentId),
         )
             .listen((order) {
-          print(order);
           if (order.transactionStatus) {
             // hide modal
             hideLoadingModal();
             // unsubscribe
             orderSubscription.cancel();
             // redirect to orders page
-            print("redirecting to orders page....");
+            _navigationService.navigateTo("Orders");
           }
         });
 
@@ -277,9 +279,7 @@ class CartViewModel with ChangeNotifier {
     // hiding payment dialog
   }
 
-  launchRedirectUrl(url) {
-    print("launcing url....");
-  }
+  launchRedirectUrl(url) {}
 
   @override
   void dispose() {

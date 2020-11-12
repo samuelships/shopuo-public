@@ -22,14 +22,23 @@ class OverlayService {
   // SHOW LOADING DIALOG
   Completer<bool> showLoadingDialogCompleter;
   Function showLoadingDialogCallback;
+  Function hideLoadingDialogCallback;
   void registerLoadingDialogCallback(Function callback) {
     showLoadingDialogCallback = callback;
+  }
+
+  void registerHideLoadingDialogCallback(Function callback) {
+    hideLoadingDialogCallback = callback;
   }
 
   showLoadingDialog() {
     showLoadingDialogCompleter = Completer<bool>();
     showLoadingDialogCallback();
     return showLoadingDialogCompleter.future;
+  }
+
+  hideLoadingDialog() {
+    hideLoadingDialogCallback();
   }
 
   // SHOW OKAY DIALOG

@@ -40,7 +40,8 @@ class OrdersViewModel with ChangeNotifier {
                 "transaction_status",
                 isEqualTo: true,
               )
-              .where("user_id", isEqualTo: uid),
+              .where("user_id", isEqualTo: uid)
+              .orderBy("time_ordered", descending: true),
           builder: ({
             Map<String, dynamic> data,
             String documentID,
