@@ -323,12 +323,11 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
   }
 
   tabThree(CartViewModel model, SettingsViewModel model2) {
-    return ListView(
-      padding: EdgeInsets.symmetric(horizontal: 25),
-      children: [
-        SizedBox(
-          height: 40,
-        ),
+    var children2 = [
+      SizedBox(
+        height: 40,
+      ),
+      if (model2.shippingAddresses.length > 1)
         DetailsCard(
           trailing: SelectComponent(
             heading: "Select shipping address",
@@ -349,91 +348,96 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
           primary: "Shipping address",
           secondary: model2
               .shippingAddresses[model.currentShippingAddress].description,
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        DetailsCard(
-          trailing: SelectComponent(
-            selectedIndex: model.currentShippingPlan,
-            heading: "Select shipping plan",
-            options: [
-              ...model.shippingPlans.map((e) => "${e.name} - \$${e.price}"),
-            ],
-            onChanged: (key) {
-              model.currentShippingPlan = key;
-            },
-            child: Text(
-              "Change",
-              style: MyTypography.body2.copyWith(
-                color: MyColor.primaryRed,
-              ),
+        )
+      else
+        Text("Please add a shipping address to continue"),
+      SizedBox(
+        height: 20,
+      ),
+      DetailsCard(
+        trailing: SelectComponent(
+          selectedIndex: model.currentShippingPlan,
+          heading: "Select shipping plan",
+          options: [
+            ...model.shippingPlans.map((e) => "${e.name} - \$${e.price}"),
+          ],
+          onChanged: (key) {
+            model.currentShippingPlan = key;
+          },
+          child: Text(
+            "Change",
+            style: MyTypography.body2.copyWith(
+              color: MyColor.primaryRed,
             ),
           ),
-          primary: "Shipping plan",
-          secondary:
-              "${model.shippingPlans[model.currentShippingPlan].name} - \$${model.shippingPlans[model.currentShippingPlan].price}",
         ),
-        SizedBox(
-          height: 70,
+        primary: "Shipping plan",
+        secondary:
+            "${model.shippingPlans[model.currentShippingPlan].name} - \$${model.shippingPlans[model.currentShippingPlan].price}",
+      ),
+      SizedBox(
+        height: 70,
+      ),
+      Text(
+        "Select and enter your payment details",
+        style: MyTypography.heading6R.copyWith(
+          color: MyColor.neutralBlack,
         ),
-        Text(
-          "Select and enter your payment details",
-          style: MyTypography.heading6R.copyWith(
-            color: MyColor.neutralBlack,
-          ),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        RichText(
-          text: TextSpan(
-              text: "By continuing you agree to our ",
-              style: MyTypography.smallText,
-              children: [
-                TextSpan(
-                  text: "Terms",
-                  style: MyTypography.smallText.copyWith(
-                    color: MyColor.primaryPurple,
-                  ),
-                )
-              ]),
-        ),
-        SizedBox(
-          height: 35,
-        ),
-        SelectPaymentMethodComponent(
-          onChange: (PaymentMethod method) {
-            model.currentPaymentMethod = method;
-          },
-        ),
-        SizedBox(
-          height: 30,
-        ),
-        if (model.currentPaymentMethod == PaymentMethod.Mastercard ||
-            model.currentPaymentMethod == PaymentMethod.Visa)
-          card(model, setState: setState)
-        else
-          momo(model, setState: setState),
-        SizedBox(
-          height: 30,
-        ),
-        ButtonComponent(
-          text: "Make Payment",
-          onTap: () {
-            model.makePayment(model2.shippingAddresses);
-          },
-          active: !model.isMakePaymentInProgress,
-        ),
-        SizedBox(
-          height: 50,
-        ),
-      ],
+      ),
+      SizedBox(
+        height: 10,
+      ),
+      RichText(
+        text: TextSpan(
+            text: "By continuing you agree to our ",
+            style: MyTypography.smallText,
+            children: [
+              TextSpan(
+                text: "Terms",
+                style: MyTypography.smallText.copyWith(
+                  color: MyColor.primaryPurple,
+                ),
+              )
+            ]),
+      ),
+      SizedBox(
+        height: 35,
+      ),
+      SelectPaymentMethodComponent(
+        onChange: (PaymentMethod method) {
+          model.currentPaymentMethod = method;
+        },
+      ),
+      SizedBox(
+        height: 30,
+      ),
+      if (model.currentPaymentMethod == PaymentMethod.Mastercard ||
+          model.currentPaymentMethod == PaymentMethod.Visa)
+        card(model, setState: setState)
+      else
+        momo(model, setState: setState),
+      SizedBox(
+        height: 30,
+      ),
+      ButtonComponent(
+        text: "Make Payment",
+        onTap: () {
+          model.makePayment(model2.shippingAddresses);
+        },
+        active: !model.isMakePaymentInProgress,
+      ),
+      SizedBox(
+        height: 50,
+      ),
+    ];
+    return ListView(
+      padding: EdgeInsets.symmetric(horizontal: 25),
+      children: children2,
     );
   }
 }
 
-card(CartViewModel model, {setState}) {
+Widget card(CartViewModel model, {setState}) {
   return Column(
     children: [
       TextInputComponent(
@@ -523,7 +527,7 @@ card(CartViewModel model, {setState}) {
   );
 }
 
-momo(CartViewModel model, {setState}) {
+Widget momo(CartViewModel model, {setState}) {
   return Column(
     children: [
       TextInputComponent(
