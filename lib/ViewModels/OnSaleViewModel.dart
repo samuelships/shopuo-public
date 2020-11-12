@@ -43,6 +43,10 @@ class OnSaleViewModel with ChangeNotifier {
   }
 
 // methods
+  navigateToOrders() {
+    _navigationService.navigateTo("Orders");
+  }
+
   getProducts({queryBuilder}) async {
     List<ProductModel> results =
         await _firestoreService.getDataCollection<ProductModel>(

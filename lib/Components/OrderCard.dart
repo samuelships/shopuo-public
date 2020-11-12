@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shopuo/Models/OrderModel.dart';
 import 'package:shopuo/Styles/Color.dart';
 import 'package:shopuo/Styles/Typography.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class OrderCard extends StatefulWidget {
   final OrderModel order;
@@ -102,7 +103,7 @@ class _OrderCardState extends State<OrderCard> {
                     ),
           Spacer(),
           Text(
-            widget.order.timeOrdered,
+            "${timeago.format(DateTime.parse(widget.order.timeOrdered))}",
             style: MyTypography.bodyInput.copyWith(
               color: MyColor.neutralGrey3,
             ),
@@ -259,7 +260,7 @@ class _OrderCardState extends State<OrderCard> {
                   ),
                   children: [
                     TextSpan(
-                      text: "- 3 days shipping",
+                      text: "- ${widget.order.shippingPlan}",
                       style: MyTypography.body2.copyWith(
                         color: MyColor.neutralGrey3,
                       ),

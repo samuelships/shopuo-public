@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopuo/Components/HeaderComponent.dart';
 import 'package:shopuo/Components/OrderCard.dart';
-import 'package:shopuo/Models/OrderModel.dart';
 import 'package:shopuo/ViewModels/OrdersViewModel.dart';
 
 import '../locator.dart';

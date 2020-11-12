@@ -130,6 +130,10 @@ class SettingsViewModel with ChangeNotifier {
     }
   }
 
+  navigateToOrders() {
+    _navigationService.navigateTo("Orders");
+  }
+
   // END GENERAL ---------------->>>
   // ---------------------------->>>
   // ---------------------------->>>

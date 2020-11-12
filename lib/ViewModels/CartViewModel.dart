@@ -190,6 +190,10 @@ class CartViewModel with ChangeNotifier {
     }
   }
 
+  navigateToOrders() {
+    _navigationService.navigateTo("Orders");
+  }
+
   makePayment(List<ShippingAddressModel> shippingAddresses) async {
     if (isValid && !isMakePaymentInProgress) {
       isMakePaymentInProgress = true;

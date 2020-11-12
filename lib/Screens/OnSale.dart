@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:shopuo/Components/HeaderComponent.dart';
 import 'package:shopuo/Components/InternetErrorComponent.dart';
 import 'package:shopuo/Components/LoadingComponent.dart';
 import 'package:shopuo/Components/ProductCard.dart';
@@ -58,42 +59,12 @@ class _OnSaleState extends State<OnSale> {
     return Consumer<OnSaleViewModel>(
       builder: (_, model, __) => SafeArea(
         child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            titleSpacing: 0,
-            title: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 25),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Transform.translate(
-                    offset: Offset(-10, 0),
-                    child: SvgPicture.asset(
-                      "assets/svg_icons/package.svg",
-                      height: 28,
-                      width: 28,
-                      color: MyColor.neutralBlack,
-                    ),
-                  ),
-                  Text(
-                    "On Sale",
-                    style: MyTypography.heading5SB.copyWith(
-                      color: MyColor.neutralBlack,
-                    ),
-                  ),
-                  Transform.translate(
-                    offset: Offset(10, 0),
-                    child: SvgPicture.asset(
-                      "assets/svg_icons/search.svg",
-                      height: 28,
-                      width: 28,
-                      color: MyColor.neutralBlack,
-                    ),
-                  )
-                ],
-              ),
-            ),
+          appBar: HeaderComponent(
+            title: "On Sale",
+            leadingCallback: () {
+              model.navigateToOrders();
+            },
+            leading: "assets/svg_icons/package.svg",
           ),
           body: Stack(
             fit: StackFit.expand,

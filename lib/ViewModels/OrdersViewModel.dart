@@ -53,7 +53,6 @@ class OrdersViewModel with ChangeNotifier {
               ));
 
       orderFetched = true;
-      print(orders);
     } catch (e) {
       print(e);
     }

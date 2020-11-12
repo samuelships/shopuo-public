@@ -48,7 +48,11 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
               else
                 Scaffold(
                   appBar: HeaderComponent(
+                    leading: "assets/svg_icons/package.svg",
                     title: "Cart",
+                    leadingCallback: () {
+                      model.navigateToOrders();
+                    },
                   ),
                   body: Column(
                     children: [
