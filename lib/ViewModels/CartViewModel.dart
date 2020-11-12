@@ -22,6 +22,7 @@ import 'package:shopuo/Validators/FormValidator.dart';
 import 'package:shopuo/Validators/FullNameValidator.dart';
 import 'package:shopuo/Validators/PhoneNumberValidator.dart';
 import 'package:shopuo/Validators/VodafoneVoucherValidator.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../locator.dart';
 
@@ -190,10 +191,6 @@ class CartViewModel with ChangeNotifier {
   }
 
   makePayment(List<ShippingAddressModel> shippingAddresses) async {
-    _overlayService.showLoadingDialog();
-    await Future.delayed(Duration(seconds: 5));
-    await _overlayService.hideLoadingDialog();
-    return;
     if (isValid && !isMakePaymentInProgress) {
       isMakePaymentInProgress = true;
       Map<String, dynamic> payload = {};
@@ -247,23 +244,31 @@ class CartViewModel with ChangeNotifier {
             .listen((order) {
           if (order.transactionStatus) {
             // hide modal
-            hideLoadingModal();
+            _overlayService.hideLoadingDialog();
             // unsubscribe
             orderSubscription.cancel();
             // redirect to orders page
             _navigationService.navigateTo("Orders");
           }
         });
-
+        print(data);
         // success
         if (data["code"] == 2000) {
           // ask user to be redirected
           if (data["data"]["redirect"]) {
             // ask user before you redirect
+            await _overlayService.showOkayDialog(secondary: data["message"]);
+            final url = data["data"]["redirect_url"];
+            _overlayService.showLoadingDialog();
+            if (await canLaunch(url)) {
+              await launch(url);
+            } else {
+              throw 'Could not launch $url';
+            }
           } else {
             // show instructions and show loading
             await _overlayService.showOkayDialog(secondary: data["message"]);
-            await _overlayService.showLoadingDialog();
+            _overlayService.showLoadingDialog();
           }
         }
       } on PlatformException catch (e) {
