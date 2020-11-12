@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'ShippingPlanModel.dart';
 
 enum OrderStatus { inProgress, delivered, waiting }
@@ -31,14 +33,14 @@ class OrderModel {
     return OrderModel(
       status: OrderStatus.inProgress,
       transactionStatus: data["transaction_status"],
-      // timeOrdered: data["time_ordered"],
-      // orderNumber: data["order_number"],
-      // trackingNumber: data["tracking_number"],
-      // valueOfItems: data["value_of_items"],
-      // quantity: data["quantity"],
-      // shippingPlan: ShippingPlan(name: "fake", price: 20),
-      // progress: 1,
-      // progressText: data["progress_text"],
+      timeOrdered: (data["time_odererd"] as Timestamp).toDate().toString(),
+      orderNumber: data["order_number"],
+      trackingNumber: data["tracking_number"],
+      valueOfItems: double.parse("${data["value_of_items"]}"),
+      quantity: data["quantity"],
+      shippingPlan: ShippingPlan(name: "fake", price: 20),
+      progress: 1,
+      progressText: data["progress_text"],
     );
   }
 

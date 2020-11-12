@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:shopuo/OverlayManager.dart';
 import 'package:shopuo/Router.dart';
 import 'package:shopuo/Screens/EntryPoint.dart';
+import 'package:shopuo/Screens/Orders.dart';
 import 'package:shopuo/Services/NavigationService.dart';
 import 'package:shopuo/ViewModels/CartViewModel.dart';
 import 'package:shopuo/ViewModels/CategoriesViewModel.dart';
@@ -45,7 +46,7 @@ class MyApp extends StatelessWidget {
         builder: (BuildContext context, Widget child) => OverlayManager.create(
           child: child,
         ),
-        home: EntryPoint.create(),
+        home: Orders.create(),
         onGenerateRoute: generateRoute,
         navigatorKey: locator<NavigationService>().navigatorKey,
       ),

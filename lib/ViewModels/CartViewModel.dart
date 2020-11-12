@@ -188,9 +188,9 @@ class CartViewModel with ChangeNotifier {
   }
 
   makePayment(List<ShippingAddressModel> shippingAddresses) async {
-    final status = await _overlayService.showOkayDialog(primary: "Yoooo");
-    print(status);
-    return false;
+    //final status = await _overlayService.showOkayDialog(primary: "Yoooo");
+    // print(status);
+    //return false;
     if (isValid && !isMakePaymentInProgress) {
       isMakePaymentInProgress = true;
       Map<String, dynamic> payload = {};
@@ -234,37 +234,34 @@ class CartViewModel with ChangeNotifier {
           data: payload,
         );
 
+        // subscribe to orderReference
+        orderSubscription = _firestoreService
+            .documentStream<OrderModel>(
+          path: "orders/${data['data']['orderReference']}",
+          builder: (data, documentId) =>
+              OrderModel.fromMap(data: data, documentId: documentId),
+        )
+            .listen((order) {
+          print(order);
+          if (order.transactionStatus) {
+            // hide modal
+            hideLoadingModal();
+            // unsubscribe
+            orderSubscription.cancel();
+            // redirect to orders page
+            print("redirecting to orders page....");
+          }
+        });
+
         // success
         if (data["code"] == 2000) {
-          // show modal
+          // ask user to be redirected
           if (data["data"]["redirect"]) {
             // ask user before you redirect
           } else {
-            // show loading
-            _overlayService.showLoadingDialog();
-          }
-
-          // subscribe to orderReference
-          orderSubscription = _firestoreService
-              .documentStream<OrderModel>(
-            path: "orders/${data['data']['orderReference']}",
-            builder: (data, documentId) =>
-                OrderModel.fromMap(data: data, documentId: documentId),
-          )
-              .listen((order) {
-            if (order.transactionStatus) {
-              // hide modal
-              hidePaymentModal();
-              // unsubscribe
-              orderSubscription.cancel();
-              // redirect to orders page
-              print("redirecting to orders page....");
-            }
-          });
-
-          // if redirect redirect
-          if (data["data"]["redirect"]) {
-            launchRedirectUrl(data["data"]["redirect_url"]);
+            // show instructions and show loading
+            await _overlayService.showOkayDialog(secondary: data["message"]);
+            await _overlayService.showLoadingDialog();
           }
         }
       } on PlatformException catch (e) {
@@ -276,12 +273,7 @@ class CartViewModel with ChangeNotifier {
     }
   }
 
-  showPaymentModal() async {
-    final status = await _overlayService.showOkayDialog();
-    print(status);
-  }
-
-  hidePaymentModal() {
+  hideLoadingModal() {
     // hiding payment dialog
   }
 

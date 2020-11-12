@@ -1,15 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shopuo/Components/HeaderComponent.dart';
 import 'package:shopuo/Components/OrderCard.dart';
 import 'package:shopuo/Models/OrderModel.dart';
+import 'package:shopuo/ViewModels/OrdersViewModel.dart';
+
+import '../locator.dart';
 
 class Orders extends StatefulWidget {
+  static Widget create() {
+    return ChangeNotifierProvider<OrdersViewModel>(
+      create: (_) => locator<OrdersViewModel>(),
+      child: Orders(),
+    );
+  }
+
   @override
   _OrdersState createState() => _OrdersState();
 }
 
 class _OrdersState extends State<Orders> {
-  final List<OrderModel> _orders = orders;
+  OrdersViewModel model;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      model = Provider.of<OrdersViewModel>(context, listen: false);
+      model.setUpModel();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +37,7 @@ class _OrdersState extends State<Orders> {
       child: Scaffold(
         appBar: HeaderComponent(
           title: "Your Orders",
+          leadingCallback: Navigator.of(context).pop,
           leading: "assets/svg_icons/chevron-left.svg",
         ),
         body: ListView(
@@ -25,13 +46,13 @@ class _OrdersState extends State<Orders> {
             SizedBox(
               height: 25,
             ),
-            ..._orders
+            ...model.orders
                 .asMap()
                 .map(
                   (index, value) => MapEntry(
                     index,
                     OrderCard(
-                      order: _orders[index],
+                      order: model.orders[index],
                     ),
                   ),
                 )
