@@ -44,14 +44,23 @@ class OverlayService {
   // SHOW OKAY DIALOG
   Completer<bool> showOkayDialogCompleter;
   Function showOkayDialogCallback;
+  Function hideOkayDialogCallback;
   void registerOkayDialogCallback(Function callback) {
     showOkayDialogCallback = callback;
+  }
+
+  void registerHideOkayDialogCallback(Function callback) {
+    hideOkayDialogCallback = callback;
   }
 
   showOkayDialog({icon, primary, secondary}) {
     showOkayDialogCompleter = Completer<bool>();
     showOkayDialogCallback(icon: icon, primary: primary, secondary: secondary);
     return showOkayDialogCompleter.future;
+  }
+
+  hideOkayDialog() {
+    hideOkayDialogCallback();
   }
 
   // SNACKBAR NOTIFICATIONS

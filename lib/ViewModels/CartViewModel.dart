@@ -248,6 +248,7 @@ class CartViewModel with ChangeNotifier {
             .listen((order) {
           if (order.transactionStatus) {
             // hide modal
+            _overlayService.hideOkayDialog();
             _overlayService.hideLoadingDialog();
             // unsubscribe
             orderSubscription.cancel();
@@ -271,7 +272,9 @@ class CartViewModel with ChangeNotifier {
             }
           } else {
             // show instructions and show loading
-            await _overlayService.showOkayDialog(secondary: data["message"]);
+            _overlayService.showOkayDialog(secondary: data["message"]);
+            await Future.delayed(Duration(seconds: 5));
+            _overlayService.hideOkayDialog();
             _overlayService.showLoadingDialog();
           }
         }

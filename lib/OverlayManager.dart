@@ -32,6 +32,7 @@ class _OverlayManagerState extends State<OverlayManager> {
     overlayService.registerYesNoDialogCallback(showYesNoDialog);
     overlayService.registerLoadingDialogCallback(showLoadingDialog);
     overlayService.registerHideLoadingDialogCallback(hideLoadingDialog);
+    overlayService.registerHideOkayDialogCallback(hideOkayDialog);
     overlayService.registerOkayDialogCallback(showOkayDialog);
     WidgetsBinding.instance.addPostFrameCallback((_) => setUpModel(context));
     super.initState();
