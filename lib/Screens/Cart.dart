@@ -57,9 +57,9 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
                   children: [
                     if (!model.modelReady)
                       Text("Loading...")
-                    else if (model.cartproducts.length < 1)
+                    else if (model.cartproducts.length == 0)
                       EmptyCartComponent()
-                    else if (model2.shippingAddresses.length < 1)
+                    else if (model2.shippingAddresses.length == 0)
                       EmptyShippingAddresses()
                     else ...[
                       SizedBox(
@@ -334,7 +334,9 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
       SizedBox(
         height: 40,
       ),
-      if (model2.shippingAddresses.length > 1)
+      if (model2.shippingAddresses.length == 0)
+        Text("Please add a shipping address to continue")
+      else
         DetailsCard(
           trailing: SelectComponent(
             heading: "Select shipping address",
@@ -355,9 +357,7 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
           primary: "Shipping address",
           secondary: model2
               .shippingAddresses[model.currentShippingAddress].description,
-        )
-      else
-        Text("Please add a shipping address to continue"),
+        ),
       SizedBox(
         height: 20,
       ),

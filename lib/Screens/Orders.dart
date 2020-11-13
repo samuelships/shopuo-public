@@ -43,7 +43,9 @@ class _OrdersState extends State<Orders> {
           ),
           body: Stack(
             children: [
-              if (model.orders.length < 1)
+              if (!model.orderFetched)
+                Text("") // loading
+              else if (model.orders.length == 0)
                 Column(
                   children: [EmptyOrderComponent()],
                 )
