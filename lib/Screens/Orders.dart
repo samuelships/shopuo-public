@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopuo/Components/EmptyOrderComponent.dart';
 import 'package:shopuo/Components/HeaderComponent.dart';
 import 'package:shopuo/Components/OrderCard.dart';
 import 'package:shopuo/ViewModels/OrdersViewModel.dart';
@@ -40,24 +41,35 @@ class _OrdersState extends State<Orders> {
             leadingCallback: Navigator.of(context).pop,
             leading: "assets/svg_icons/chevron-left.svg",
           ),
-          body: ListView(
-            padding: EdgeInsets.symmetric(horizontal: 25),
+          body: Stack(
             children: [
-              SizedBox(
-                height: 25,
-              ),
-              ...model.orders
-                  .asMap()
-                  .map(
-                    (index, value) => MapEntry(
-                      index,
-                      OrderCard(
-                        order: model.orders[index],
+              if (model.orders.length < 1)
+                Column(
+                  children: [EmptyOrderComponent()],
+                )
+              else
+                ListView(
+                  padding: EdgeInsets.symmetric(horizontal: 25),
+                  children: [
+                    ...[
+                      SizedBox(
+                        height: 25,
                       ),
-                    ),
-                  )
-                  .values
-                  .toList()
+                      ...model.orders
+                          .asMap()
+                          .map(
+                            (index, value) => MapEntry(
+                              index,
+                              OrderCard(
+                                order: model.orders[index],
+                              ),
+                            ),
+                          )
+                          .values
+                          .toList()
+                    ]
+                  ],
+                ),
             ],
           ),
         ),
