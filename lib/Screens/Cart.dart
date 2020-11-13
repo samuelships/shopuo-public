@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:shopuo/Components/Button/ButtonComponent.dart';
 import 'package:shopuo/Components/CartProductCard.dart';
 import 'package:shopuo/Components/EmptyCartComponent.dart';
+import 'package:shopuo/Components/EmptyShippingAddresses.dart';
 import 'package:shopuo/Components/HeaderComponent.dart';
 import 'package:shopuo/Components/Input/TextInputComponent.dart';
 import 'package:shopuo/Components/PaymentComponent.dart';
@@ -58,6 +59,8 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
                       Text("Loading...")
                     else if (model.cartproducts.length < 1)
                       EmptyCartComponent()
+                    else if (model2.shippingAddresses.length < 1)
+                      EmptyShippingAddresses()
                     else ...[
                       SizedBox(
                         height: 25,
