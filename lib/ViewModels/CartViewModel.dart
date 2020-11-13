@@ -233,12 +233,10 @@ class CartViewModel with ChangeNotifier {
       }
 
       try {
-        print("starting.....");
         final data = await _cloudFunctionService.call(
           name: "makePayment",
           data: payload,
         );
-        print("ended.....");
 
         // subscribe to orderReference
         orderSubscription = _firestoreService
@@ -285,12 +283,6 @@ class CartViewModel with ChangeNotifier {
       isMakePaymentInProgress = false;
     }
   }
-
-  hideLoadingModal() {
-    // hiding payment dialog
-  }
-
-  launchRedirectUrl(url) {}
 
   @override
   void dispose() {

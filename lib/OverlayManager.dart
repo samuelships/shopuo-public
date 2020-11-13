@@ -71,8 +71,8 @@ class _OverlayManagerState extends State<OverlayManager> {
   }
 
   hideLoadingDialog() {
-    if (overlayService.showOkayDialogCompleter != null) {
-      overlayService.showOkayDialogCompleter.complete(false);
+    if (overlayService.showLoadingDialogCompleter != null) {
+      overlayService.showLoadingDialogCompleter.complete(false);
       overlayService.showLoadingDialogCompleter = null;
     }
     setState(() {
@@ -113,6 +113,12 @@ class _OverlayManagerState extends State<OverlayManager> {
   }
 
   hideOkayDialog() {
+    if (overlayService.showOkayDialogCompleter != null) {
+      print("loading dialog is not null");
+      overlayService.showOkayDialogCompleter.complete(false);
+      overlayService.showOkayDialogCompleter = null;
+    }
+
     setState(() {
       _showOkayDialog = false;
       icon = "assets/svg_icons/monthly-salary.svg";
@@ -139,26 +145,26 @@ class _OverlayManagerState extends State<OverlayManager> {
                 secondary: secondary,
                 onOkay: () {
                   overlayService.showOkayDialogCompleter.complete(true);
-                  hideOkayDialog();
                   overlayService.showOkayDialogCompleter = null;
+                  hideOkayDialog();
                 },
                 dismissCallback: () {
                   overlayService.showOkayDialogCompleter.complete(false);
-                  hideOkayDialog();
                   overlayService.showOkayDialogCompleter = null;
+                  hideOkayDialog();
                 },
               ),
             if (_showLoadingDialog)
               LoadingComponent2(
                 dismissCallback: () {
                   overlayService.showLoadingDialogCompleter.complete(false);
-                  hideLoadingDialog();
                   overlayService.showLoadingDialogCompleter = null;
+                  hideLoadingDialog();
                 },
                 onCancel: () {
                   overlayService.showLoadingDialogCompleter.complete(true);
-                  hideLoadingDialog();
                   overlayService.showLoadingDialogCompleter = null;
+                  hideLoadingDialog();
                 },
               ),
             if (_showYesNoDialog)
@@ -166,13 +172,13 @@ class _OverlayManagerState extends State<OverlayManager> {
                 dismissCallback: hideYesNoDialog,
                 onYes: () {
                   overlayService.yesNoDialogCompleter.complete(true);
-                  hideYesNoDialog();
                   overlayService.yesNoDialogCompleter = null;
+                  hideYesNoDialog();
                 },
                 onNo: () {
                   overlayService.yesNoDialogCompleter.complete(false);
-                  hideYesNoDialog();
                   overlayService.yesNoDialogCompleter = null;
+                  hideYesNoDialog();
                 },
               )
           ],
