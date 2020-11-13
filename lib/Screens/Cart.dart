@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:shopuo/Components/Button/ButtonComponent.dart';
 import 'package:shopuo/Components/CartProductCard.dart';
+import 'package:shopuo/Components/EmptyCartComponent.dart';
 import 'package:shopuo/Components/HeaderComponent.dart';
 import 'package:shopuo/Components/Input/TextInputComponent.dart';
 import 'package:shopuo/Components/PaymentComponent.dart';
@@ -43,19 +44,21 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
         builder: (context, CartViewModel model, child) => SafeArea(
           child: Stack(
             children: [
-              if (!model.modelReady)
-                Text("Loading...")
-              else
-                Scaffold(
-                  appBar: HeaderComponent(
-                    leading: "assets/svg_icons/package.svg",
-                    title: "Cart",
-                    leadingCallback: () {
-                      model.navigateToOrders();
-                    },
-                  ),
-                  body: Column(
-                    children: [
+              Scaffold(
+                appBar: HeaderComponent(
+                  leading: "assets/svg_icons/package.svg",
+                  title: "Cart",
+                  leadingCallback: () {
+                    model.navigateToOrders();
+                  },
+                ),
+                body: Column(
+                  children: [
+                    if (!model.modelReady)
+                      Text("Loading...")
+                    else if (model.cartproducts.length < 1)
+                      EmptyCartComponent()
+                    else ...[
                       SizedBox(
                         height: 25,
                       ),
@@ -101,9 +104,10 @@ class _CartState extends State<Cart> with TickerProviderStateMixin {
                           ),
                         ),
                       )
-                    ],
-                  ),
+                    ]
+                  ],
                 ),
+              ),
             ],
           ),
         ),
