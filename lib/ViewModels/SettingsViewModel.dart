@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shopuo/Models/AddressModel.dart';
+import 'package:shopuo/Models/ShippingAddressModel.dart';
 import 'package:shopuo/Services/AuthenticationService.dart';
 import 'package:shopuo/Services/FirebaseStorageService.dart';
 import 'package:shopuo/Services/FirestoreService.dart';
@@ -54,7 +54,7 @@ class SettingsViewModel with ChangeNotifier {
         // },
         {
           "icon": "map-pin",
-          "heading": "Add Addresses",
+          "heading": "Add Shipping Addresses",
           "sub heading": "Add your shipping addresses",
           "color": Color(0xff00C48C),
           "callback": (model) => model.goToInner("Address")
@@ -108,6 +108,10 @@ class SettingsViewModel with ChangeNotifier {
 
   // METHODS
   setUpModel() {
+    setUpAddress();
+    setUpProfile();
+
+    ///
     final currentUser = _authenticationService.currentUser();
     final userInfo = currentUser.providerData[0];
     if (userInfo.providerId != "google.com") {
@@ -124,6 +128,10 @@ class SettingsViewModel with ChangeNotifier {
       );
       notifyListeners();
     }
+  }
+
+  navigateToOrders() {
+    _navigationService.navigateTo("Orders");
   }
 
   // END GENERAL ---------------->>>
@@ -380,8 +388,10 @@ class SettingsViewModel with ChangeNotifier {
   }
 
   StreamSubscription addressSubscription;
-  List<AddressModel> addresses = [];
-  List<AddressModel> get filteredAddresses => addresses.where((e) {
+  List<ShippingAddressModel> shippingAddresses = [];
+
+  List<ShippingAddressModel> get filteredAddresses =>
+      shippingAddresses.where((e) {
         if (search.isNotEmpty) {
           if (e.title.toLowerCase().startsWith(search) ||
               e.description.toLowerCase().startsWith(search)) {
@@ -437,17 +447,17 @@ class SettingsViewModel with ChangeNotifier {
 
   fetchAddress() async {
     final addressSubscription = _firestoreService
-        .collectionStream<AddressModel>(
-      path: "addresses",
+        .collectionStream<ShippingAddressModel>(
+      path: "shipping_addresses",
       builder: (data, documentId) =>
-          AddressModel.fromMap(data: data, documentId: documentId),
+          ShippingAddressModel.fromMap(data: data, documentId: documentId),
       queryBuilder: (query) => query.where(
         "user_id",
         isEqualTo: _authenticationService.currentUser().uid,
       ),
     )
         .listen((data) {
-      addresses = data;
+      shippingAddresses = data;
       addressFetched = true;
       notifyListeners();
     });
@@ -458,14 +468,14 @@ class SettingsViewModel with ChangeNotifier {
       addressInProgress = true;
 
       try {
-        await _firestoreService.addDocument(path: "addresses", data: {
+        await _firestoreService.addDocument(path: "shipping_addresses", data: {
           "title": addressName.formz.value,
           "description": addressDescription.formz.value,
           "user_id": _authenticationService.currentUser().uid
         });
 
         _overlayService.showSnackBarSuccess(
-            widget: Text("Address added successfully"));
+            widget: Text("Shipping address added successfully"));
 
         _navigationService.popInner();
         notifyListeners();
@@ -479,7 +489,7 @@ class SettingsViewModel with ChangeNotifier {
 
   editAddress({id}) async {
     try {
-      await _firestoreService.setData(path: "addresses/$id", data: {
+      await _firestoreService.setData(path: "shipping_addresses/$id", data: {
         "title": addressName.formz.value,
         "description": addressDescription.formz.value,
       });
@@ -503,7 +513,7 @@ class SettingsViewModel with ChangeNotifier {
     final status = await _overlayService.showYesNoDialog();
     if (status) {
       try {
-        await _firestoreService.deleteData("addresses/$id");
+        await _firestoreService.deleteData("shipping_addresses/$id");
       } catch (e) {
         print(e);
       }
@@ -561,8 +571,6 @@ class SettingsViewModel with ChangeNotifier {
 
       pushNotification = push;
       notifyListeners();
-
-      print(push);
     } catch (e) {
       //
     }

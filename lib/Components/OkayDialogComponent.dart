@@ -4,20 +4,27 @@ import 'package:shopuo/Components/PopupComponent.dart';
 import 'package:shopuo/Styles/Color.dart';
 import 'package:shopuo/Styles/Typography.dart';
 
-class PaymentInstructionsComponent extends StatefulWidget {
+class OkayDialogComponent extends StatefulWidget {
+  final String icon;
+  final String primary;
+  final String secondary;
   final Function dismissCallback;
   final Function onOkay;
 
-  const PaymentInstructionsComponent(
-      {Key key, this.dismissCallback, this.onOkay})
-      : super(key: key);
+  const OkayDialogComponent({
+    Key key,
+    this.dismissCallback,
+    this.onOkay,
+    this.icon = "assets/svg_icons/monthly-salary.svg",
+    this.primary = "Payment Instructions",
+    this.secondary =
+        "You would be redirected and a push notification will been sent to your phone, do you like to continue?",
+  }) : super(key: key);
   @override
-  _PaymentInstructionsComponentState createState() =>
-      _PaymentInstructionsComponentState();
+  _OkayDialogComponentState createState() => _OkayDialogComponentState();
 }
 
-class _PaymentInstructionsComponentState
-    extends State<PaymentInstructionsComponent> {
+class _OkayDialogComponentState extends State<OkayDialogComponent> {
   @override
   Widget build(BuildContext context) {
     return PopupComponent(
@@ -42,7 +49,7 @@ class _PaymentInstructionsComponentState
               ),
               child: Center(
                 child: SvgPicture.asset(
-                  "assets/svg_icons/monthly-salary.svg",
+                  widget.icon,
                   width: 28,
                   color: MyColor.primaryGreen,
                 ),
@@ -52,7 +59,7 @@ class _PaymentInstructionsComponentState
               height: 10,
             ),
             Text(
-              "Payment Instructions",
+              widget.primary,
               style: MyTypography.heading5SB.copyWith(
                 color: MyColor.neutralGrey1,
               ),
@@ -63,7 +70,7 @@ class _PaymentInstructionsComponentState
             Container(
               width: 280,
               child: Text(
-                "You would be redirected and a push notification will been sent to your phone, do you like to continue?",
+                widget.secondary,
                 textAlign: TextAlign.center,
                 style: MyTypography.body2.copyWith(
                   color: MyColor.neutralGrey2,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopuo/Components/DeleteComponent.dart';
 import 'package:shopuo/Components/LoadingComponent2.dart';
-import 'package:shopuo/Components/PaymentInstructionsComponent.dart';
+import 'package:shopuo/Components/OkayDialogComponent.dart';
 import 'package:shopuo/Services/OverlayService.dart';
 import "./ViewModels/OverlayManagerViewModel.dart";
 import 'Services/FirebaseMessagingService.dart';
@@ -31,7 +31,8 @@ class _OverlayManagerState extends State<OverlayManager> {
     firebaseMessagingService.register();
     overlayService.registerYesNoDialogCallback(showYesNoDialog);
     overlayService.registerLoadingDialogCallback(showLoadingDialog);
-    overlayService.registerPaymentDialogCallback(showPaymentDialog);
+    overlayService.registerHideLoadingDialogCallback(hideLoadingDialog);
+    overlayService.registerOkayDialogCallback(showOkayDialog);
     WidgetsBinding.instance.addPostFrameCallback((_) => setUpModel(context));
     super.initState();
   }
@@ -70,23 +71,54 @@ class _OverlayManagerState extends State<OverlayManager> {
   }
 
   hideLoadingDialog() {
+    if (overlayService.showOkayDialogCompleter != null) {
+      overlayService.showOkayDialogCompleter.complete(false);
+      overlayService.showLoadingDialogCompleter = null;
+    }
     setState(() {
       _showLoadingDialog = false;
     });
   }
 
-  // PAYMENT INSTRUCTIONS DIALOG
-  bool _showPaymentDialog = false;
+  // OKAY  DIALOG
+  String icon = "assets/svg_icons/monthly-salary.svg";
+  String primary = "Payment Instructions";
+  String secondary =
+      "You would be redirected and a push notification will been sent to your phone, do you like to continue?";
 
-  showPaymentDialog() {
+  bool _showOkayDialog = false;
+
+  showOkayDialog({icon, primary, secondary}) {
+    if (icon != null) {
+      setState(() {
+        this.icon = icon;
+      });
+    }
+
+    if (primary != null) {
+      setState(() {
+        this.primary = primary;
+      });
+    }
+
+    if (secondary != null) {
+      setState(() {
+        this.secondary = secondary;
+      });
+    }
+
     setState(() {
-      _showPaymentDialog = true;
+      _showOkayDialog = true;
     });
   }
 
-  hidePaymentDialog() {
+  hideOkayDialog() {
     setState(() {
-      _showPaymentDialog = false;
+      _showOkayDialog = false;
+      icon = "assets/svg_icons/monthly-salary.svg";
+      primary = "Payment Instructions";
+      secondary =
+          "You would be redirected and a push notification will been sent to your phone, do you like to continue?";
     });
   }
 
@@ -100,17 +132,20 @@ class _OverlayManagerState extends State<OverlayManager> {
           fit: StackFit.expand,
           children: [
             widget.child,
-            if (_showPaymentDialog)
-              PaymentInstructionsComponent(
+            if (_showOkayDialog)
+              OkayDialogComponent(
+                icon: icon,
+                primary: primary,
+                secondary: secondary,
                 onOkay: () {
-                  overlayService.showPaymentDialogCompleter.complete(true);
-                  hidePaymentDialog();
-                  overlayService.showPaymentDialogCompleter = null;
+                  overlayService.showOkayDialogCompleter.complete(true);
+                  hideOkayDialog();
+                  overlayService.showOkayDialogCompleter = null;
                 },
                 dismissCallback: () {
-                  overlayService.showPaymentDialogCompleter.complete(false);
-                  hidePaymentDialog();
-                  overlayService.showPaymentDialogCompleter = null;
+                  overlayService.showOkayDialogCompleter.complete(false);
+                  hideOkayDialog();
+                  overlayService.showOkayDialogCompleter = null;
                 },
               ),
             if (_showLoadingDialog)

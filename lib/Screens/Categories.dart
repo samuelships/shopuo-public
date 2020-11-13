@@ -27,7 +27,10 @@ class _CategoriesState extends State<Categories> {
           appBar: HeaderComponent(
             leading: "assets/svg_icons/package.svg",
             title: "Categories",
-            trailing: "assets/svg_icons/search.svg",
+            leadingCallback: () {
+              model.navigateToOrders();
+            },
+            //trailing: "assets/svg_icons/search.svg",
           ),
           body: Stack(
             fit: StackFit.expand,

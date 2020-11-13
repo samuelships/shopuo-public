@@ -93,7 +93,10 @@ class _SelectComponentState extends State<SelectComponent> {
         ),
       ),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(10),
+          topRight: Radius.circular(10),
+        ),
       ),
     );
   }

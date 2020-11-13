@@ -22,8 +22,13 @@ class OverlayService {
   // SHOW LOADING DIALOG
   Completer<bool> showLoadingDialogCompleter;
   Function showLoadingDialogCallback;
+  Function hideLoadingDialogCallback;
   void registerLoadingDialogCallback(Function callback) {
     showLoadingDialogCallback = callback;
+  }
+
+  void registerHideLoadingDialogCallback(Function callback) {
+    hideLoadingDialogCallback = callback;
   }
 
   showLoadingDialog() {
@@ -32,17 +37,21 @@ class OverlayService {
     return showLoadingDialogCompleter.future;
   }
 
-  // SHOW PAYMENT DIALOG
-  Completer<bool> showPaymentDialogCompleter;
-  Function showPaymentDialogCallback;
-  void registerPaymentDialogCallback(Function callback) {
-    showPaymentDialogCallback = callback;
+  hideLoadingDialog() {
+    hideLoadingDialogCallback();
   }
 
-  showPaymentDialog() {
-    showPaymentDialogCompleter = Completer<bool>();
-    showPaymentDialogCallback();
-    return showPaymentDialogCompleter.future;
+  // SHOW OKAY DIALOG
+  Completer<bool> showOkayDialogCompleter;
+  Function showOkayDialogCallback;
+  void registerOkayDialogCallback(Function callback) {
+    showOkayDialogCallback = callback;
+  }
+
+  showOkayDialog({icon, primary, secondary}) {
+    showOkayDialogCompleter = Completer<bool>();
+    showOkayDialogCallback(icon: icon, primary: primary, secondary: secondary);
+    return showOkayDialogCompleter.future;
   }
 
   // SNACKBAR NOTIFICATIONS

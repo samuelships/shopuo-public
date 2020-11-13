@@ -6,6 +6,7 @@ import 'package:shopuo/Screens/ChangeName.dart';
 import 'package:shopuo/Screens/ChangePassword.dart';
 import 'package:shopuo/Screens/EditAddress.dart';
 import 'package:shopuo/Screens/NestedNavigagtion.dart';
+import 'package:shopuo/Screens/Orders.dart';
 import 'package:shopuo/Screens/PrivacyPolicy.dart';
 import 'package:shopuo/Screens/ProductDetails.dart';
 import 'package:shopuo/Screens/Profile.dart';
@@ -175,6 +176,14 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       var args = settings.arguments as Map;
       return getPageRoute(
         builder: ProductDetails.create(product: args["product"]),
+        name: settings.name,
+        arguments: settings.arguments,
+      );
+      break;
+
+    case "Orders":
+      return getPageRoute(
+        builder: Orders.create(),
         name: settings.name,
         arguments: settings.arguments,
       );

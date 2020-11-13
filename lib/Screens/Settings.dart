@@ -31,7 +31,10 @@ class _SettingsState extends State<Settings> {
           appBar: HeaderComponent(
             leading: "assets/svg_icons/package.svg",
             title: "Settings",
-            trailing: "assets/svg_icons/search.svg",
+            leadingCallback: () {
+              model.navigateToOrders();
+            },
+            //trailing: "assets/svg_icons/search.svg",
           ),
           body: ListView(
             children: [

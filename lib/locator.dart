@@ -10,6 +10,7 @@ import 'package:shopuo/ViewModels/CartViewModel.dart';
 import 'package:shopuo/ViewModels/CategoriesViewModel.dart';
 import 'package:shopuo/ViewModels/EntryPointViewModel.dart';
 import 'package:shopuo/ViewModels/OnSaleViewModel.dart';
+import 'package:shopuo/ViewModels/OrdersViewModel.dart';
 import 'package:shopuo/ViewModels/ProductDetailsViewModel.dart';
 import 'package:shopuo/ViewModels/ProfileViewModel.dart';
 import 'package:shopuo/ViewModels/ResetPasswordViewModel.dart';
@@ -37,6 +38,7 @@ setupLocator() {
   locator.registerFactory(() => SignUpInfoViewModel());
   locator.registerFactory(() => SignUpVerifyViewModel());
   locator.registerFactory(() => ProductDetailsViewModel());
+  locator.registerFactory(() => OrdersViewModel());
 
   locator.registerLazySingleton(() => NavigationService());
   locator.registerLazySingleton(() => FirestoreService());

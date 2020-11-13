@@ -66,7 +66,6 @@ class _SignUpVerifyState extends State<SignUpVerify> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.phoneNumber);
     return Consumer<SignUpVerifyViewModel>(
       builder: (context, model, child) => Scaffold(
         resizeToAvoidBottomInset: false,

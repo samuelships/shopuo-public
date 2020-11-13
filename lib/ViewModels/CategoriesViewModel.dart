@@ -1,18 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:shopuo/Models/CategoryModel.dart';
 import 'package:shopuo/Services/FirestoreService.dart';
+import 'package:shopuo/Services/NavigationService.dart';
 import 'package:shopuo/locator.dart';
 
 class CategoriesViewModel with ChangeNotifier {
   // SERVICES
   final _firestoreService = locator<FirestoreService>();
+  final _navigationService = locator<NavigationService>();
 
   // PAGE DATA
   List<CategoryModel> categories = [];
 
   //  METHODS
+  navigateToOrders() {
+    _navigationService.navigateTo("Orders");
+  }
+
   setUpModel() async {
-    print("starting...");
     try {
       List<CategoryModel> result =
           await _firestoreService.getDataCollection<CategoryModel>(

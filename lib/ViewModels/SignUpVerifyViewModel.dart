@@ -57,7 +57,6 @@ class SignUpVerifyViewModel with ChangeNotifier {
           _overlayService.showSnackBarFailure(widget: Text(data["message"]));
         }
       } on PlatformException catch (e) {
-        print(e);
         _overlayService.showSnackBarFailure(
             widget: Text("Something wrong happened."));
       } finally {
@@ -67,12 +66,14 @@ class SignUpVerifyViewModel with ChangeNotifier {
   }
 
   sendVerificationCode() async {
+    print("sending verification code...");
     try {
       var data = await _cloudFunctionService.call(
         name: "sendVerificationCode",
       );
 
       // success
+      print(data);
       if (data["code"] == 2000) {
         _overlayService.showSnackBarSuccess(widget: Text(data["message"]));
         timeToSend = data["data"]["time_to_send"];
@@ -81,7 +82,7 @@ class SignUpVerifyViewModel with ChangeNotifier {
         notifyListeners();
       }
     } on PlatformException catch (e) {
-      print(e);
+      print(e.code);
       _overlayService.showSnackBarFailure(
           widget: Text("Something wrong happened."));
     } finally {}

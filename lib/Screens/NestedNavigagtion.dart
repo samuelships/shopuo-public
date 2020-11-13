@@ -77,7 +77,7 @@ class _NestedNavigationState extends State<NestedNavigation> {
           children: [
             _buildNavigator(tab: TabItem.One),
             _buildNavigator(tab: TabItem.Two),
-            // _buildNavigator(tab: TabItem.Three),
+            _buildNavigator(tab: TabItem.Three),
             _buildNavigator(tab: TabItem.Four),
           ],
         ),
