@@ -21,12 +21,12 @@ class _ProductCardState extends State<ProductCard> {
       color: Colors.transparent,
       child: InkWell(
         splashColor: Colors.transparent,
-        highlightColor: MyColor.primaryPurple.withAlpha(20),
+        highlightColor: MyColor.primaryPurple.withAlpha(40),
         onTap: widget.onTap,
         child: Column(
           children: [
             Expanded(
-              flex: 6,
+              flex: 5,
               child: Container(
                 child: CachedNetworkImage(
                   fadeOutDuration: Duration(milliseconds: 0),
@@ -49,7 +49,7 @@ class _ProductCardState extends State<ProductCard> {
               ),
             ),
             Expanded(
-              flex: 5,
+              flex: 4,
               child: Padding(
                 padding: EdgeInsets.all(18),
                 child: Column(
@@ -57,13 +57,15 @@ class _ProductCardState extends State<ProductCard> {
                   children: [
                     Text(
                       widget.product.name,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
                       style: MyTypography.heading5SB.copyWith(
                         color: MyColor.neutralBlack,
                       ),
                     ),
                     Spacer(flex: 2),
                     Text(
-                      (widget.product.category as String).toUpperCase(),
+                      (widget.product.category).toUpperCase(),
                       style: MyTypography.button2.copyWith(
                         color: MyColor.primaryPurple,
                       ),
