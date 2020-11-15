@@ -4,6 +4,15 @@ class CategoryModel {
   final String image;
 
   CategoryModel({this.name, this.numberOfItems, this.image});
+
+  factory CategoryModel.fromMap(
+      {Map<String, dynamic> data, String documentId}) {
+    return CategoryModel(
+      name: data["name"],
+      numberOfItems: double.parse("${data["number_of_items"]}"),
+      image: data["image"],
+    );
+  }
 }
 
 final List<CategoryModel> categories = [

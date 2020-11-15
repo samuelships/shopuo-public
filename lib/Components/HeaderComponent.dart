@@ -10,18 +10,20 @@ class HeaderComponent extends StatelessWidget implements PreferredSizeWidget {
   final background;
   final leadingColor;
   final titleStyle;
+  final leadingCallback;
+  final trailingCallback;
 
   HeaderComponent({
     Key key,
     this.leading,
+    this.leadingCallback,
+    this.trailingCallback,
     this.title,
     this.trailing,
     this.background,
     this.leadingColor,
     this.titleStyle,
-  })  : assert(leading != null),
-        assert(title != null),
-        super(key: key);
+  }) : super(key: key);
 
   static final fontStyle = MyTypography.heading5SB.copyWith(
     color: MyColor.neutralBlack,
@@ -40,6 +42,7 @@ class HeaderComponent extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       child: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
         elevation: 0,
         titleSpacing: 0,
@@ -48,32 +51,44 @@ class HeaderComponent extends StatelessWidget implements PreferredSizeWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Transform.translate(
-                offset: Offset(-10, 0),
-                child: SvgPicture.asset(
-                  "$leading",
-                  height: 28,
-                  width: 28,
-                  color: leadingColor ?? MyColor.neutralBlack,
-                ),
+              GestureDetector(
+                onTap: () {
+                  if (leadingCallback != null) leadingCallback();
+                },
+                child: leading == null
+                    ? SizedBox()
+                    : Transform.translate(
+                        offset: Offset(-10, 0),
+                        child: SvgPicture.asset(
+                          "$leading",
+                          height: 28,
+                          width: 28,
+                          color: leadingColor ?? MyColor.neutralBlack,
+                        ),
+                      ),
               ),
               Text(
-                "$title",
+                "${title ?? ''}",
                 style: titleStyle ?? HeaderComponent.fontStyle,
               ),
-              Transform.translate(
-                offset: Offset(10, 0),
-                child: trailing != null
-                    ? SvgPicture.asset(
-                        "$trailing",
-                        height: 28,
-                        width: 28,
-                        color: MyColor.neutralBlack,
-                      )
-                    : SizedBox(
-                        height: 28,
-                        width: 28,
-                      ),
+              GestureDetector(
+                onTap: () {
+                  if (trailingCallback != null) trailingCallback();
+                },
+                child: Transform.translate(
+                  offset: Offset(10, 0),
+                  child: trailing != null
+                      ? SvgPicture.asset(
+                          "$trailing",
+                          height: 28,
+                          width: 28,
+                          color: MyColor.neutralBlack,
+                        )
+                      : SizedBox(
+                          height: 28,
+                          width: 28,
+                        ),
+                ),
               )
             ],
           ),

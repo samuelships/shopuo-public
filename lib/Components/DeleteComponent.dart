@@ -7,8 +7,15 @@ import 'package:shopuo/Styles/Typography.dart';
 
 class DeleteComponent extends StatelessWidget {
   final Function dismissCallback;
+  final Function onYes;
+  final Function onNo;
 
-  const DeleteComponent({Key key, this.dismissCallback}) : super(key: key);
+  const DeleteComponent({
+    Key key,
+    this.dismissCallback,
+    this.onYes,
+    this.onNo,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +73,7 @@ class DeleteComponent extends StatelessWidget {
               children: [
                 Expanded(
                   child: ButtonComponent(
-                    onTap: () {},
+                    onTap: onYes,
                     text: "Yes",
                   ),
                 ),
@@ -77,7 +84,7 @@ class DeleteComponent extends StatelessWidget {
                   child: ButtonComponent(
                     color: MyColor.neutralGrey4,
                     textColor: Colors.black,
-                    onTap: () {},
+                    onTap: onNo,
                     text: "No",
                   ),
                 )

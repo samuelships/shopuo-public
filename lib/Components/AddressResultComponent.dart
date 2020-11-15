@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shopuo/Components/AddressCard.dart';
-import 'package:shopuo/Models/AddressModel.dart';
+import 'package:shopuo/Models/ShippingAddressModel.dart';
+import 'package:shopuo/ViewModels/SettingsViewModel.dart';
 
 class AddressResultComponent extends StatelessWidget {
   final loading;
-  final List<AddressModel> results;
+  final List<ShippingAddressModel> results;
   final loaded;
 
   const AddressResultComponent({
@@ -20,7 +22,19 @@ class AddressResultComponent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ...results
-            .map((e) => AddressCard(
+            .map((ShippingAddressModel e) => AddressCard(
+                  key: ValueKey(e.id),
+                  onEdit: () {
+                    Provider.of<SettingsViewModel>(context, listen: false)
+                        .navigateToEditAddress(
+                            id: e.id,
+                            title: e.title,
+                            description: e.description);
+                  },
+                  onDelete: () {
+                    Provider.of<SettingsViewModel>(context, listen: false)
+                        .deleteAddress(id: e.id);
+                  },
                   address: e,
                 ))
             .toList()

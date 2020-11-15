@@ -79,11 +79,6 @@ class _SearchComponentState extends State<SearchComponent> {
                       color: MyColor.neutralGrey3,
                     ),
                   ),
-                  onChanged: (value) {
-                    if (widget.onChanged != null) {
-                      widget.onChanged(value);
-                    }
-                  },
                 ),
               )
             ],

@@ -1,13 +1,25 @@
-import 'dart:ui';
-
-import 'package:shopuo/Models/CategoryModel.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import "package:flutter/material.dart";
 import 'package:shopuo/Styles/Color.dart';
 
 class ProductColor {
-  final String name;
-  final Color value;
+  String name;
+  Color value;
 
   ProductColor({this.name, this.value});
+
+  static List<ProductColor> fromMap({List<dynamic> data}) {
+    List<ProductColor> colors = [];
+
+    data.forEach((value) {
+      colors.add(ProductColor(
+        name: value["name"],
+        value: Color(int.parse(value["value"])),
+      ));
+    });
+
+    return colors;
+  }
 }
 
 class ProductSize {
@@ -18,33 +30,61 @@ class ProductSize {
 }
 
 class ProductModel {
+  final String documentId;
   final String name;
   final String description;
-  final CategoryModel brand;
   final double price;
   final String image;
+  final String timeAdded;
   final List<String> secondaryImages;
-  final CategoryModel category;
+  final String category;
   final List<ProductColor> colors;
-  final List<ProductSize> sizes;
+  final List sizes;
+  final DocumentSnapshot snapshot;
 
   ProductModel({
+    this.documentId,
+    this.snapshot,
     this.name,
     this.description,
-    this.brand,
     this.price,
     this.image,
     this.secondaryImages,
+    this.timeAdded,
     this.category,
     this.colors,
     this.sizes,
   });
+
+  factory ProductModel.fromMap({
+    Map<String, dynamic> data,
+    String documentId,
+    DocumentSnapshot snapshot,
+  }) {
+    return ProductModel(
+      documentId: documentId,
+      name: data["name"],
+      description: data["description"],
+      price: (data["price"] as num).toDouble(),
+      image: data["image"],
+      secondaryImages: data["secondary_images"].cast<String>(),
+      timeAdded: (data["time_added"] as Timestamp).toDate().toString(),
+      category: data["category"],
+      colors: ProductColor.fromMap(data: (data["colors"] as List)),
+      sizes: data["sizes"],
+      snapshot: snapshot,
+    );
+  }
+
+  toString() {
+    return "{documentId : ${this.documentId}, name : ${this.name}, description : ${this.description}, price : ${this.price}}";
+  }
 }
 
 final List<ProductModel> products = [
   ProductModel(
     name: "New Balance Raff Simons Bright Color",
-    category: CategoryModel(name: "Women"),
+    category: "Women",
     price: 130,
     image: "assets/images/product_img_one.png",
     colors: [
@@ -110,31 +150,31 @@ final List<ProductModel> products = [
   ),
   ProductModel(
     name: "New Balance Raff Simons Bright Colorr",
-    category: CategoryModel(name: "Women"),
+    category: "Women",
     price: 130,
     image: "assets/images/product_img_two.png",
   ),
   ProductModel(
     name: "New Balance Raff Simons Bright Color",
-    category: CategoryModel(name: "Women"),
+    category: "Women",
     price: 130,
     image: "assets/images/product_img_three.png",
   ),
   ProductModel(
     name: "New Balance Raff Simons Bright Color",
-    category: CategoryModel(name: "Women"),
+    category: "Women",
     price: 130,
     image: "assets/images/product_img_four.png",
   ),
   ProductModel(
     name: "New Balance Raff Simons Bright Color",
-    category: CategoryModel(name: "Women"),
+    category: "Women",
     price: 130,
     image: "assets/images/product_img_five.png",
   ),
   ProductModel(
     name: "New Balance Raff Simons Bright Color",
-    category: CategoryModel(name: "Women"),
+    category: "Women",
     price: 130,
     image: "assets/images/product_img_six.png",
   ),

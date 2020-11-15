@@ -7,6 +7,7 @@ class TextInputComponent extends StatefulWidget {
   final ValueChanged<String> onChanged;
   final error;
   final hintText;
+  final leadingIcon;
   final trailingIcon;
   final obscure;
   final TextEditingController controller;
@@ -22,6 +23,7 @@ class TextInputComponent extends StatefulWidget {
     this.header,
     this.headerStyle,
     @required this.hintText,
+    this.leadingIcon,
     this.trailingIcon,
   }) : super(key: key);
 
@@ -70,6 +72,16 @@ class _TextInputComponentState extends State<TextInputComponent> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              if (widget.leadingIcon != null)
+                Padding(
+                  padding: EdgeInsets.only(left: 10),
+                  child: SvgPicture.asset(
+                    widget.leadingIcon,
+                    color: widget.error == null
+                        ? MyColor.neutralGrey3
+                        : MyColor.primaryRed,
+                  ),
+                ),
               Expanded(
                 child: TextField(
                   controller: widget.controller ?? _controller,
@@ -95,7 +107,6 @@ class _TextInputComponentState extends State<TextInputComponent> {
                     ),
                   ),
                   obscureText: widget.obscure == true ? true : false,
-                  onChanged: widget.onChanged,
                 ),
               ),
               if (widget.trailingIcon != null)
@@ -114,7 +125,7 @@ class _TextInputComponentState extends State<TextInputComponent> {
             "${widget.error}",
             style: TextStyle(
               fontFamily: "SF Pro Display",
-              fontSize: 11,
+              fontSize: MyTypography.body1.fontSize,
               color: MyColor.primaryRed,
             ),
           )

@@ -11,7 +11,7 @@ class ToggleComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onDoubleTap: onTap,
+      onTap: onTap,
       child: Container(
         width: 48,
         height: 28,
@@ -32,9 +32,8 @@ class ToggleComponent extends StatelessWidget {
           ],
         ),
         child: Row(
-          mainAxisAlignment: position == "start"
-              ? MainAxisAlignment.start
-              : MainAxisAlignment.end,
+          mainAxisAlignment:
+              position ? MainAxisAlignment.end : MainAxisAlignment.start,
           children: [
             Container(
               height: 24,
