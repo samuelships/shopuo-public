@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:flutter_svg/svg.dart';
+import 'package:shopuo/Styles/Color.dart';
 
 class ButtonComponent extends StatelessWidget {
   final text;
@@ -8,16 +9,12 @@ class ButtonComponent extends StatelessWidget {
   final icon;
   final active;
   final Function onTap;
-  static Key containerKey = Key("containerKey");
 
   Color get buttonColor {
-    if (active) {
-      return color != null ? color : Color(0xff6979F8);
-    } else {
-      return color != null
-          ? color.withOpacity(.7)
-          : Color(0xff6979F8).withOpacity(.7);
-    }
+    if (active)
+      return color ?? MyColor.primaryPurple;
+    else
+      return color?.withOpacity(.7) ?? MyColor.primaryPurple.withOpacity(.7);
   }
 
   ButtonComponent({
@@ -34,8 +31,6 @@ class ButtonComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      key: containerKey,
-      height: 50,
       decoration: BoxDecoration(
         color: buttonColor,
         borderRadius: BorderRadius.circular(5),
@@ -60,7 +55,6 @@ class ButtonComponent extends StatelessWidget {
           splashColor: Colors.white30,
           onTap: onTap,
           child: Container(
-            // width: double.infinity,
             alignment: Alignment.center,
             padding: EdgeInsets.symmetric(vertical: 14, horizontal: 10),
             child: Row(
