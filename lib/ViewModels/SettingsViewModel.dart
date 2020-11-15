@@ -477,6 +477,9 @@ class SettingsViewModel with ChangeNotifier {
         _overlayService.showSnackBarSuccess(
             widget: Text("Shipping address added successfully"));
 
+        // clean up form
+        addressName.reset();
+        addressDescription.reset();
         _navigationService.popInner();
         notifyListeners();
       } catch (e) {
